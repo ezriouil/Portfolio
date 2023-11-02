@@ -1,0 +1,140 @@
+li{
+  float: left;
+  position: relative;left:450px;
+  text-align: center;
+  padding: 15px;
+  border: solid white;
+  margin: auto;
+  border-radius: 25px / 40px;
+  height:10px;
+  width:10%;
+}
+h1{
+	color: white;
+	text-align: center;
+	font-family:Copperplate Gothic Light;
+	margin-top: 40px;
+	margin-bottom: 25px;
+	font-size: 45px;
+	letter-spacing: 2px;
+}
+p{
+	color:white;
+	text-align: center;
+	font-family: MV Boli;
+	word-spacing: 2px;
+
+}
+img{
+	position: relative;
+	left: 682px;
+	height: 710px;
+	width: 520px;
+	border:6px solid;
+	border-radius:10px;
+}
+.Bio{
+	color:#c2d6d6;
+	text-align: center;
+	font-family:verdana;
+	margin-top: 50px;
+	font-size: 20px;
+	border-bottom: outset #c2d6d6 ;
+	position:relative;left: 680px;
+	padding-bottom: 10px;
+	width: 150px;
+}
+.bio-2{
+	margin-top: 20px;
+	width: 670px;
+	position: relative;left: 600px;
+
+}
+.bio-3{
+	margin-top: 20px;
+	width: 650px;
+	position: relative;left: 600px;
+
+}
+.Photography{
+	border: solid white;
+	margin: auto;
+	border-radius: 30px / 50px;
+	display: flex;
+	height:28px;
+	width:40%;
+	background-color: white;
+
+}
+.Photo-graphy{
+	background-color:white; 
+	width:480px;
+	margin:5px;
+	border-radius: 25px / 45px;
+}
+.Web-Design{
+	border: solid white;
+	margin: auto;
+	border-radius: 30px / 50px;
+	display: flex;
+	height:28px;
+	width:40%;
+}
+.Web--Design{
+	background-color: white;
+	width:250px;
+	margin:5px;
+	border-radius: 25px / 45px;
+}
+.Photo-shop{
+	border: solid white;
+	margin: auto;
+	border-radius: 30px / 50px;
+	display: flex;
+	height:28px;
+	width:40%;
+}
+.Photo--shop{
+	background-color: white;
+	width:370px;
+	margin:5px;
+	border-radius: 25px  45px;
+}
+.m-photo{
+	color:#c2d6d6;
+	text-align: center;
+	font-family:verdana;
+	margin-top: 50px;
+	border-bottom: outset #c2d6d6 ;
+	position:relative;left: 680px;
+	padding-bottom: 10px;
+	width: 150px;
+	display: bloc;
+	
+}
+.pic{
+	
+	position: relative;left: 1000px;
+	height: 810px;
+	width: 540px;
+	border:6px solid white;
+	border-radius:10px;
+	background-image: url(meee.jpg);
+	background-position: center;
+	background-size:cover;
+}
+.picc{
+	position: relative;right:580px;
+	position: relative;top: 50px;
+	height: 700px;
+	width: 540px;
+	border:6px solid white;
+	border-radius:10px;
+	background-image: url(meeee.jpg);
+	background-position: center;
+	background-size:cover;
+}
+.icon{
+	position: relative;bottom: 28px;
+	position: relative;left: 682px;
+}
