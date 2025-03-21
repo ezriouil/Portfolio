@@ -18,17 +18,13 @@ dependencies:
   firebase_core: ^2.24.2
   cloud_firestore: ^4.14.0
 
-  # LOCAL STORAGE
-  #get_storage: ^2.1.1
-  #sqflite: ^2.3.0
-
   # IMAGES + CAMERA
-  #image_picker: ^1.0.0
-  #cached_network_image: ^3.4.0
-  #flutter_image_compress: ^2.0.0
+  image_picker: ^1.0.0
+  cached_network_image: ^3.4.0
+  flutter_image_compress: ^2.0.0
 
   # UTILS
-# cloudinary: ^1.2.0
+  cloudinary: ^1.2.0
   url_launcher: ^6.3.0
   #avatar_glow: ^3.0.1
   #flutter_launcher_icons: ^0.13.1
