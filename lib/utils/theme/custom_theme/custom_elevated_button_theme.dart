@@ -18,7 +18,7 @@ class CustomElevatedButtonTheme {
               textStyle:
                   const TextStyle(
                       fontSize: 13,
-                      color: Colors.white, fontFamily: "poppins_bold",
+                      color: Colors.white, fontFamily: "Manrope-Bold",
                  ),
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12))));
@@ -37,7 +37,7 @@ class CustomElevatedButtonTheme {
               padding: const EdgeInsets.symmetric(vertical: 8),
               textStyle: const TextStyle(
                   fontSize: 13,
-                  color: Colors.white, fontFamily: "poppins_bold"),
+                  color: Colors.white, fontFamily: "Manrope-Bold"),
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12))));
 }

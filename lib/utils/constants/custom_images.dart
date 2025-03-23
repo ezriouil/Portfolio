@@ -4,5 +4,6 @@ class CustomImages{
   CustomImages._();
 
   // static const String LOGO = "assets/images/logo.webp";
+  static const String MOHAMED_EZRIOUIL = "assets/images/mohamed_ezriouil.jpg";
 
 }

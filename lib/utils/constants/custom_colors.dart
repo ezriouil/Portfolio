@@ -17,28 +17,25 @@ class CustomColors{
   static const SECONDARY = Color(0xFF354A63);
 
   /*__________________ COLORS ______________________*/
-  static const GRAY_LIGHT = Color(0xFFB8B8C2);
-  static const GRAY_DARK = Color(0xFF64717C);
+  static const GRAY_LIGHT = Color(0xFFE0E0E0); // Gris clair neutre et doux
+  static const GRAY_DARK = Color(0xFF37474F); // Gris foncé moderne et profond
 
-  static const RED_LIGHT = Color(0xFFFF6666);
-  static const RED_DARK = Color(0xFFFF0000);
+  static const RED_LIGHT = Color(0xFFFF5252); // Rouge vif énergique
+  static const RED_DARK = Color(0xFFD50000); // Rouge profond et intense
 
-  static const PURPLE_LIGHT= Color(0xFFCC99FF);
-  static const PURPLE_DARK = Color(0xFF660066);
+  static const PURPLE_LIGHT = Color(0xFFB388FF); // Violet pastel élégant
+  static const PURPLE_DARK = Color(0xFF6200EA); // Violet foncé sophistiqué
 
-  static const BLUE_LIGHT = Color(0xFF0077FF);
-  static const BLUE_DARK = Color(0xFF0029FF);
+  static const BLUE_LIGHT = Color(0xFF448AFF); // Bleu vif éclatant
+  static const BLUE_DARK = Color(0xFF0D47A1); // Bleu nuit intense
 
-  static const YELLOW_LIGHT = Color(0xFFFFED21);
-  static const YELLOW_DARK = Color(0xFFFFD32C);
+  static const YELLOW_LIGHT = Color(0xFFFFF176); // Jaune lumineux et joyeux
+  static const YELLOW_DARK = Color(0xFFFFC107); // Jaune doré chaleureux
 
-  static const GREEN_LIGHT = Color(0xFF66FF66);
-  static const GREEN_DARK = Color(0xFF006600);
+  static const GREEN_LIGHT = Color(0xFF69F0AE); // Vert menthe frais
+  static const GREEN_DARK = Color(0xFF00C853); // Vert émeraude dynamique
 
-  static const ORANGE_LIGHT = Color(0xFFFFB266);
-  static const ORANGE_DARK = Color(0xFFCC6600);
-
-  /*__________________ OTHERS COLORS ______________________*/
-  static const GOLD = Color(0xFFEABF00);
+  static const ORANGE_LIGHT = Color(0xFFFFAB40); // Orange vif et chaleureux
+  static const ORANGE_DARK = Color(0xFFEF6C00); // Orange foncé audacieux
 
 }

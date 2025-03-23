@@ -16,7 +16,7 @@ class CustomOutlinedButtonTheme {
               textStyle:
               const TextStyle(
                 fontSize: 13,
-                color: CustomColors.PRIMARY, fontFamily: "poppins_bold",
+                color: CustomColors.PRIMARY, fontFamily: "Manrope-Bold",
               ),
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12))));
@@ -33,7 +33,7 @@ class CustomOutlinedButtonTheme {
               padding: const EdgeInsets.symmetric(vertical: 8),
               textStyle: const TextStyle(
                   fontSize: 13,
-                  color: CustomColors.PRIMARY, fontFamily: "poppins_bold"),
+                  color: CustomColors.PRIMARY, fontFamily: "Manrope-Bold"),
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12))));
 }

@@ -18,26 +18,11 @@ dependencies:
   firebase_core: ^2.24.2
   cloud_firestore: ^4.14.0
 
-  # LOCAL STORAGE
-  #get_storage: ^2.1.1
-  #sqflite: ^2.3.0
-
-  # IMAGES + CAMERA
-  #image_picker: ^1.0.0
-  #cached_network_image: ^3.4.0
-  #flutter_image_compress: ^2.0.0
-
   # UTILS
-# cloudinary: ^1.2.0
   url_launcher: ^6.3.0
-  #avatar_glow: ^3.0.1
-  #flutter_launcher_icons: ^0.13.1
-  #permission_handler: ^11.3.0
-  #device_info_plus: ^10.0.1
+  avatar_glow: ^3.0.1
   mailer: ^6.1.1
-  #http: ^1.2.0
-  #connectivity_plus: ^5.0.2
-  #iconsax: ^0.0.8
+  widget_and_text_animator: ^1.1.5
 
 dev_dependencies:
   flutter_test:
@@ -54,19 +39,30 @@ flutter:
   uses-material-design: true
 
   assets:
-#    - assets/images/
+    - assets/images/
+    - assets/icons/db/
+    - assets/icons/design/
+    - assets/icons/editors/
+    - assets/icons/mobile/
+    - assets/icons/stores/
+    - assets/icons/web/
 
 
   fonts:
-    - family: Poppins_light
-      fonts:
-        - asset: assets/font/poppins_light.ttf
 
-    - family: Poppins_regular
+    - family: Manrope-Bold
       fonts:
-        - asset: assets/font/poppins_regular.ttf
+        - asset: assets/font/Manrope-Bold.ttf
 
-    - family: Poppins_bold
+    - family: Manrope-Medium
       fonts:
-        - asset: assets/font/poppins_bold.ttf
+        - asset: assets/font/Manrope-Medium.ttf
+
+    - family: Recoleta-Medium
+      fonts:
+        - asset: assets/font/Recoleta-Medium.otf
+
+    - family: Recoleta-Bold
+      fonts:
+        - asset: assets/font/Recoleta-Bold.otf
 

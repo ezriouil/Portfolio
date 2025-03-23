@@ -24,7 +24,7 @@ class CustomAppBarTheme {
       iconTheme: IconThemeData(color: CustomColors.BLACK, size: 24),
       actionsIconTheme: IconThemeData(color: CustomColors.BLACK, size: 24),
       titleTextStyle: TextStyle(
-          fontSize: 18.0, fontFamily: "poppins_regular",
+          fontSize: 18.0, fontFamily: "Manrope-Medium",
           fontWeight: FontWeight.w600,
           color: CustomColors.BLACK));
 
@@ -46,7 +46,7 @@ class CustomAppBarTheme {
           systemNavigationBarDividerColor: CustomColors.BLACK
       ),
       titleTextStyle: TextStyle(
-          fontSize: 18.0, fontFamily: "poppins_regular",
+          fontSize: 18.0, fontFamily: "Manrope-Medium",
           fontWeight: FontWeight.w600,
           color: CustomColors.WHITE));
 }

@@ -9,7 +9,7 @@ class CustomLayout extends CustomState {
   @override
   Widget execute(BuildContext context) {
     return LayoutBuilder(builder: (context, constraints) {
-      if(constraints.maxWidth >= 1200) { return web; }
+      if(constraints.maxWidth >= 1100) { return web; }
       else if(constraints.maxWidth >= 650 && constraints.maxWidth < 1100) { return tablet; }
       else { return mobile; }
     });

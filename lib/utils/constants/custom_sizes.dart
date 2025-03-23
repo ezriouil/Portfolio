@@ -3,8 +3,8 @@
 class CustomSizes {
   CustomSizes._();
 
-  static const double SPACE_BETWEEN_ITEMS_MOBILE = 16.0;
-  static const double SPACE_BETWEEN_SECTIONS_MOBILE = 32.0;
-  static const double SPACE_DEFAULT_MOBILE = 24.0;
+  static const double SPACE_BETWEEN_ITEMS = 16.0;
+  static const double SPACE_BETWEEN_SECTIONS = 32.0;
+  static const double SPACE_DEFAULT = 24.0;
 
 }
