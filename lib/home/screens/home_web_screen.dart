@@ -1,14 +1,18 @@
 import 'package:avatar_glow/avatar_glow.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:portfolio/common/widgets/custom_elevated_button.dart';
-import 'package:portfolio/common/widgets/custom_outlined_button.dart';
+import 'package:portfolio/common/widgets/custom_text_field.dart';
 import 'package:portfolio/home/home_controller.dart';
 import 'package:portfolio/utils/constants/custom_colors.dart';
+import 'package:portfolio/utils/constants/custom_icons.dart';
 import 'package:portfolio/utils/constants/custom_images.dart';
 import 'package:portfolio/utils/constants/custom_sizes.dart';
 import 'package:portfolio/utils/state/custom_state.dart';
 import 'package:widget_and_text_animator/widget_and_text_animator.dart';
+
+import '../../common/widgets/custom_outlined_button.dart';
 
 class HomeWebScreen extends CustomState {
   const HomeWebScreen({super.key});
@@ -86,7 +90,7 @@ class HomeWebScreen extends CustomState {
               const SizedBox(height: CustomSizes.SPACE_DEFAULT * 2),
 
               // HOME
-              SizedBox(
+              /*SizedBox(
                 width: 300,
                 child: Stack(
                   alignment: Alignment.center,
@@ -210,21 +214,379 @@ class HomeWebScreen extends CustomState {
                   ),
                 ],
               ),
-              const SizedBox(height: CustomSizes.SPACE_DEFAULT * 2),
+              const SizedBox(height: CustomSizes.SPACE_DEFAULT * 2),*/
 
               // SKILLS
-              Container(
-                  height: 60,
+              /*Container(
+                  height: 50,
                   color: darkDarkLightLightColor(context),
                   child: ListView.builder(
-                      controller: controller.skillsScrollController,
+                      controller: controller.skillsFirstScrollController,
                       scrollDirection: Axis.horizontal,
                       itemCount: controller.skills.length,
                       itemBuilder: (context, index) => Padding(
                         padding: const EdgeInsets.symmetric(horizontal: CustomSizes.SPACE_BETWEEN_ITEMS),
-                        child: Image.asset(controller.skills[index], width: 40, height: 40),
+                        child: Image.asset(controller.skills[index], width: 30, height: 30),
                       ))),
-              const SizedBox(height: CustomSizes.SPACE_DEFAULT * 2),
+              const SizedBox(height: CustomSizes.SPACE_BETWEEN_SECTIONS * 4),*/
+
+              // MOBILE + STORES
+              /*
+              Text("Skills", style: Theme.of(context).textTheme.headlineMedium?.copyWith(fontFamily: 'Recoleta-Bold', fontSize: 50, color: darkDarkLightLightColor(context))),
+              const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS / 2),
+              Text("Technologies i'm working with", style: Theme.of(context).textTheme.headlineMedium?.copyWith(fontFamily: 'Recoleta-Medium', fontSize: 24, color: darkDarkLightLightColor(context))),
+              const SizedBox(height: CustomSizes.SPACE_DEFAULT * 3),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    width: 350,
+                    decoration: BoxDecoration(
+                        color: grayColor(context),
+                        borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(CustomSizes.SPACE_BETWEEN_ITEMS / 4),
+                          topRight: Radius.circular(CustomSizes.SPACE_BETWEEN_ITEMS / 4),
+                          bottomLeft: Radius.circular(CustomSizes.SPACE_DEFAULT),
+                          bottomRight: Radius.circular(CustomSizes.SPACE_DEFAULT),
+                        ),
+                        border: Border.all(color: darkDarkLightLightColor(context))
+                    ),
+                    child: Column(
+                      children: [
+                        const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS / 2),
+                        Text('Mobile', style: Theme.of(context).textTheme.headlineMedium?.copyWith(fontFamily: 'Recoleta-Bold', color: darkDarkLightLightColor(context))),
+                        Divider(color: darkDarkLightLightColor(context), thickness: 0.5, indent: CustomSizes.SPACE_DEFAULT, endIndent: CustomSizes.SPACE_DEFAULT),
+                        const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS / 2),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: CustomSizes.SPACE_BETWEEN_ITEMS),
+                          child:  Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(child: _customSkill(context: context, imgUri: CustomIcons.MOBILE_DART, title: "DART")),
+                              Expanded(child: _customSkill(context: context, imgUri: CustomIcons.MOBILE_KOTLIN, title: "KOTLIN")),
+                              Expanded(child: _customSkill(context: context, imgUri: CustomIcons.MOBILE_FLUTTER, title: "FLUTTER")),
+                              Expanded(child: _customSkill(context: context, imgUri: CustomIcons.MOBILE_JAVA, title: "JAVA")),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS)
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: CustomSizes.SPACE_DEFAULT),
+                  Container(
+                    width: 350,
+                    decoration: BoxDecoration(
+                        color: grayColor(context),
+                        borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(CustomSizes.SPACE_BETWEEN_ITEMS / 4),
+                          topRight: Radius.circular(CustomSizes.SPACE_BETWEEN_ITEMS / 4),
+                          bottomLeft: Radius.circular(CustomSizes.SPACE_DEFAULT),
+                          bottomRight: Radius.circular(CustomSizes.SPACE_DEFAULT),
+                        ),
+                        border: Border.all(color: darkDarkLightLightColor(context))
+                    ),
+                    child: Column(
+                      children: [
+                        const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS / 2),
+                        Text('Stores', style: Theme.of(context).textTheme.headlineMedium?.copyWith(fontFamily: 'Recoleta-Bold', color: darkDarkLightLightColor(context))),
+                        Divider(color: darkDarkLightLightColor(context), thickness: 0.5, indent: CustomSizes.SPACE_DEFAULT, endIndent: CustomSizes.SPACE_DEFAULT),
+                        const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS / 2),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: CustomSizes.SPACE_BETWEEN_ITEMS),
+                          child:  Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(child: _customSkill(context: context, imgUri: CustomIcons.STORES_GOOGLE_PLAY, title: "PLAY STORE")),
+                              Expanded(child: _customSkill(context: context, imgUri: CustomIcons.STORES_APPLE, title: "APP STORE")),
+                              Expanded(child: _customSkill(context: context, imgUri: CustomIcons.STORES_AMAZON, title: "AMAZON")),
+                              Expanded(child: _customSkill(context: context, imgUri: CustomIcons.STORES_HUAWEI, title: "APP GALLERY")),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS)
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: CustomSizes.SPACE_BETWEEN_SECTIONS),
+              // WEB + DB
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    width: 350,
+                    decoration: BoxDecoration(
+                        color: grayColor(context),
+                        borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(CustomSizes.SPACE_BETWEEN_ITEMS / 4),
+                          topRight: Radius.circular(CustomSizes.SPACE_BETWEEN_ITEMS / 4),
+                          bottomLeft: Radius.circular(CustomSizes.SPACE_DEFAULT),
+                          bottomRight: Radius.circular(CustomSizes.SPACE_DEFAULT),
+                        ),
+                        border: Border.all(color: darkDarkLightLightColor(context))
+                    ),
+                    child: Column(
+                      children: [
+                        const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS / 2),
+                        Text('Web', style: Theme.of(context).textTheme.headlineMedium?.copyWith(fontFamily: 'Recoleta-Bold', color: darkDarkLightLightColor(context))),
+                        Divider(color: darkDarkLightLightColor(context), thickness: 0.5, indent: CustomSizes.SPACE_DEFAULT, endIndent: CustomSizes.SPACE_DEFAULT),
+                        const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS / 2),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: CustomSizes.SPACE_BETWEEN_ITEMS),
+                          child:  Column(
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Expanded(child: _customSkill(context: context, imgUri: CustomIcons.WEB_HTML, title: "HTML")),
+                                  Expanded(child: _customSkill(context: context, imgUri: CustomIcons.WEB_CSS, title: "CSS")),
+                                  Expanded(child: _customSkill(context: context, imgUri: CustomIcons.WEB_JS, title: "JAVA SCRIPT")),
+                                  Expanded(child: _customSkill(context: context, imgUri: CustomIcons.WEB_REACT_JS, title: "REACT JS")),
+                                ],
+                              ),
+                              const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Expanded(child: _customSkill(context: context, imgUri: CustomIcons.WEB_TAILWIND_CSS, title: "TAILWIND CSS")),
+                                  Expanded(child: _customSkill(context: context, imgUri: CustomIcons.WEB_NODE_JS, title: "NODE JS")),
+                                  Expanded(child: _customSkill(context: context, imgUri: CustomIcons.WEB_EXPRESS_JS, title: "EXPRESS JS", color: darkDarkLightLightColor(context))),
+                                  Expanded(child: _customSkill(context: context, imgUri: CustomIcons.WEB_PYTHON, title: "PYTHON")),
+                                ],
+                              ),
+                            ],
+                          )
+                        ),
+                        const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS)
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: CustomSizes.SPACE_DEFAULT),
+                  Container(
+                    width: 350,
+                    decoration: BoxDecoration(
+                        color: grayColor(context),
+                        borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(CustomSizes.SPACE_BETWEEN_ITEMS / 4),
+                          topRight: Radius.circular(CustomSizes.SPACE_BETWEEN_ITEMS / 4),
+                          bottomLeft: Radius.circular(CustomSizes.SPACE_DEFAULT),
+                          bottomRight: Radius.circular(CustomSizes.SPACE_DEFAULT),
+                        ),
+                        border: Border.all(color: darkDarkLightLightColor(context))
+                    ),
+                    child: Column(
+                      children: [
+                        const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS / 2),
+                        Text('Database', style: Theme.of(context).textTheme.headlineMedium?.copyWith(fontFamily: 'Recoleta-Bold', color: darkDarkLightLightColor(context))),
+                        Divider(color: darkDarkLightLightColor(context), thickness: 0.5, indent: CustomSizes.SPACE_DEFAULT, endIndent: CustomSizes.SPACE_DEFAULT),
+                        const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS / 2),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: CustomSizes.SPACE_BETWEEN_ITEMS),
+                          child:  Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(child: _customSkill(context: context, imgUri: CustomIcons.DB_MONGO_DB, title: "MONGO DB")),
+                              Expanded(child: _customSkill(context: context, imgUri: CustomIcons.DB_FIREBASE, title: "FIREBASE")),
+                              Expanded(child: _customSkill(context: context, imgUri: CustomIcons.DB_SQL, title: "SQL")),
+                              Expanded(child: _customSkill(context: context, imgUri: CustomIcons.DB_SUPABASE, title: "SUPABASE")),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS)
+                      ],
+                    ),
+                  )
+                ],
+              ),
+              const SizedBox(height: CustomSizes.SPACE_BETWEEN_SECTIONS),
+              // EDITORS + DESIGN
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    width: 350,
+                    decoration: BoxDecoration(
+                        color: grayColor(context),
+                        borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(CustomSizes.SPACE_BETWEEN_ITEMS / 4),
+                          topRight: Radius.circular(CustomSizes.SPACE_BETWEEN_ITEMS / 4),
+                          bottomLeft: Radius.circular(CustomSizes.SPACE_DEFAULT),
+                          bottomRight: Radius.circular(CustomSizes.SPACE_DEFAULT),
+                        ),
+                        border: Border.all(color: darkDarkLightLightColor(context))
+                    ),
+                    child: Column(
+                      children: [
+                        const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS / 2),
+                        Text('Editors', style: Theme.of(context).textTheme.headlineMedium?.copyWith(fontFamily: 'Recoleta-Bold', color: darkDarkLightLightColor(context))),
+                        Divider(color: darkDarkLightLightColor(context), thickness: 0.5, indent: CustomSizes.SPACE_DEFAULT, endIndent: CustomSizes.SPACE_DEFAULT),
+                        const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS / 2),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: CustomSizes.SPACE_BETWEEN_ITEMS),
+                          child:  Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(child: _customSkill(context: context, imgUri: CustomIcons.EDITORS_ANDROID_STUDIO, title: "ANDROID STUDIO")),
+                              Expanded(child: _customSkill(context: context, imgUri: CustomIcons.EDITORS_VS_CODE, title: "VS CODE")),
+                              Expanded(child: _customSkill(context: context, imgUri: CustomIcons.EDITORS_INTELLIJ_IDEA, title: "INTELLIJ IDEA")),
+                              Expanded(child: _customSkill(context: context, imgUri: CustomIcons.EDITORS_SUBLIME, title: "SUBLIME")),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS)
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: CustomSizes.SPACE_DEFAULT),
+                  Container(
+                    width: 350,
+                    decoration: BoxDecoration(
+                        color: grayColor(context),
+                        borderRadius: const BorderRadius.only(
+                            topLeft: Radius.circular(CustomSizes.SPACE_BETWEEN_ITEMS / 4),
+                            topRight: Radius.circular(CustomSizes.SPACE_BETWEEN_ITEMS / 4),
+                            bottomLeft: Radius.circular(CustomSizes.SPACE_DEFAULT),
+                            bottomRight: Radius.circular(CustomSizes.SPACE_DEFAULT),
+                        ),
+                        border: Border.all(color: darkDarkLightLightColor(context))
+                    ),
+                    child: Column(
+                      children: [
+                        const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS / 2),
+                        Text('Design', style: Theme.of(context).textTheme.headlineMedium?.copyWith(fontFamily: 'Recoleta-Bold', color: darkDarkLightLightColor(context))),
+                        Divider(color: darkDarkLightLightColor(context), thickness: 0.5, indent: CustomSizes.SPACE_DEFAULT, endIndent: CustomSizes.SPACE_DEFAULT),
+                        const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS / 2),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: CustomSizes.SPACE_BETWEEN_ITEMS),
+                          child:  _customSkill(context: context, imgUri: CustomIcons.DESIGN_FIGMA, title: "FIGMA"),
+                        ),
+                        const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS)
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: CustomSizes.SPACE_BETWEEN_SECTIONS * 4),*/
+
+              // SKILLS
+              /*Container(
+                  height: 50,
+                  color: darkDarkLightLightColor(context),
+                  child: ListView.builder(
+                      controller: controller.skillsLastScrollController,
+                      scrollDirection: Axis.horizontal,
+                      itemCount: controller.skills.length,
+                      itemBuilder: (context, index) => Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: CustomSizes.SPACE_BETWEEN_ITEMS),
+                        child: Image.asset(controller.skills[index], width: 30, height: 30),
+                      ))),
+              const SizedBox(height: CustomSizes.SPACE_DEFAULT * 2),*/
+
+              // ABOUT ME
+              /*
+              Text("About Me", style: Theme.of(context).textTheme.headlineMedium?.copyWith(fontFamily: 'Recoleta-Bold', fontSize: 50, color: darkDarkLightLightColor(context))),
+              const SizedBox(height: CustomSizes.SPACE_DEFAULT),
+              SizedBox(
+                width: 650,
+                height: 220,
+                child: Row(
+                  children: [
+                    Expanded(
+                      flex: 1,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(CustomSizes.SPACE_DEFAULT),
+                        child: Image.asset(CustomImages.MOHAMED_EZRIOUIL,
+                          width: getWidth(context),
+                          height: getHeight(context),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: CustomSizes.SPACE_DEFAULT),
+                    Expanded(
+                      flex: 2,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text("Know who am I", style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontFamily: 'Recoleta-Medium', color: darkDarkLightLightColor(context))),
+                          const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS),
+                          Text("Mohamed Ezriouil, ${DateTime.now().year - 2003} years old, is a mobile and web developer with a bachelor’s degree and ${DateTime.now().year - 2022} years of development experience. Passionate about building innovative applications, he specializes in creating efficient and high-performance solutions.",
+                              style: Theme.of(context).textTheme.titleMedium?.copyWith(color: darkDarkLightLightColor(context))
+                          ),
+                          const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS),
+                          Row(
+                            children: [
+                              _customContact(context: context, imgUri: CustomIcons.CONTACT_GMAIL, onPressed: (){}),
+                              const SizedBox(width: CustomSizes.SPACE_BETWEEN_ITEMS / 2),
+                              _customContact(context: context, imgUri: CustomIcons.CONTACT_WHATSAPP, onPressed: (){}),
+                              const SizedBox(width: CustomSizes.SPACE_BETWEEN_ITEMS / 2),
+                              _customContact(context: context, imgUri: CustomIcons.CONTACT_LINKEDIN, onPressed: (){}),
+                              const SizedBox(width: CustomSizes.SPACE_BETWEEN_ITEMS / 2),
+                              _customContact(context: context, imgUri: CustomIcons.CONTACT_GITHUB, color: darkDarkLightLightColor(context), onPressed: (){}),
+                            ]
+                          )
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              ),
+              const SizedBox(height: CustomSizes.SPACE_DEFAULT * 3),*/
+
+              // CONTACT ME
+              /*SizedBox(
+                width: 600,
+                child: Form(
+                  key: controller.formState,
+                  child: Column(
+                    children: [
+                      Text("Contact Me", style: Theme.of(context).textTheme.headlineMedium?.copyWith(fontFamily: 'Recoleta-Bold', fontSize: 50, color: darkDarkLightLightColor(context))),
+                      const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS / 4),
+                      Text("Let's talk on something great together", style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontFamily: 'Recoleta-Medium', color: darkDarkLightLightColor(context))),
+                      const SizedBox(height: CustomSizes.SPACE_BETWEEN_SECTIONS),
+                      CustomTextField(
+                          controller: controller.fullNameController,
+                          hint: "Full Name",
+                          icon: Iconsax.user,
+                          validator: (value){
+                            if (value == null || value.isEmpty || value.length < 2) { return "Field must not be empty"; }
+                            return null;
+                          }),
+                      const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS),
+                      CustomTextField(
+                          controller: controller.objectController,
+                          hint: "Object",
+                          icon: Iconsax.message,
+                          validator: (value){
+                            if (value == null || value.isEmpty || value.length < 2) { return "Field must not be empty"; }
+                            return null;
+                          }),
+                      const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS),
+                      CustomTextField(
+                          controller: controller.messageController,
+                          hint: "Message",
+                          validator: (value){
+                            if (value == null || value.isEmpty || value.length < 10) { return "Field must not be empty"; }
+                            return null;
+                          },
+                          minLines: 8,
+                          maxLines: 12
+                      ),
+                      const SizedBox(height: CustomSizes.SPACE_DEFAULT),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: CustomSizes.SPACE_BETWEEN_SECTIONS * 3),
+                        child: CustomElevatedButton(onPressed: controller.onSend, bgColor: darkLightColor(context), child: const Text("Send")),
+                      )
+                    ],
+                  ),
+                ),
+              )*/
 
             ]
           ),
@@ -232,4 +594,34 @@ class HomeWebScreen extends CustomState {
       )
     );
   }
+
+  Widget _customSkill({ required BuildContext context, required String imgUri, required String title, Color? color}) => Column(
+    children: [
+      Container(
+        padding: const EdgeInsets.all(CustomSizes.SPACE_BETWEEN_ITEMS),
+        decoration: BoxDecoration(
+            color: darkLightColor(context),
+            borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_ITEMS),
+            border: Border.all(color: darkDarkLightLightColor(context))
+        ),
+        child: Image.asset(imgUri, width: 28.0, height: 28.0, fit: BoxFit.cover, color: color),
+      ),
+      const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS / 4),
+      Text(title, style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: darkDarkLightLightColor(context), fontSize: 10), maxLines: 1, overflow: TextOverflow.ellipsis, textAlign: TextAlign.center)
+    ],
+  );
+
+  Widget _customContact({ required BuildContext context, required String imgUri, required GestureTapCallback onPressed, Color? color}) => InkWell(
+    onTap: onPressed,
+    overlayColor: const WidgetStatePropertyAll<Color?>(CustomColors.TRANSPARENT),
+    child: Container(
+      padding: const EdgeInsets.all(CustomSizes.SPACE_BETWEEN_ITEMS / 2),
+      decoration: BoxDecoration(
+          color: darkLightColor(context),
+          borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_ITEMS / 2),
+          border: Border.all(color: darkDarkLightLightColor(context))
+      ),
+      child: Image.asset(imgUri, width: 18.0, height: 18.0, fit: BoxFit.cover, color: color,),
+    ),
+  );
 }

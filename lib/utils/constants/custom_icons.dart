@@ -36,4 +36,9 @@ class CustomIcons{
   static const String WEB_REACT_JS = "assets/icons/web/react_js.png";
   static const String WEB_TAILWIND_CSS = "assets/icons/web/tailwind_css.png";
 
+  static const String CONTACT_GMAIL = "assets/icons/contact/gmail.png";
+  static const String CONTACT_LINKEDIN = "assets/icons/contact/linkedin.png";
+  static const String CONTACT_WHATSAPP = "assets/icons/contact/whatsapp.png";
+  static const String CONTACT_GITHUB = "assets/icons/contact/github.png";
+
 }

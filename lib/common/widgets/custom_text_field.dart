@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:portfolio/utils/constants/custom_colors.dart';
 
 import '../../utils/constants/custom_sizes.dart';
 import '../../utils/state/custom_state.dart';
@@ -10,7 +11,7 @@ class CustomTextField extends CustomState{
   final String hint;
   final IconData? icon;
   final Widget? trailing;
-  final int? maxLength;
+  final int? maxLength, minLines, maxLines;
   final void Function(String)? onChanged;
   final TextInputType keyboardType;
   final TextInputAction textInputAction;
@@ -30,7 +31,9 @@ class CustomTextField extends CustomState{
         this.obscureText = false,
         this.readOnly = false,
         this.validator,
-        this.trailing
+        this.trailing,
+        this.minLines = 1,
+        this.maxLines = 1,
       });
 
   @override
@@ -44,17 +47,17 @@ class CustomTextField extends CustomState{
       cursorOpacityAnimates: true,
       cursorRadius: const Radius.circular(CustomSizes.SPACE_BETWEEN_ITEMS),
       decoration: InputDecoration(
-        fillColor: grayColor(context).withValues(alpha: 0.1),
+        fillColor: darkDarkLightLightColor(context).withValues(alpha: 0.8),
         filled: true,
         hintText: hint,
         contentPadding: const EdgeInsets.all(CustomSizes.SPACE_BETWEEN_ITEMS * 1.25),
         hintStyle: Theme.of(context).textTheme.bodySmall?.copyWith(color: grayColor(context)),
-        prefixIcon: Icon(icon, color: grayColor(context), size: 16.0),
+        prefixIcon: icon == null ? null : Icon(icon, color: grayColor(context), size: 16.0),
         counterStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(fontSize: 8),
         suffixIcon: trailing,
       ),
-      minLines: 1,
-      maxLines: 1,
+      minLines: minLines,
+      maxLines: maxLines,
       maxLength: maxLength,
       enabled: enabled,
       readOnly: readOnly,
