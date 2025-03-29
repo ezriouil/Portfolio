@@ -20,6 +20,7 @@ dependencies:
 
   # UTILS
   iconsax: any
+  flutter_card_swiper: ^7.0.2
   url_launcher: ^6.3.0
   avatar_glow: ^3.0.1
   mailer: ^6.1.1

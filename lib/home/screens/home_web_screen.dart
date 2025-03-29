@@ -1,9 +1,8 @@
-import 'package:avatar_glow/avatar_glow.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_card_swiper/flutter_card_swiper.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:portfolio/common/widgets/custom_elevated_button.dart';
-import 'package:portfolio/common/widgets/custom_text_field.dart';
 import 'package:portfolio/home/home_controller.dart';
 import 'package:portfolio/utils/constants/custom_colors.dart';
 import 'package:portfolio/utils/constants/custom_icons.dart';
@@ -11,8 +10,6 @@ import 'package:portfolio/utils/constants/custom_images.dart';
 import 'package:portfolio/utils/constants/custom_sizes.dart';
 import 'package:portfolio/utils/state/custom_state.dart';
 import 'package:widget_and_text_animator/widget_and_text_animator.dart';
-
-import '../../common/widgets/custom_outlined_button.dart';
 
 class HomeWebScreen extends CustomState {
   const HomeWebScreen({super.key});
@@ -487,6 +484,28 @@ class HomeWebScreen extends CustomState {
                       ))),
               const SizedBox(height: CustomSizes.SPACE_DEFAULT * 2),*/
 
+              // PROJECTS
+              SizedBox(
+                width: getWidth(context) * 0.6,
+                height: 550,
+                child: CardSwiper(
+                  cardsCount: 3,
+                  numberOfCardsDisplayed: 3,
+                  cardBuilder: (context, index, percentThresholdX, percentThresholdY) =>
+                          _customProject(
+                              context: context,
+                              logoUri: "https://i.ytimg.com/an_webp/CbY0rSfUPYg/mqdefault_6s.webp?du=3000&sqp=CKiFnr8G&rs=AOn4CLDqARhPfRBcVHfKk_nfY3-R4hA5tg",
+                              title: "https",
+                              description: "https://i.ytimg.com/an_webp/CbY0rSfUPYg/mqdefault_6s.webp?du=3000&sqp=CKiFnr8G&rs=AOn4CLDqARhPfRBcVHfKk_nfY3-R4hA5tg",
+                              thumbnailUri: "",
+                              onInstallApk: (){},
+                              onDetails: (){},
+                              onGithub: (){}
+                          ),
+                ),
+              ),
+              const SizedBox(height: CustomSizes.SPACE_DEFAULT),
+
               // ABOUT ME
               /*
               Text("About Me", style: Theme.of(context).textTheme.headlineMedium?.copyWith(fontFamily: 'Recoleta-Bold', fontSize: 50, color: darkDarkLightLightColor(context))),
@@ -524,8 +543,8 @@ class HomeWebScreen extends CustomState {
                             children: [
                               _customContact(context: context, imgUri: CustomIcons.CONTACT_GMAIL, onPressed: (){}),
                               const SizedBox(width: CustomSizes.SPACE_BETWEEN_ITEMS / 2),
-                              _customContact(context: context, imgUri: CustomIcons.CONTACT_WHATSAPP, onPressed: (){}),
-                              const SizedBox(width: CustomSizes.SPACE_BETWEEN_ITEMS / 2),
+                              // _customContact(context: context, imgUri: CustomIcons.CONTACT_WHATSAPP, onPressed: (){}),
+                              // const SizedBox(width: CustomSizes.SPACE_BETWEEN_ITEMS / 2),
                               _customContact(context: context, imgUri: CustomIcons.CONTACT_LINKEDIN, onPressed: (){}),
                               const SizedBox(width: CustomSizes.SPACE_BETWEEN_ITEMS / 2),
                               _customContact(context: context, imgUri: CustomIcons.CONTACT_GITHUB, color: darkDarkLightLightColor(context), onPressed: (){}),
@@ -578,7 +597,7 @@ class HomeWebScreen extends CustomState {
                           minLines: 8,
                           maxLines: 12
                       ),
-                      const SizedBox(height: CustomSizes.SPACE_DEFAULT),
+         const              const SizedBox(height: CustomSizes.SPACE_DEFAULT),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: CustomSizes.SPACE_BETWEEN_SECTIONS * 3),
                         child: CustomElevatedButton(onPressed: controller.onSend, bgColor: darkLightColor(context), child: const Text("Send")),
@@ -588,12 +607,132 @@ class HomeWebScreen extends CustomState {
                 ),
               )*/
 
+              // FOOTER
+              /*Container(
+                color: darkLightColor(context),
+                padding: const EdgeInsets.symmetric(vertical: CustomSizes.SPACE_DEFAULT),
+                child: Column(
+                  children: [
+                    Text("Designed and built by Mohamed Ezriouil with love and coffee", style: Theme.of(context).textTheme.titleLarge?.copyWith(color: darkDarkLightLightColor(context))),
+                    const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          _customContact(context: context, imgUri: CustomIcons.CONTACT_LINKEDIN, onPressed: (){}),
+                          const SizedBox(width: CustomSizes.SPACE_BETWEEN_ITEMS / 2),
+                          _customContact(context: context, imgUri: CustomIcons.CONTACT_GMAIL, onPressed: (){}),
+                          //_customContact(context: context, imgUri: CustomIcons.CONTACT_WHATSAPP, onPressed: (){}),
+                          //const SizedBox(width: CustomSizes.SPACE_BETWEEN_ITEMS / 2),
+                          const SizedBox(width: CustomSizes.SPACE_BETWEEN_ITEMS / 2),
+                          _customContact(context: context, imgUri: CustomIcons.CONTACT_GITHUB, color: darkDarkLightLightColor(context), onPressed: (){}),
+                        ]
+                    )
+                  ],
+                ),
+              )*/
+
             ]
           ),
         ),
       )
     );
   }
+
+  Widget _customProject({ required BuildContext context, required String logoUri, required String title, required String description, required String thumbnailUri, required GestureTapCallback onInstallApk, required GestureTapCallback onDetails, required GestureTapCallback onGithub }) => Container(
+    width: getWidth(context) * 0.6,
+    padding: const EdgeInsets.symmetric(vertical: CustomSizes.SPACE_BETWEEN_ITEMS),
+    decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_ITEMS / 2),
+        color: grayColor(context),
+        border: Border.all(color: darkDarkLightLightColor(context))
+    ),
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: CustomSizes.SPACE_BETWEEN_SECTIONS),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            spacing: CustomSizes.SPACE_BETWEEN_ITEMS / 2,
+            children: [
+              Row(
+                spacing: CustomSizes.SPACE_BETWEEN_ITEMS,
+                children: [
+                  ClipRRect(
+                      borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_ITEMS / 2),
+                      child: Image.network(CustomImages.REAL_MOROCCO_LOGO, height: 32, width: 32)),
+                  Text(title, style: Theme.of(context).textTheme.headlineMedium?.copyWith(fontFamily: 'Recoleta-Bold', color: darkDarkLightLightColor(context))),
+                ],
+              ),
+              Text(description, style: Theme.of(context).textTheme.titleMedium?.copyWith(fontSize: 12, color: darkDarkLightLightColor(context)), maxLines: 2, overflow: TextOverflow.ellipsis),
+            ],
+          ),
+        ),
+
+        const SizedBox(height: CustomSizes.SPACE_DEFAULT),
+
+        SizedBox(
+          width: getWidth(context) * 0.6,
+          height: 300,
+          child: DecoratedBox(decoration: BoxDecoration(image: DecorationImage(image: NetworkImage(thumbnailUri), fit: BoxFit.cover)))),
+
+        const SizedBox(height: CustomSizes.SPACE_DEFAULT),
+
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: CustomSizes.SPACE_BETWEEN_SECTIONS),
+          child: Row(
+            spacing: CustomSizes.SPACE_DEFAULT,
+            children: [
+              Expanded(child: CustomElevatedButton(
+                  onPressed: onInstallApk,
+                  height: CustomSizes.SPACE_DEFAULT * 1.5,
+                  bgColor: darkDarkLightLightColor(context),
+                  elevation: 0,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    spacing: CustomSizes.SPACE_BETWEEN_ITEMS / 2,
+                    children: [
+                      Icon(Icons.arrow_circle_down, color: darkLightColor(context),),
+                      Text('Install APK', style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: darkLightColor(context))),
+                    ],
+                  )
+              )),
+              Expanded(child: CustomElevatedButton(
+                  onPressed: onDetails,
+                  height: CustomSizes.SPACE_DEFAULT * 1.5,
+                  bgColor: darkDarkLightLightColor(context),
+                  elevation: 0,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    spacing: CustomSizes.SPACE_BETWEEN_ITEMS / 2,
+                    children: [
+                      Icon(Iconsax.more_2, color: darkLightColor(context),),
+                      Text('More Details', style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: darkLightColor(context))),
+                    ],
+                  )
+              )),
+              Expanded(child: CustomElevatedButton(
+                  onPressed: onGithub,
+                  height: CustomSizes.SPACE_DEFAULT * 1.5,
+                  bgColor: darkDarkLightLightColor(context),
+                  elevation: 0,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    spacing: CustomSizes.SPACE_BETWEEN_ITEMS / 2,
+                    children: [
+                      Image.asset(CustomIcons.CONTACT_GITHUB, color: darkLightColor(context), width: 24, height: 24),
+                      Text('Code Source', style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: darkLightColor(context))),
+                    ],
+                  )
+              )),
+            ],
+          ),
+        ),
+
+      ],
+    ),
+  );
 
   Widget _customSkill({ required BuildContext context, required String imgUri, required String title, Color? color}) => Column(
     children: [

@@ -41,6 +41,7 @@ class HomeController extends GetxController{
     CustomIcons.WEB_TAILWIND_CSS
   ];
 
+
   // - - - - - - - - - - - - - - - - - - INIT STATES - - - - - - - - - - - - - - - - - -  //
   @override
   void onInit() {

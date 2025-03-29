@@ -5,5 +5,9 @@ class CustomImages{
 
   // static const String LOGO = "assets/images/logo.webp";
   static const String MOHAMED_EZRIOUIL = "assets/images/mohamed_ezriouil.jpg";
+  static const String REAL_MOROCCO_THUMBNAIL = "assets/images/real_morocco_thumbnail.png";
+  static const String REAL_MOROCCO_BG = "assets/images/real_morocco_bg.png";
+  static const String REAL_MOROCCO_LOGO = "assets/images/real_morocco_logo.png";
+
 
 }
