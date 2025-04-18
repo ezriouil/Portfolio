@@ -17,8 +17,10 @@ dependencies:
   # FIREBASE
   firebase_core: ^2.24.2
   cloud_firestore: ^4.14.0
+  cloud_firestore_web: any
 
   # UTILS
+  cloudinary: ^1.2.0
   iconsax: any
   flutter_card_swiper: ^7.0.2
   url_launcher: ^6.3.0

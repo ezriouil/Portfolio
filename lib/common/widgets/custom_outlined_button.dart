@@ -11,7 +11,15 @@ class CustomOutlinedButton  extends CustomState {
   final GestureTapCallback onPressed;
   final Widget child;
 
-  const CustomOutlinedButton({super.key, required this.onPressed, required this.child, this.width, this.height, this.color, this.elevation});
+  const CustomOutlinedButton(
+      {super.key,
+      required this.onPressed,
+      required this.child,
+      this.width,
+      this.height,
+      this.color,
+      this.elevation
+      });
 
   @override
   Widget execute(BuildContext context) {

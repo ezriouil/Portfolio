@@ -1,5 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:portfolio/common/models/custom_project_entity.dart';
 import 'package:portfolio/utils/constants/custom_icons.dart';
 
 class HomeController extends GetxController{
@@ -9,7 +11,9 @@ class HomeController extends GetxController{
   late final ScrollController skillsFirstScrollController;
   late final ScrollController skillsLastScrollController;
   late final TextEditingController fullNameController, objectController, messageController;
+  late final RxBool isDarkTheme, isFabVisible;
   late final GlobalKey<FormState> formState;
+  late final RxList<CustomProjectEntity> projects;
 
   final List<String> skills = [
     CustomIcons.DB_FIREBASE,
@@ -52,7 +56,10 @@ class HomeController extends GetxController{
     fullNameController = TextEditingController();
     objectController = TextEditingController();
     messageController = TextEditingController();
+    isDarkTheme = false.obs;
+    isFabVisible = false.obs;
     formState = GlobalKey<FormState>();
+    projects = RxList.empty(growable: true);
     init();
   }
 
@@ -60,6 +67,21 @@ class HomeController extends GetxController{
   void init() async {
     skills.shuffle();
     _autoScrolling();
+    _getProjects();
+  }
+
+  // - - - - - - - - - - - - - - - - - - GET PROJECTS - - - - - - - - - - - - - - - - - -  //
+  void _getProjects() async {
+    try{
+      final QuerySnapshot<Map<String, dynamic>> getAllProjects = await FirebaseFirestore.instance.collection('PROJECTS').get();
+      if(getAllProjects.size <= 0) return;
+      for(QueryDocumentSnapshot<Map<String, dynamic>> projectJson in getAllProjects.docs){
+        final CustomProjectEntity customProjectEntity = CustomProjectEntity.fromJson(projectJson.data());
+        projects.add(customProjectEntity);
+      }
+
+    }
+    catch(_){}
   }
 
   // - - - - - - - - - - - - - - - - - - MENU CLICKS - - - - - - - - - - - - - - - - - -  //
@@ -68,7 +90,7 @@ class HomeController extends GetxController{
   void onWorks() {}
   void onAbout() {}
   void onLetsTalk() {}
-  void onResume() {}
+  void onDownloadResume() {}
 
   // - - - - - - - - - - - - - - - - - - CONTACT BUTTON SEND - - - - - - - - - - - - - - - - - -  //
   void onSend() { if(!formState.currentState!.validate()) return; }
@@ -80,14 +102,18 @@ class HomeController extends GetxController{
     skillsFirstScrollController.animateTo(
       skillsFirstScrollController.position.maxScrollExtent,
       curve: Curves.linear,
-      duration: const Duration(seconds: 60),
+      duration: const Duration(seconds: 40),
     );
     skillsLastScrollController.addListener(() { if (skillsLastScrollController.position.pixels == skillsLastScrollController.position.maxScrollExtent) skillsLastScrollController.jumpTo(0); });
     skillsLastScrollController.animateTo(
       skillsLastScrollController.position.maxScrollExtent,
       curve: Curves.linear,
-      duration: const Duration(seconds: 60),
+      duration: const Duration(seconds: 40),
     );
+    scrollController.addListener(() {
+      if (scrollController.offset > 200 && !isFabVisible.value) { isFabVisible.value = true; }
+      else if (scrollController.offset <= 200 && isFabVisible.value) { isFabVisible.value = false; }
+    });
   }
 
   @override
@@ -95,6 +121,24 @@ class HomeController extends GetxController{
     scrollController.dispose();
     skillsFirstScrollController.dispose();
     super.dispose();
+  }
+
+  // - - - - - - - - - - - - - - - - - - CHANGE COLOR THEME - - - - - - - - - - - - - - - - - -  //
+  void scrollingUp(){
+    scrollController.animateTo(
+      0,
+      duration: const Duration(milliseconds: 500),
+      curve: Curves.easeInOut,
+    );
+  }
+
+  // - - - - - - - - - - - - - - - - - - CHANGE COLOR THEME - - - - - - - - - - - - - - - - - -  //
+  void onChangeColorTheming() {
+    try{
+      Get.changeThemeMode(isDarkTheme.value ? ThemeMode.light : ThemeMode.dark);
+      isDarkTheme.value = !isDarkTheme.value;
+    }
+    catch(_){}
   }
 
 }

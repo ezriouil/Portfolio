@@ -1,3 +1,5 @@
+import 'package:cloudinary/cloudinary.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -7,6 +9,7 @@ import 'package:portfolio/home/screens/home_tablet_screen.dart';
 import 'package:portfolio/home/screens/home_web_screen.dart';
 import 'package:portfolio/utils/state/custom_layout.dart';
 
+import 'firebase_options.dart';
 import 'utils/theme/theme_app.dart';
 
 void main() async {
@@ -15,7 +18,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // - - - - - - - - - - - - - - - - - - INIT FIREBASE - - - - - - - - - - - - - - - - - -  //
-  //await Firebase.initializeApp();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   // - - - - - - - - - - - - - - - - - - HIDE TOP STATUS BAR + SYSTEM BOTTOM BAR - - - - - - - - - - - - - - - - - -  //
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
@@ -50,6 +53,7 @@ class DependencyInjection implements Bindings {
   @override
   void dependencies() {
     Get.put(HomeController());
+    Get.put(Cloudinary.signedConfig(apiKey: "336153497372995", apiSecret: "2n4ZVVLFLsmBxY74pSCwiMRXqq0", cloudName: "dwcnliksx"));
   }
 
 }

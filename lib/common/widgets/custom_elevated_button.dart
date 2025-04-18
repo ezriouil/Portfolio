@@ -22,6 +22,7 @@ class CustomElevatedButton  extends CustomState {
           style: ElevatedButton.styleFrom(
             padding: const EdgeInsets.symmetric(horizontal: CustomSizes.SPACE_BETWEEN_ITEMS, vertical: CustomSizes.SPACE_BETWEEN_ITEMS / 4),
             backgroundColor: bgColor ?? darkDarkLightLightColor(context),
+            foregroundColor: textColor,
             elevation: elevation ?? 3,
             shadowColor: bgColor ?? darkDarkLightLightColor(context),
             side: BorderSide.none,
