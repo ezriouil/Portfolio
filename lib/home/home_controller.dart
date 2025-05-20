@@ -7,12 +7,11 @@ import 'package:portfolio/utils/constants/custom_icons.dart';
 class HomeController extends GetxController{
 
   // - - - - - - - - - - - - - - - - - - CREATE STATES - - - - - - - - - - - - - - - - - -  //
-  late final ScrollController scrollController;
-  late final ScrollController skillsFirstScrollController;
-  late final ScrollController skillsLastScrollController;
+  late final ScrollController scrollController, skillsZeroScrollController, skillsFirstScrollController, skillsLastScrollController;
   late final TextEditingController fullNameController, objectController, messageController;
   late final RxBool isDarkTheme, isFabVisible;
   late final GlobalKey<FormState> formState;
+  late final GlobalKey homeKey, skillsKey, projectsKey, contactKey;
   late final RxList<CustomProjectEntity> projects;
 
   final List<String> skills = [
@@ -51,6 +50,7 @@ class HomeController extends GetxController{
   void onInit() {
     super.onInit();
     scrollController = ScrollController();
+    skillsZeroScrollController = ScrollController();
     skillsFirstScrollController = ScrollController();
     skillsLastScrollController = ScrollController();
     fullNameController = TextEditingController();
@@ -59,6 +59,10 @@ class HomeController extends GetxController{
     isDarkTheme = false.obs;
     isFabVisible = false.obs;
     formState = GlobalKey<FormState>();
+    homeKey = GlobalKey();
+    skillsKey = GlobalKey();
+    projectsKey = GlobalKey();
+    contactKey = GlobalKey();
     projects = RxList.empty(growable: true);
     init();
   }
@@ -85,11 +89,46 @@ class HomeController extends GetxController{
   }
 
   // - - - - - - - - - - - - - - - - - - MENU CLICKS - - - - - - - - - - - - - - - - - -  //
-  void onHome() {}
-  void onSkills() {}
-  void onWorks() {}
-  void onAbout() {}
-  void onLetsTalk() {}
+  void onHome() {
+    final context = homeKey.currentContext;
+    if (context != null) {
+      Scrollable.ensureVisible(
+        context,
+        duration: const Duration(milliseconds: 500),
+        curve: Curves.easeInOut,
+      );
+    }
+  }
+  void onSkills() {
+    final context = skillsKey.currentContext;
+    if (context != null) {
+      Scrollable.ensureVisible(
+        context,
+        duration: const Duration(milliseconds: 500),
+        curve: Curves.easeInOut,
+      );
+    }
+  }
+  void onProjects() {
+    final context = projectsKey.currentContext;
+    if (context != null) {
+      Scrollable.ensureVisible(
+        context,
+        duration: const Duration(milliseconds: 500),
+        curve: Curves.easeInOut,
+      );
+    }
+  }
+  void onContact() {
+    final context = contactKey.currentContext;
+    if (context != null) {
+      Scrollable.ensureVisible(
+        context,
+        duration: const Duration(milliseconds: 500),
+        curve: Curves.easeInOut,
+      );
+    }
+  }
   void onDownloadResume() {}
 
   // - - - - - - - - - - - - - - - - - - CONTACT BUTTON SEND - - - - - - - - - - - - - - - - - -  //
@@ -97,23 +136,47 @@ class HomeController extends GetxController{
 
   // - - - - - - - - - - - - - - - - - - ADD AUTO SCROLLING TO LIST VIEW - - - - - - - - - - - - - - - - - -  //
   void _autoScrolling() async {
+
     await Future.delayed(const Duration(seconds: 3));
+
+    skillsZeroScrollController.addListener(() { if (skillsZeroScrollController.position.pixels == skillsZeroScrollController.position.maxScrollExtent) skillsZeroScrollController.jumpTo(0); });
+    skillsZeroScrollController.animateTo(
+      skillsFirstScrollController.position.maxScrollExtent,
+      curve: Curves.linear,
+      duration: const Duration(seconds: 40),
+    );
+
     skillsFirstScrollController.addListener(() { if (skillsFirstScrollController.position.pixels == skillsFirstScrollController.position.maxScrollExtent) skillsFirstScrollController.jumpTo(0); });
     skillsFirstScrollController.animateTo(
       skillsFirstScrollController.position.maxScrollExtent,
       curve: Curves.linear,
       duration: const Duration(seconds: 40),
     );
+
     skillsLastScrollController.addListener(() { if (skillsLastScrollController.position.pixels == skillsLastScrollController.position.maxScrollExtent) skillsLastScrollController.jumpTo(0); });
     skillsLastScrollController.animateTo(
       skillsLastScrollController.position.maxScrollExtent,
       curve: Curves.linear,
       duration: const Duration(seconds: 40),
     );
+
     scrollController.addListener(() {
       if (scrollController.offset > 200 && !isFabVisible.value) { isFabVisible.value = true; }
       else if (scrollController.offset <= 200 && isFabVisible.value) { isFabVisible.value = false; }
     });
+
+  }
+
+  // - - - - - - - - - - - - - - - - - - SCROLL UP - - - - - - - - - - - - - - - - - -  //
+  void scrollingUp(){ scrollController.animateTo(0, duration: const Duration(milliseconds: 500), curve: Curves.easeInOut); }
+
+  // - - - - - - - - - - - - - - - - - - CHANGE COLOR THEME - - - - - - - - - - - - - - - - - -  //
+  void onChangeColorTheming() {
+    try{
+      Get.changeThemeMode(isDarkTheme.value ? ThemeMode.dark : ThemeMode.light);
+      isDarkTheme.value = !isDarkTheme.value;
+    }
+    catch(_){}
   }
 
   @override
@@ -121,24 +184,6 @@ class HomeController extends GetxController{
     scrollController.dispose();
     skillsFirstScrollController.dispose();
     super.dispose();
-  }
-
-  // - - - - - - - - - - - - - - - - - - CHANGE COLOR THEME - - - - - - - - - - - - - - - - - -  //
-  void scrollingUp(){
-    scrollController.animateTo(
-      0,
-      duration: const Duration(milliseconds: 500),
-      curve: Curves.easeInOut,
-    );
-  }
-
-  // - - - - - - - - - - - - - - - - - - CHANGE COLOR THEME - - - - - - - - - - - - - - - - - -  //
-  void onChangeColorTheming() {
-    try{
-      Get.changeThemeMode(isDarkTheme.value ? ThemeMode.light : ThemeMode.dark);
-      isDarkTheme.value = !isDarkTheme.value;
-    }
-    catch(_){}
   }
 
 }

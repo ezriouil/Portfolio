@@ -32,7 +32,7 @@ class Portfolio extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-        themeMode: ThemeMode.light,
+        themeMode: ThemeMode.dark,
         theme: ThemeApp.lightTheme,
         darkTheme: ThemeApp.darkTheme,
         debugShowCheckedModeBanner: false,
