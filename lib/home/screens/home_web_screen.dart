@@ -264,7 +264,7 @@ class HomeWebScreen extends CustomState {
                               try{ await launchUrl(Uri.parse(controller.projects[index].apkLink ?? CustomConstants.GITHUB)); }
                               catch(_){}
                             },
-                            onDetails: (){},
+                            onDetails: () { Get.toNamed('/details/${controller.projects[index].id}'); },
                             onGithub: () async {
                               try{ await launchUrl(Uri.parse(controller.projects[index].codeSourceLink ?? CustomConstants.GITHUB)); }
                               catch(_){}
@@ -645,6 +645,7 @@ class HomeWebScreen extends CustomState {
           mainAxisSize: MainAxisSize.min,
           children: [
             FloatingActionButton(
+                heroTag: "1",
               elevation: 16,
                 onPressed: () { controller.onChangeColorTheming(); },
                 backgroundColor: darkDarkLightLightColor(context),
@@ -653,6 +654,7 @@ class HomeWebScreen extends CustomState {
             if(controller.isFabVisible.value) ... [
               const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS),
               FloatingActionButton(
+                  heroTag: "2",
                   onPressed: () { controller.scrollingUp(); },
                   backgroundColor: CustomColors.WHITE,
                   foregroundColor: CustomColors.BLACK,

@@ -19,7 +19,10 @@ class CustomOutlinedButtonTheme {
                 color: CustomColors.PRIMARY, fontFamily: "Manrope-Bold",
               ),
               shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12))));
+                  borderRadius: BorderRadius.circular(12), side: const BorderSide(color: CustomColors.BLACK, width: 0.5)
+              )
+          )
+      );
 
   /// Outlined Button Dark Theme
   static final OutlinedButtonThemeData darkOutlinedButtonTheme =
@@ -34,6 +37,7 @@ class CustomOutlinedButtonTheme {
               textStyle: const TextStyle(
                   fontSize: 13,
                   color: CustomColors.PRIMARY, fontFamily: "Manrope-Bold"),
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12))));
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12), side: const BorderSide(color: CustomColors.WHITE, width: 0.5))
+          )
+      );
 }

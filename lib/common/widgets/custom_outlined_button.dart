@@ -34,7 +34,7 @@ class CustomOutlinedButton  extends CustomState {
             backgroundColor: CustomColors.TRANSPARENT,
             shadowColor: color ?? darkDarkLightLightColor(context),
             side: BorderSide(color: color ?? darkDarkLightLightColor(context)),
-            shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(CustomSizes.SPACE_BETWEEN_ITEMS))),
+            shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(CustomSizes.SPACE_BETWEEN_ITEMS / 2))),
           ),
           onPressed: onPressed,
           child: child

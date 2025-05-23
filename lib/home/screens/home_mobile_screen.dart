@@ -7,6 +7,8 @@ import 'package:portfolio/common/screens/custom_loading_screen.dart';
 import 'package:portfolio/common/widgets/custom_elevated_button.dart';
 import 'package:portfolio/common/widgets/custom_outlined_button.dart';
 import 'package:portfolio/common/widgets/custom_text_field.dart';
+import 'package:portfolio/details/screens/details_mobile_screen.dart';
+import 'package:portfolio/details/screens/details_tablet_and_web_screen.dart';
 import 'package:portfolio/home/home_controller.dart';
 import 'package:portfolio/utils/constants/custom_colors.dart';
 import 'package:portfolio/utils/constants/custom_constants.dart';
@@ -212,7 +214,13 @@ class HomeMobileScreen extends CustomState {
                             try{ await launchUrl(Uri.parse(controller.projects[index].apkLink ?? CustomConstants.GITHUB)); }
                             catch(_){}
                           },
-                          onDetails: (){},
+                          onDetails: () {
+
+                            print('===');
+                            print(controller.projects[index].id);
+                            print('===');
+
+                            Get.toNamed('/details/${controller.projects[index].id}'); },
                           onGithub: () async {
                             try{ await launchUrl(Uri.parse(controller.projects[index].codeSourceLink ?? CustomConstants.GITHUB)); }
                             catch(_){}
@@ -579,6 +587,7 @@ class HomeMobileScreen extends CustomState {
           mainAxisSize: MainAxisSize.min,
           children: [
             FloatingActionButton(
+              heroTag: "1",
                 elevation: 16,
                 onPressed: () { controller.onChangeColorTheming(); },
                 backgroundColor: darkDarkLightLightColor(context),
@@ -587,6 +596,7 @@ class HomeMobileScreen extends CustomState {
             if(controller.isFabVisible.value) ... [
               const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS),
               FloatingActionButton(
+                  heroTag: "2",
                   onPressed: () { controller.scrollingUp(); },
                   backgroundColor: CustomColors.WHITE,
                   foregroundColor: CustomColors.BLACK,

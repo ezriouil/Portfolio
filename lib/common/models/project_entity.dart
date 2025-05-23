@@ -1,8 +1,9 @@
-class CustomProjectEntity {
+class ProjectEntity {
 
   final String? id;
   final String? title;
   final String? description;
+  final String? features;
   final String? logo;
   final String? thumbnail;
   final String? apkLink;
@@ -11,13 +12,15 @@ class CustomProjectEntity {
   final String? videoLink;
   final String? codeSourceLink;
   final String? createAt;
-  final List<String>? technologiesUsed;
-  final Map<String, dynamic>? images;
+  final String? technologies;
+  final List<String>? lightImages;
+  final List<String>? darkImages;
 
-  CustomProjectEntity({
+  ProjectEntity({
     this.id,
     this.title,
     this.description,
+    this.features,
     this.logo,
     this.thumbnail,
     this.apkLink,
@@ -26,15 +29,17 @@ class CustomProjectEntity {
     this.videoLink,
     this.codeSourceLink,
     this.createAt,
-    this.technologiesUsed,
-    this.images,
+    this.technologies,
+    this.lightImages,
+    this.darkImages,
   });
 
-  factory CustomProjectEntity.fromJson(Map<String, dynamic> json) {
-    return CustomProjectEntity(
+  factory ProjectEntity.fromJson(Map<String, dynamic> json) {
+    return ProjectEntity(
       id: json['id'],
       title: json['title'],
       description: json['description'],
+      features: json['features'],
       logo: json['logo'],
       thumbnail: json['thumbnail'],
       apkLink: json['apkLink'],
@@ -43,8 +48,9 @@ class CustomProjectEntity {
       videoLink: json['videoLink'],
       codeSourceLink: json['codeSourceLink'],
       createAt: json['createAt'],
-      technologiesUsed: json['technologiesUsed'] != null ? List<String>.from(json['technologiesUsed']) : null,
-      images: json['images'] != null ? Map<String, dynamic>.from(json['images']) : null,
+      technologies: json['technologies'],
+      lightImages: json['lightImages'] != null ? List<String>.from(json['lightImages']) : null,
+      darkImages: json['darkImages'] != null ? List<String>.from(json['darkImages']) : null,
     );
   }
 
@@ -53,6 +59,7 @@ class CustomProjectEntity {
       'id': id,
       'title': title,
       'description': description,
+      'features': features,
       'logo': logo,
       'thumbnail': thumbnail,
       'apkLink': apkLink,
@@ -61,8 +68,9 @@ class CustomProjectEntity {
       'videoLink': videoLink,
       'codeSourceLink': codeSourceLink,
       'createAt': createAt,
-      'technologiesUsed': technologiesUsed,
-      'images': images,
+      'technologies': technologies,
+      'lightImages': lightImages,
+      'darkImages': darkImages,
     };
   }
 }

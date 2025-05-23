@@ -6,8 +6,8 @@ class CustomTextTheme{
   /// Text For Light Theme
   static final TextTheme lightTextTheme = TextTheme(
     headlineSmall: const TextStyle().copyWith(fontSize: 16.0, fontWeight: FontWeight.w600, color: CustomColors.BLACK, fontFamily: "Manrope-Medium"),
-    headlineMedium: const TextStyle().copyWith(fontSize: 24.0, fontWeight: FontWeight.w600, color: CustomColors.BLACK, fontFamily: "Manrope-Medium"),
-    headlineLarge: const TextStyle().copyWith(fontSize: 32.0, fontWeight: FontWeight.bold, color: CustomColors.BLACK, fontFamily: "Manrope-Medium"),
+    headlineMedium: const TextStyle().copyWith(fontSize: 22.0, fontWeight: FontWeight.w600, color: CustomColors.BLACK, fontFamily: "Manrope-Medium"),
+    headlineLarge: const TextStyle().copyWith(fontSize: 30.0, fontWeight: FontWeight.bold, color: CustomColors.BLACK, fontFamily: "Manrope-Medium"),
 
     titleSmall: const TextStyle().copyWith(fontSize: 13.0, fontWeight: FontWeight.w400, color: CustomColors.BLACK, fontFamily: "Manrope-Medium"),
     titleMedium: const TextStyle().copyWith(fontSize: 13.0, fontWeight: FontWeight.w500, color: CustomColors.BLACK, fontFamily: "Manrope-Medium"),
@@ -21,8 +21,8 @@ class CustomTextTheme{
   /// Text For Dark Theme
   static final TextTheme darkTextTheme = TextTheme(
     headlineSmall: const TextStyle().copyWith(fontSize: 16.0, fontWeight: FontWeight.w600, color: CustomColors.WHITE, fontFamily: "Manrope-Medium"),
-    headlineMedium: const TextStyle().copyWith(fontSize: 24.0, fontWeight: FontWeight.w600, color: CustomColors.WHITE, fontFamily: "Manrope-Medium"),
-    headlineLarge: const TextStyle().copyWith(fontSize: 32.0, fontWeight: FontWeight.bold, color: CustomColors.WHITE, fontFamily: "Manrope-Medium"),
+    headlineMedium: const TextStyle().copyWith(fontSize: 22.0, fontWeight: FontWeight.w600, color: CustomColors.WHITE, fontFamily: "Manrope-Medium"),
+    headlineLarge: const TextStyle().copyWith(fontSize: 30.0, fontWeight: FontWeight.bold, color: CustomColors.WHITE, fontFamily: "Manrope-Medium"),
 
     titleSmall: const TextStyle().copyWith(fontSize: 13.0, fontWeight: FontWeight.w400, color: CustomColors.WHITE, fontFamily: "Manrope-Medium"),
     titleMedium: const TextStyle().copyWith(fontSize: 13.0, fontWeight: FontWeight.w500, color: CustomColors.WHITE, fontFamily: "Manrope-Medium"),

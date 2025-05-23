@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:portfolio/common/models/custom_project_entity.dart';
+import 'package:portfolio/common/models/project_entity.dart';
 import 'package:portfolio/utils/constants/custom_icons.dart';
 
 class HomeController extends GetxController{
@@ -12,7 +12,7 @@ class HomeController extends GetxController{
   late final RxBool isDarkTheme, isFabVisible;
   late final GlobalKey<FormState> formState;
   late final GlobalKey homeKey, skillsKey, projectsKey, contactKey;
-  late final RxList<CustomProjectEntity> projects;
+  late final RxList<ProjectEntity> projects;
 
   final List<String> skills = [
     CustomIcons.DB_FIREBASE,
@@ -80,7 +80,7 @@ class HomeController extends GetxController{
       final QuerySnapshot<Map<String, dynamic>> getAllProjects = await FirebaseFirestore.instance.collection('PROJECTS').get();
       if(getAllProjects.size <= 0) return;
       for(QueryDocumentSnapshot<Map<String, dynamic>> projectJson in getAllProjects.docs){
-        final CustomProjectEntity customProjectEntity = CustomProjectEntity.fromJson(projectJson.data());
+        final ProjectEntity customProjectEntity = ProjectEntity.fromJson(projectJson.data());
         projects.add(customProjectEntity);
       }
 
