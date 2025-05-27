@@ -1,7 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:iconsax/iconsax.dart';
 import 'package:portfolio/common/screens/custom_empty_screen.dart';
 import 'package:portfolio/common/screens/custom_loading_screen.dart';
 import 'package:portfolio/common/widgets/custom_outlined_button.dart';
@@ -368,7 +367,7 @@ class DetailsMobileScreen extends CustomState {
           foregroundColor: CustomColors.BLACK,
           child: WidgetAnimator(
             atRestEffect: WidgetRestingEffects.wave(effectStrength: 0.6),
-            child: const Icon(Iconsax.arrow_up, color: CustomColors.BLACK),
+            child: const Icon(Icons.keyboard_double_arrow_up, color: CustomColors.BLACK),
           )
       )
           : null,

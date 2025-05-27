@@ -2,13 +2,11 @@ import 'package:avatar_glow/avatar_glow.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_card_swiper/flutter_card_swiper.dart';
 import 'package:get/get.dart';
-import 'package:iconsax/iconsax.dart';
 import 'package:portfolio/common/screens/custom_loading_screen.dart';
 import 'package:portfolio/common/widgets/custom_elevated_button.dart';
 import 'package:portfolio/common/widgets/custom_outlined_button.dart';
+import 'package:portfolio/common/widgets/custom_snackbar.dart';
 import 'package:portfolio/common/widgets/custom_text_field.dart';
-import 'package:portfolio/details/screens/details_mobile_screen.dart';
-import 'package:portfolio/details/screens/details_tablet_and_web_screen.dart';
 import 'package:portfolio/home/home_controller.dart';
 import 'package:portfolio/utils/constants/custom_colors.dart';
 import 'package:portfolio/utils/constants/custom_constants.dart';
@@ -193,8 +191,36 @@ class HomeMobileScreen extends CustomState {
               children: [
                 Text("Projects", style: Theme.of(context).textTheme.headlineLarge?.copyWith(fontFamily: 'Recoleta-Bold', color: darkDarkLightLightColor(context))),
                 const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS / 2),
-                Text("Some projects i have worked", style: Theme.of(context).textTheme.titleLarge?.copyWith(fontFamily: 'Recoleta-Medium', fontSize: 16, color: darkDarkLightLightColor(context))),
-                const SizedBox(height: CustomSizes.SPACE_DEFAULT),
+                Row(
+                  spacing: CustomSizes.SPACE_BETWEEN_ITEMS,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    InkWell(
+                        onTap: () { controller.cardSwiperController.swipe(CardSwiperDirection.left); },
+                        overlayColor: const WidgetStatePropertyAll(CustomColors.TRANSPARENT),
+                        child: Container(
+                            padding: const EdgeInsets.all(CustomSizes.SPACE_BETWEEN_ITEMS / 4),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(CustomSizes.SPACE_DEFAULT * 2),
+                                border: Border.all(color: darkDarkLightLightColor(context))),
+                            child: WidgetAnimator(atRestEffect: WidgetRestingEffects.dangle(effectStrength: 0.6), child: Icon(Icons.keyboard_double_arrow_left, size: 20, color: darkDarkLightLightColor(context)))
+                        )
+                    ),
+                    Text("Some projects i have worked", style: Theme.of(context).textTheme.titleLarge?.copyWith(fontFamily: 'Recoleta-Medium', fontSize: 16, color: darkDarkLightLightColor(context))),
+                    InkWell(
+                        onTap: () { controller.cardSwiperController.swipe(CardSwiperDirection.right); },
+                        overlayColor: const WidgetStatePropertyAll(CustomColors.TRANSPARENT),
+                        child: Container(
+                            padding: const EdgeInsets.all(CustomSizes.SPACE_BETWEEN_ITEMS / 4),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(CustomSizes.SPACE_DEFAULT * 2),
+                                border: Border.all(color: darkDarkLightLightColor(context))),
+                            child: WidgetAnimator(atRestEffect: WidgetRestingEffects.dangle(effectStrength: 0.6), child: Icon(Icons.keyboard_double_arrow_right, size: 20, color: darkDarkLightLightColor(context)))
+                        )
+                    ),
+                  ],
+                ),
+                const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS),
                 SizedBox(
                   width: getWidth(context),
                   height: 480,
@@ -212,18 +238,12 @@ class HomeMobileScreen extends CustomState {
                           thumbnailUri: controller.projects[index].thumbnail ?? "",
                           onInstallApk: () async {
                             try{ await launchUrl(Uri.parse(controller.projects[index].apkLink ?? CustomConstants.GITHUB)); }
-                            catch(_){}
+                            catch(_){ CustomSnackBar.error(); }
                           },
-                          onDetails: () {
-
-                            print('===');
-                            print(controller.projects[index].id);
-                            print('===');
-
-                            Get.toNamed('/details/${controller.projects[index].id}'); },
+                          onDetails: () { Get.toNamed('/details/${controller.projects[index].id}'); },
                           onGithub: () async {
                             try{ await launchUrl(Uri.parse(controller.projects[index].codeSourceLink ?? CustomConstants.GITHUB)); }
-                            catch(_){}
+                            catch(_){ CustomSnackBar.error(); }
                           },
                         ),
                   ),
@@ -509,7 +529,7 @@ class HomeMobileScreen extends CustomState {
                       CustomTextField(
                           controller: controller.fullNameController,
                           hint: "Full Name",
-                          icon: Iconsax.user,
+                          icon: Icons.more_horiz,
                           validator: (value){
                             if (value == null || value.isEmpty || value.length < 2) { return "Field must not be empty"; }
                             return null;
@@ -518,7 +538,7 @@ class HomeMobileScreen extends CustomState {
                       CustomTextField(
                           controller: controller.objectController,
                           hint: "Object",
-                          icon: Iconsax.message,
+                          icon: Icons.sms_outlined,
                           validator: (value){
                             if (value == null || value.isEmpty || value.length < 2) { return "Field must not be empty"; }
                             return null;
@@ -587,11 +607,11 @@ class HomeMobileScreen extends CustomState {
           mainAxisSize: MainAxisSize.min,
           children: [
             FloatingActionButton(
-              heroTag: "1",
+                heroTag: "1",
                 elevation: 16,
                 onPressed: () { controller.onChangeColorTheming(); },
                 backgroundColor: darkDarkLightLightColor(context),
-                child: Icon(Iconsax.colorfilter, color: darkLightColor(context))
+                child: Icon(Icons.invert_colors_on_outlined, color: darkLightColor(context))
             ),
             if(controller.isFabVisible.value) ... [
               const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS),
@@ -602,7 +622,7 @@ class HomeMobileScreen extends CustomState {
                   foregroundColor: CustomColors.BLACK,
                   child: WidgetAnimator(
                     atRestEffect: WidgetRestingEffects.wave(effectStrength: 0.6),
-                    child: const Icon(Iconsax.arrow_up, color: CustomColors.BLACK),
+                    child: const Icon(Icons.keyboard_double_arrow_up, color: CustomColors.BLACK),
                   )
               )
             ]
@@ -706,7 +726,7 @@ class HomeMobileScreen extends CustomState {
                       mainAxisAlignment: MainAxisAlignment.center,
                       spacing: CustomSizes.SPACE_BETWEEN_ITEMS / 2,
                       children: [
-                        Icon(Iconsax.more_2, size: 20, color: darkLightColor(context),),
+                        Icon(Icons.more_horiz, size: 20, color: darkLightColor(context),),
                         Flexible(child: Text('More Details', style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontSize: 10, color: darkLightColor(context)))),
                       ],
                     )

@@ -1,13 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_card_swiper/flutter_card_swiper.dart';
 import 'package:get/get.dart';
 import 'package:portfolio/common/models/project_entity.dart';
+import 'package:portfolio/common/widgets/custom_snackbar.dart';
 import 'package:portfolio/utils/constants/custom_icons.dart';
 
 class HomeController extends GetxController{
 
   // - - - - - - - - - - - - - - - - - - CREATE STATES - - - - - - - - - - - - - - - - - -  //
   late final ScrollController scrollController, skillsZeroScrollController, skillsFirstScrollController, skillsLastScrollController;
+  late final CardSwiperController cardSwiperController;
   late final TextEditingController fullNameController, objectController, messageController;
   late final RxBool isDarkTheme, isFabVisible;
   late final GlobalKey<FormState> formState;
@@ -53,6 +56,7 @@ class HomeController extends GetxController{
     skillsZeroScrollController = ScrollController();
     skillsFirstScrollController = ScrollController();
     skillsLastScrollController = ScrollController();
+    cardSwiperController = CardSwiperController();
     fullNameController = TextEditingController();
     objectController = TextEditingController();
     messageController = TextEditingController();
@@ -129,7 +133,10 @@ class HomeController extends GetxController{
       );
     }
   }
-  void onDownloadResume() {}
+  void onDownloadResume() {
+    try{}
+    catch(_){ CustomSnackBar.error(); }
+  }
 
   // - - - - - - - - - - - - - - - - - - CONTACT BUTTON SEND - - - - - - - - - - - - - - - - - -  //
   void onSend() { if(!formState.currentState!.validate()) return; }

@@ -2,6 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:portfolio/common/models/project_entity.dart';
+import 'package:portfolio/common/widgets/custom_snackbar.dart';
+import 'package:portfolio/utils/constants/custom_constants.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 
 class DetailsController extends GetxController{
@@ -34,9 +37,6 @@ class DetailsController extends GetxController{
   void _getProjectInfo() async {
     isLoading.value = true;
     final String projectId = Get.parameters['id'] ?? "";
-    print('=====');
-    print(projectId);
-    print('=====');
     try{
       final DocumentSnapshot<Map<String, dynamic>> getProject = await FirebaseFirestore.instance.collection('PROJECTS').doc(projectId).get();
       if(!getProject.exists || getProject.data() == null) { isLoading.value = false; projectEntity.value = null; return; }
@@ -62,16 +62,36 @@ class DetailsController extends GetxController{
   // void scrollingUp(){ scrollController.animateTo(0, duration: const Duration(milliseconds: 500), curve: Curves.easeInOut); }
 
   // - - - - - - - - - - - - - - - - - - GOOGLE PLAY - - - - - - - - - - - - - - - - - -  //
-  void onGooglePlay() {}
+  void onGooglePlay() async {
+    if(projectEntity.value?.googlePlayLink == null || projectEntity.value?.googlePlayLink == ""){
+      CustomSnackBar.error();
+      return;
+    }
+    try{ await launchUrl(Uri.parse(projectEntity.value?.googlePlayLink ?? CustomConstants.GITHUB)); }
+    catch(_){ CustomSnackBar.error(); }
+  }
 
   // - - - - - - - - - - - - - - - - - - APPLE STORE - - - - - - - - - - - - - - - - - -  //
-  void onAppleStore() {}
+  void onAppleStore() async {
+    if(projectEntity.value?.appStoreLink == null || projectEntity.value?.appStoreLink == ""){
+      CustomSnackBar.error();
+      return;
+    }
+    try{ await launchUrl(Uri.parse(projectEntity.value?.appStoreLink ?? CustomConstants.GITHUB)); }
+    catch(_){ CustomSnackBar.error(); }
+  }
 
   // - - - - - - - - - - - - - - - - - - Download APK - - - - - - - - - - - - - - - - - -  //
-  void onDownloadAPK() {}
+  void onDownloadAPK() async {
+    try{ await launchUrl(Uri.parse(projectEntity.value?.apkLink ?? CustomConstants.GITHUB)); }
+    catch(_){ CustomSnackBar.error(); }
+  }
 
   // - - - - - - - - - - - - - - - - - - GITHUB - - - - - - - - - - - - - - - - - -  //
-  void onGithub() {}
+  void onGithub() async {
+    try{ await launchUrl(Uri.parse(CustomConstants.GITHUB)); }
+    catch(_){ CustomSnackBar.error(); }
+  }
 
   // - - - - - - - - - - - - - - - - - - LINKEDIN - - - - - - - - - - - - - - - - - -  //
   void onLinkedin() {}
@@ -89,6 +109,7 @@ class DetailsController extends GetxController{
 
   @override
   void dispose() {
+    scrollController.dispose();
     super.dispose();
   }
 

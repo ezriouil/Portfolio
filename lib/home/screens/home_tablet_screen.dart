@@ -2,11 +2,10 @@ import 'package:avatar_glow/avatar_glow.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_card_swiper/flutter_card_swiper.dart';
 import 'package:get/get.dart';
-import 'package:iconsax/iconsax.dart';
 import 'package:portfolio/common/screens/custom_loading_screen.dart';
 import 'package:portfolio/common/widgets/custom_elevated_button.dart';
+import 'package:portfolio/common/widgets/custom_snackbar.dart';
 import 'package:portfolio/common/widgets/custom_text_field.dart';
-import 'package:portfolio/details/screens/details_tablet_and_web_screen.dart';
 import 'package:portfolio/home/home_controller.dart';
 import 'package:portfolio/utils/constants/custom_colors.dart';
 import 'package:portfolio/utils/constants/custom_constants.dart';
@@ -80,7 +79,7 @@ class HomeTabletScreen extends CustomState {
               children: [
 
                 // HOME
-                const SizedBox(height: CustomSizes.SPACE_DEFAULT),
+                const SizedBox(height: CustomSizes.SPACE_DEFAULT * 2),
                 SizedBox(
                   key: controller.homeKey,
                   width: 300,
@@ -133,7 +132,7 @@ class HomeTabletScreen extends CustomState {
                     ],
                   ),
                 ),
-                const SizedBox(height: CustomSizes.SPACE_BETWEEN_SECTIONS),
+                const SizedBox(height: CustomSizes.SPACE_DEFAULT * 2),
                 Text("Welcome to\nmy digital humble abode",
                     textAlign: TextAlign.center,
                     style: Theme.of(context).textTheme.headlineLarge?.copyWith(
@@ -142,7 +141,7 @@ class HomeTabletScreen extends CustomState {
                         color: darkDarkLightLightColor(context)
                     )
                 ),
-                const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS),
+                const SizedBox(height: CustomSizes.SPACE_BETWEEN_SECTIONS),
                 Text.rich(
                   textAlign: TextAlign.center,
                   TextSpan(
@@ -168,7 +167,7 @@ class HomeTabletScreen extends CustomState {
                     ],
                   ),
                 ),
-                const SizedBox(height: CustomSizes.SPACE_BETWEEN_SECTIONS),
+                const SizedBox(height: CustomSizes.SPACE_DEFAULT * 2),
                 Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -229,8 +228,36 @@ class HomeTabletScreen extends CustomState {
                 // PROJECTS
                 Text("Projects", style: Theme.of(context).textTheme.headlineMedium?.copyWith(fontFamily: 'Recoleta-Bold', fontSize: 40, color: darkDarkLightLightColor(context))),
                 const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS / 2),
-                Text("Some projects i have worked", style: Theme.of(context).textTheme.headlineMedium?.copyWith(fontFamily: 'Recoleta-Medium', fontSize: 20, color: darkDarkLightLightColor(context))),
-                const SizedBox(height: CustomSizes.SPACE_BETWEEN_SECTIONS),
+                Row(
+                  spacing: CustomSizes.SPACE_DEFAULT * 2,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    InkWell(
+                        onTap: () { controller.cardSwiperController.swipe(CardSwiperDirection.left); },
+                        overlayColor: const WidgetStatePropertyAll(CustomColors.TRANSPARENT),
+                        child: Container(
+                          padding: const EdgeInsets.all(CustomSizes.SPACE_BETWEEN_ITEMS / 2),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(CustomSizes.SPACE_DEFAULT * 2),
+                                border: Border.all(color: darkDarkLightLightColor(context))),
+                            child: WidgetAnimator(atRestEffect: WidgetRestingEffects.dangle(effectStrength: 0.6), child: Icon(Icons.keyboard_double_arrow_left, color: darkDarkLightLightColor(context)))
+                        )
+                    ),
+                    Text("Some projects i have worked", style: Theme.of(context).textTheme.headlineMedium?.copyWith(fontFamily: 'Recoleta-Medium', fontSize: 20, color: darkDarkLightLightColor(context))),
+                    InkWell(
+                        onTap: () { controller.cardSwiperController.swipe(CardSwiperDirection.right); },
+                        overlayColor: const WidgetStatePropertyAll(CustomColors.TRANSPARENT),
+                        child: Container(
+                            padding: const EdgeInsets.all(CustomSizes.SPACE_BETWEEN_ITEMS / 2),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(CustomSizes.SPACE_DEFAULT * 2),
+                                border: Border.all(color: darkDarkLightLightColor(context))),
+                            child: WidgetAnimator(atRestEffect: WidgetRestingEffects.dangle(effectStrength: 0.6), child: Icon(Icons.keyboard_double_arrow_right, color: darkDarkLightLightColor(context)))
+                        )
+                    ),
+                  ],
+                ),
+                const SizedBox(height: CustomSizes.SPACE_DEFAULT),
                 SizedBox(
                   key: controller.projectsKey,
                   width: getWidth(context) * 0.8,
@@ -238,6 +265,7 @@ class HomeTabletScreen extends CustomState {
                   child: controller.projects.isEmpty
                       ? const CustomLoadingScreen()
                       : CardSwiper(
+                    controller: controller.cardSwiperController,
                     cardsCount: controller.projects.length <= 3 ? controller.projects.length : 3,
                     numberOfCardsDisplayed: controller.projects.length <= 3 ? controller.projects.length : 3,
                     cardBuilder: (context, index, percentThresholdX, percentThresholdY) =>
@@ -249,12 +277,12 @@ class HomeTabletScreen extends CustomState {
                           thumbnailUri: controller.projects[index].thumbnail ?? "",
                           onInstallApk: () async {
                             try{ await launchUrl(Uri.parse(controller.projects[index].apkLink ?? CustomConstants.GITHUB)); }
-                            catch(_){}
+                            catch(_){ CustomSnackBar.error(); }
                           },
                           onDetails: () { Get.toNamed('/details/${controller.projects[index].id}'); },
                           onGithub: () async {
                             try{ await launchUrl(Uri.parse(controller.projects[index].codeSourceLink ?? CustomConstants.GITHUB)); }
-                            catch(_){}
+                            catch(_){ CustomSnackBar.error(); }
                           },
                         ),
                   ),
@@ -531,7 +559,7 @@ class HomeTabletScreen extends CustomState {
                         CustomTextField(
                             controller: controller.fullNameController,
                             hint: "Full Name",
-                            icon: Iconsax.user,
+                            icon: Icons.person_outline,
                             validator: (value){
                               if (value == null || value.isEmpty || value.length < 2) { return "Field must not be empty"; }
                               return null;
@@ -540,7 +568,7 @@ class HomeTabletScreen extends CustomState {
                         CustomTextField(
                             controller: controller.objectController,
                             hint: "Object",
-                            icon: Iconsax.message,
+                            icon: Icons.sms_outlined,
                             validator: (value){
                               if (value == null || value.isEmpty || value.length < 2) { return "Field must not be empty"; }
                               return null;
@@ -617,7 +645,7 @@ class HomeTabletScreen extends CustomState {
                 elevation: 16,
                 onPressed: () { controller.onChangeColorTheming(); },
                 backgroundColor: darkDarkLightLightColor(context),
-                child: Icon(Iconsax.colorfilter, color: darkLightColor(context))
+                child: Icon(Icons.invert_colors_on, color: darkLightColor(context))
             ),
             if(controller.isFabVisible.value) ... [
               const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS),
@@ -628,7 +656,7 @@ class HomeTabletScreen extends CustomState {
                   foregroundColor: CustomColors.BLACK,
                   child: WidgetAnimator(
                     atRestEffect: WidgetRestingEffects.wave(effectStrength: 0.6),
-                    child: const Icon(Iconsax.arrow_up, color: CustomColors.BLACK),
+                    child: const Icon(Icons.keyboard_double_arrow_up, color: CustomColors.BLACK),
                   )
               )
             ]
@@ -715,7 +743,7 @@ class HomeTabletScreen extends CustomState {
                       mainAxisAlignment: MainAxisAlignment.center,
                       spacing: CustomSizes.SPACE_BETWEEN_ITEMS / 2,
                       children: [
-                        Icon(Iconsax.more_2, color: darkLightColor(context), size: 16),
+                        Icon(Icons.more_horiz, color: darkLightColor(context), size: 16),
                         Text('More Details', style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: darkLightColor(context), fontSize: 10)),
                       ],
                     )

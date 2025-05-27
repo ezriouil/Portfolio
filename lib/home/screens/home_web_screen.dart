@@ -2,9 +2,9 @@ import 'package:avatar_glow/avatar_glow.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_card_swiper/flutter_card_swiper.dart';
 import 'package:get/get.dart';
-import 'package:iconsax/iconsax.dart';
 import 'package:portfolio/common/screens/custom_loading_screen.dart';
 import 'package:portfolio/common/widgets/custom_elevated_button.dart';
+import 'package:portfolio/common/widgets/custom_snackbar.dart';
 import 'package:portfolio/common/widgets/custom_text_field.dart';
 import 'package:portfolio/home/home_controller.dart';
 import 'package:portfolio/utils/constants/custom_colors.dart';
@@ -235,7 +235,7 @@ class HomeWebScreen extends CustomState {
                         padding: const EdgeInsets.symmetric(horizontal: CustomSizes.SPACE_BETWEEN_ITEMS),
                         child: Image.asset(controller.skills[index], width: 30, height: 30),
                       ))),
-              const SizedBox(height: CustomSizes.SPACE_DEFAULT * 3),
+              const SizedBox(height: CustomSizes.SPACE_DEFAULT * 4),
 
               // PROJECTS
               Column(
@@ -243,8 +243,36 @@ class HomeWebScreen extends CustomState {
                 children: [
                   Text("Projects", style: Theme.of(context).textTheme.headlineMedium?.copyWith(fontFamily: 'Recoleta-Bold', fontSize: 50, color: darkDarkLightLightColor(context))),
                   const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS / 2),
-                  Text("Some projects i have worked", style: Theme.of(context).textTheme.headlineMedium?.copyWith(fontFamily: 'Recoleta-Medium', fontSize: 24, color: darkDarkLightLightColor(context))),
-                  const SizedBox(height: CustomSizes.SPACE_DEFAULT * 2),
+                  Row(
+                    spacing: CustomSizes.SPACE_DEFAULT * 2,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      InkWell(
+                          onTap: () { controller.cardSwiperController.swipe(CardSwiperDirection.left); },
+                          overlayColor: const WidgetStatePropertyAll(CustomColors.TRANSPARENT),
+                          child: Container(
+                              padding: const EdgeInsets.all(CustomSizes.SPACE_BETWEEN_ITEMS / 2),
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(CustomSizes.SPACE_DEFAULT * 2),
+                                  border: Border.all(color: darkDarkLightLightColor(context))),
+                              child: WidgetAnimator(atRestEffect: WidgetRestingEffects.dangle(effectStrength: 0.6), child: Icon(Icons.keyboard_double_arrow_left, color: darkDarkLightLightColor(context)))
+                          )
+                      ),
+                      Text("Some projects i have worked", style: Theme.of(context).textTheme.headlineMedium?.copyWith(fontFamily: 'Recoleta-Medium', fontSize: 24, color: darkDarkLightLightColor(context))),
+                      InkWell(
+                          onTap: () { controller.cardSwiperController.swipe(CardSwiperDirection.right); },
+                          overlayColor: const WidgetStatePropertyAll(CustomColors.TRANSPARENT),
+                          child: Container(
+                              padding: const EdgeInsets.all(CustomSizes.SPACE_BETWEEN_ITEMS / 2),
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(CustomSizes.SPACE_DEFAULT * 2),
+                                  border: Border.all(color: darkDarkLightLightColor(context))),
+                              child: WidgetAnimator(atRestEffect: WidgetRestingEffects.dangle(effectStrength: 0.6), child: Icon(Icons.keyboard_double_arrow_right, color: darkDarkLightLightColor(context)))
+                          )
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: CustomSizes.SPACE_BETWEEN_SECTIONS),
                   SizedBox(
                     width: getWidth(context) * 0.6,
                     height: 580,
@@ -262,12 +290,12 @@ class HomeWebScreen extends CustomState {
                             thumbnailUri: controller.projects[index].thumbnail ?? "",
                             onInstallApk: () async {
                               try{ await launchUrl(Uri.parse(controller.projects[index].apkLink ?? CustomConstants.GITHUB)); }
-                              catch(_){}
+                              catch(_){ CustomSnackBar.error(); }
                             },
                             onDetails: () { Get.toNamed('/details/${controller.projects[index].id}'); },
                             onGithub: () async {
                               try{ await launchUrl(Uri.parse(controller.projects[index].codeSourceLink ?? CustomConstants.GITHUB)); }
-                              catch(_){}
+                              catch(_){ CustomSnackBar.error(); }
                             },
                           ),
                     ),
@@ -531,7 +559,7 @@ class HomeWebScreen extends CustomState {
                   ),
                 ],
               ),
-              const SizedBox(height: CustomSizes.SPACE_DEFAULT * 3),
+              const SizedBox(height: CustomSizes.SPACE_DEFAULT * 4),
 
               // SKILLS
               Container(
@@ -547,7 +575,7 @@ class HomeWebScreen extends CustomState {
                       )
                   )
               ),
-              const SizedBox(height: CustomSizes.SPACE_DEFAULT * 3),
+              const SizedBox(height: CustomSizes.SPACE_DEFAULT * 4),
 
               // CONTACT ME
               SizedBox(
@@ -559,12 +587,12 @@ class HomeWebScreen extends CustomState {
                     children: [
                       Text("Contact Me", style: Theme.of(context).textTheme.headlineMedium?.copyWith(fontFamily: 'Recoleta-Bold', fontSize: 50, color: darkDarkLightLightColor(context))),
                       const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS / 2),
-                      Text("Let's talk on something great together", style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontFamily: 'Recoleta-Medium', color: darkDarkLightLightColor(context))),
+                      Text("Let's talk on something great together", style: Theme.of(context).textTheme.headlineMedium?.copyWith(fontFamily: 'Recoleta-Medium', fontSize: 24, color: darkDarkLightLightColor(context))),
                       const SizedBox(height: CustomSizes.SPACE_DEFAULT * 2),
                       CustomTextField(
                           controller: controller.fullNameController,
                           hint: "Full Name",
-                          icon: Iconsax.user,
+                          icon: Icons.person_outline,
                           validator: (value){
                             if (value == null || value.isEmpty || value.length < 2) { return "Field must not be empty"; }
                             return null;
@@ -573,7 +601,7 @@ class HomeWebScreen extends CustomState {
                       CustomTextField(
                           controller: controller.objectController,
                           hint: "Object",
-                          icon: Iconsax.message,
+                          icon: Icons.sms_outlined,
                           validator: (value){
                             if (value == null || value.isEmpty || value.length < 2) { return "Field must not be empty"; }
                             return null;
@@ -598,7 +626,7 @@ class HomeWebScreen extends CustomState {
                   ),
                 ),
               ),
-              const SizedBox(height: CustomSizes.SPACE_DEFAULT * 4),
+              const SizedBox(height: CustomSizes.SPACE_DEFAULT * 3),
 
               // FOOTER
               Container(
@@ -649,7 +677,7 @@ class HomeWebScreen extends CustomState {
               elevation: 16,
                 onPressed: () { controller.onChangeColorTheming(); },
                 backgroundColor: darkDarkLightLightColor(context),
-                child: Icon(Iconsax.colorfilter, color: darkLightColor(context))
+                child: Icon(Icons.invert_colors_on_outlined, color: darkLightColor(context))
             ),
             if(controller.isFabVisible.value) ... [
               const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS),
@@ -660,7 +688,7 @@ class HomeWebScreen extends CustomState {
                   foregroundColor: CustomColors.BLACK,
                   child: WidgetAnimator(
                     atRestEffect: WidgetRestingEffects.wave(effectStrength: 0.6),
-                    child: const Icon(Iconsax.arrow_up, color: CustomColors.BLACK),
+                    child: const Icon(Icons.keyboard_double_arrow_up, color: CustomColors.BLACK),
                   )
               )
             ]
@@ -745,7 +773,7 @@ class HomeWebScreen extends CustomState {
                     mainAxisAlignment: MainAxisAlignment.center,
                     spacing: CustomSizes.SPACE_BETWEEN_ITEMS / 2,
                     children: [
-                      Icon(Iconsax.more_2, color: darkLightColor(context),),
+                      Icon(Icons.more_horiz, color: darkLightColor(context),),
                       Text('More Details', style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: darkLightColor(context))),
                     ],
                   )

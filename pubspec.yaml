@@ -22,7 +22,6 @@ dependencies:
   # UTILS
   cloudinary: ^1.2.0
   carousel_slider: ^5.0.0
-  iconsax: any
   flutter_card_swiper: ^7.0.2
   url_launcher: ^6.3.0
   avatar_glow: ^3.0.1

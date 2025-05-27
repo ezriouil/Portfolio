@@ -63,8 +63,8 @@ class DependencyInjection implements Bindings {
   @override
   void dependencies() {
     Get.put(Cloudinary.signedConfig(apiKey: "336153497372995", apiSecret: "2n4ZVVLFLsmBxY74pSCwiMRXqq0", cloudName: "dwcnliksx"));
-    Get.lazyPut(() => HomeController(), fenix: false);
-    Get.lazyPut(() => DetailsController(), fenix: false);
+    Get.lazyPut(() => HomeController(), fenix: true);
+    Get.lazyPut(() => DetailsController(), fenix: true);
   }
 
 }
