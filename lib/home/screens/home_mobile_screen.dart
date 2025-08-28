@@ -24,7 +24,7 @@ class HomeMobileScreen extends CustomState {
   Widget execute(BuildContext context) {
    final HomeController controller = Get.find<HomeController>();
     return Obx(() => Scaffold(
-      backgroundColor: grayColor(context).withValues(alpha: 0.9),
+      backgroundColor: grayColor(context).withValues(alpha: context.isDarkMode ? 0.6 : 0.9),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -41,16 +41,23 @@ class HomeMobileScreen extends CustomState {
                     child: Stack(
                       alignment: Alignment.center,
                       children: [
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_SECTIONS * 3),
-                          child: SizedBox(
-                              width: 120,
-                              height: 120,
-                              child: Image.asset(CustomImages.MOHAMED_EZRIOUIL,
-                                width: getWidth(context),
-                                height: getHeight(context),
-                                fit: BoxFit.cover,
-                              )
+                        Container(
+                          decoration: BoxDecoration(
+                              color: grayColor(context),
+                              borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_SECTIONS * 3),
+                              border: Border.all(color: darkDarkLightLightColor(context))
+                          ),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_SECTIONS * 3),
+                            child: SizedBox(
+                                width: 120,
+                                height: 120,
+                                child: Image.asset(CustomImages.MOHAMED_EZRIOUIL,
+                                  width: getWidth(context),
+                                  height: getHeight(context),
+                                  fit: BoxFit.cover,
+                                )
+                            ),
                           ),
                         ),
                         Positioned(
@@ -58,7 +65,7 @@ class HomeMobileScreen extends CustomState {
                             child: Container(
                               width: 150,
                               padding: const EdgeInsets.symmetric(
-                                vertical: CustomSizes.SPACE_BETWEEN_ITEMS / 2,
+                                vertical: CustomSizes.SPACE_BETWEEN_ITEMS / 4,
                                 horizontal: CustomSizes.SPACE_BETWEEN_ITEMS,
                               ),
                               decoration: BoxDecoration(
@@ -79,7 +86,7 @@ class HomeMobileScreen extends CustomState {
                                         color: darkDarkLightLightColor(context)
                                     ),
                                   ),
-                                  const SizedBox(width: CustomSizes.SPACE_BETWEEN_ITEMS),
+                                  const SizedBox(width: CustomSizes.SPACE_BETWEEN_ITEMS / 1.2),
                                   Text("Available", style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: darkDarkLightLightColor(context))),
                                 ],
                               ),
@@ -92,28 +99,35 @@ class HomeMobileScreen extends CustomState {
                       textAlign: TextAlign.center,
                       style: Theme.of(context).textTheme.headlineLarge?.copyWith(
                           fontFamily: 'Recoleta-Medium',
-                          fontSize: 22,
+                          fontSize: 14,
+                          letterSpacing: 1.2,
                           color: darkDarkLightLightColor(context)
                       )
                   ),
-                  const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS),
+                  const SizedBox(height: CustomSizes.SPACE_DEFAULT),
                   Text.rich(
                     textAlign: TextAlign.center,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
                     TextSpan(
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(color: darkDarkLightLightColor(context)),
                       text: "I’m",
                       children: <TextSpan>[
                         TextSpan(
-                            text: '  Mobile  ',
-                            style: Theme.of(context).textTheme.headlineMedium?.copyWith(color: CustomColors.BLACK, fontFamily: 'Recoleta-Bold')
+                            text: '   Mobile   ',
+                            style: Theme.of(context).textTheme.headlineMedium?.copyWith(color: darkDarkLightLightColor(context), fontFamily: 'Recoleta-Bold')
                         ),
                         TextSpan(
                             text: "&",
                             style: Theme.of(context).textTheme.titleMedium?.copyWith(color: darkDarkLightLightColor(context))
                         ),
                         TextSpan(
-                            text: "  Web developer",
-                            style: Theme.of(context).textTheme.headlineMedium?.copyWith(color: CustomColors.BLACK, fontFamily: 'Recoleta-Bold')
+                            text: "   Web   ",
+                            style: Theme.of(context).textTheme.headlineMedium?.copyWith(color: darkDarkLightLightColor(context), fontFamily: 'Recoleta-Bold')
+                        ),
+                        TextSpan(
+                            text: "Developer",
+                            style: Theme.of(context).textTheme.titleMedium?.copyWith(color: darkDarkLightLightColor(context))
                         ),
                         TextSpan(
                             text: "\nSpecializing in building digital applications focused on user experience.",
@@ -126,41 +140,36 @@ class HomeMobileScreen extends CustomState {
                   Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      WidgetAnimator(
-                        atRestEffect: WidgetRestingEffects.swing(effectStrength: 10),
+                      Flexible(
                         child: CustomElevatedButton(
                             width: 150,
+                            height: CustomSizes.SPACE_BETWEEN_SECTIONS * 1.1,
                             elevation: 0,
                             textColor: CustomColors.WHITE,
                             bgColor: CustomColors.BLACK,
                             onPressed: controller.onContact,
+                            child: Text("Let's Talk", style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: CustomColors.WHITE))
+                        ),
+                      ),
+                      const SizedBox(width: CustomSizes.SPACE_DEFAULT * 0.8),
+                      Flexible(
+                        child: CustomOutlinedButton(
+                            width: 150,
+                            height: CustomSizes.SPACE_BETWEEN_SECTIONS * 1.1,
+                            elevation: 0,
+                            onPressed: controller.onDownloadResume,
                             child: Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                Text("Let's Talk", style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: CustomColors.WHITE)),
+                                Text("Resume", style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: darkDarkLightLightColor(context))),
                                 const SizedBox(width: CustomSizes.SPACE_BETWEEN_ITEMS / 2),
-                                const Icon(Icons.waving_hand, color: CustomColors.WHITE, size: 16),
+                                WidgetAnimator(
+                                    atRestEffect: WidgetRestingEffects.wave(effectStrength: 0.6),
+                                    child: Obx(() => Icon(Icons.downloading, size: 14.0, color: controller.isDarkTheme.value ? CustomColors.BLACK : CustomColors.WHITE))
+                                ),
                               ],
                             )
                         ),
-                      ),
-                      const SizedBox(width: CustomSizes.SPACE_BETWEEN_ITEMS),
-                      CustomOutlinedButton(
-                          width: 150,
-                          elevation: 0,
-                          onPressed: controller.onDownloadResume,
-                          color: CustomColors.BLACK,
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text("Resume", style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: CustomColors.BLACK)),
-                              const SizedBox(width: CustomSizes.SPACE_BETWEEN_ITEMS / 2),
-                              WidgetAnimator(
-                                  atRestEffect: WidgetRestingEffects.wave(effectStrength: 0.6),
-                                  child: const Icon(Icons.downloading, color: CustomColors.BLACK, size: 16)
-                              ),
-                            ],
-                          )
                       ),
                     ],
                   ),
@@ -183,13 +192,13 @@ class HomeMobileScreen extends CustomState {
                     )
                 )
             ),
-            const SizedBox(height: CustomSizes.SPACE_DEFAULT * 2),
+            const SizedBox(height: CustomSizes.SPACE_DEFAULT * 3),
 
             // PROJECTS
             Column(
               key: controller.projectsKey,
               children: [
-                Text("Projects", style: Theme.of(context).textTheme.headlineLarge?.copyWith(fontFamily: 'Recoleta-Bold', color: darkDarkLightLightColor(context))),
+                Text("Projects", style: Theme.of(context).textTheme.titleLarge?.copyWith(fontFamily: 'Recoleta-Bold', fontSize: 24, color: darkDarkLightLightColor(context))),
                 const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS / 2),
                 Row(
                   spacing: CustomSizes.SPACE_BETWEEN_ITEMS,
@@ -203,10 +212,10 @@ class HomeMobileScreen extends CustomState {
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(CustomSizes.SPACE_DEFAULT * 2),
                                 border: Border.all(color: darkDarkLightLightColor(context))),
-                            child: WidgetAnimator(atRestEffect: WidgetRestingEffects.dangle(effectStrength: 0.6), child: Icon(Icons.keyboard_double_arrow_left, size: 20, color: darkDarkLightLightColor(context)))
+                            child: WidgetAnimator(atRestEffect: WidgetRestingEffects.dangle(effectStrength: 0.6), child: Obx(() =>  Icon(Icons.keyboard_double_arrow_left, size: 16, color: controller.isDarkTheme.value ? CustomColors.BLACK : CustomColors.WHITE)))
                         )
                     ),
-                    Text("Some projects i have worked", style: Theme.of(context).textTheme.titleLarge?.copyWith(fontFamily: 'Recoleta-Medium', fontSize: 16, color: darkDarkLightLightColor(context))),
+                    Text("Some projects i have worked", style: Theme.of(context).textTheme.titleLarge?.copyWith(fontFamily: 'Recoleta-Medium', fontSize: 16, letterSpacing: 1.2, color: darkDarkLightLightColor(context))),
                     InkWell(
                         onTap: () { controller.cardSwiperController.swipe(CardSwiperDirection.right); },
                         overlayColor: const WidgetStatePropertyAll(CustomColors.TRANSPARENT),
@@ -215,7 +224,7 @@ class HomeMobileScreen extends CustomState {
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(CustomSizes.SPACE_DEFAULT * 2),
                                 border: Border.all(color: darkDarkLightLightColor(context))),
-                            child: WidgetAnimator(atRestEffect: WidgetRestingEffects.dangle(effectStrength: 0.6), child: Icon(Icons.keyboard_double_arrow_right, size: 20, color: darkDarkLightLightColor(context)))
+                            child: WidgetAnimator(atRestEffect: WidgetRestingEffects.dangle(effectStrength: 0.6), child: Obx(() =>  Icon(Icons.keyboard_double_arrow_right, size: 16, color: controller.isDarkTheme.value ? CustomColors.BLACK : CustomColors.WHITE)))
                         )
                     ),
                   ],
@@ -223,7 +232,7 @@ class HomeMobileScreen extends CustomState {
                 const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS),
                 SizedBox(
                   width: getWidth(context),
-                  height: 480,
+                  height: 500,
                   child: controller.projects.isEmpty
                       ? const CustomLoadingScreen()
                       : CardSwiper(
@@ -248,11 +257,11 @@ class HomeMobileScreen extends CustomState {
                         ),
                   ),
                 ),
-                const SizedBox(height: CustomSizes.SPACE_DEFAULT * 2),
               ],
             ),
 
             // SKILLS
+            const SizedBox(height: CustomSizes.SPACE_DEFAULT * 3),
             Container(
                 height: 40,
                 color: darkDarkLightLightColor(context),
@@ -264,12 +273,12 @@ class HomeMobileScreen extends CustomState {
                       padding: const EdgeInsets.symmetric(horizontal: CustomSizes.SPACE_BETWEEN_ITEMS),
                       child: Image.asset(controller.skills[index], width: 24, height: 24),
                     ))),
-            const SizedBox(height: CustomSizes.SPACE_DEFAULT * 2),
+            const SizedBox(height: CustomSizes.SPACE_DEFAULT * 3),
 
             // MOBILE + STORES
-            Text("Skills", style: Theme.of(context).textTheme.headlineLarge?.copyWith(fontFamily: 'Recoleta-Bold', color: darkDarkLightLightColor(context))),
+            Text("Skills", style: Theme.of(context).textTheme.titleLarge?.copyWith(fontFamily: 'Recoleta-Bold', fontSize: 24, color: darkDarkLightLightColor(context))),
             const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS / 2),
-            Text("Technologies i'm working with", style: Theme.of(context).textTheme.titleLarge?.copyWith(fontFamily: 'Recoleta-Medium', fontSize: 16, color: darkDarkLightLightColor(context))),
+            Text("Technologies i'm working with", style: Theme.of(context).textTheme.titleLarge?.copyWith(fontFamily: 'Recoleta-Medium', fontSize: 16, letterSpacing: 1.2, color: darkDarkLightLightColor(context))),
             const SizedBox(height: CustomSizes.SPACE_DEFAULT * 2),
             Container(
               margin: const EdgeInsets.symmetric(horizontal: CustomSizes.SPACE_DEFAULT),
@@ -286,8 +295,8 @@ class HomeMobileScreen extends CustomState {
               ),
               child: Column(
                 children: [
-                  const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS / 2),
-                  Text('Mobile', style: Theme.of(context).textTheme.headlineMedium?.copyWith(fontFamily: 'Recoleta-Bold', color: darkDarkLightLightColor(context))),
+                  const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS),
+                  Text('Mobile', style: Theme.of(context).textTheme.titleLarge?.copyWith(fontFamily: 'Recoleta-Bold', fontSize: 20, color: darkDarkLightLightColor(context))),
                   Divider(color: darkDarkLightLightColor(context), thickness: 0.5, indent: CustomSizes.SPACE_DEFAULT, endIndent: CustomSizes.SPACE_DEFAULT),
                   const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS / 2),
                   Padding(
@@ -322,8 +331,8 @@ class HomeMobileScreen extends CustomState {
               ),
               child: Column(
                 children: [
-                  const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS / 2),
-                  Text('Stores', style: Theme.of(context).textTheme.headlineMedium?.copyWith(fontFamily: 'Recoleta-Bold', color: darkDarkLightLightColor(context))),
+                  const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS),
+                  Text('Stores', style: Theme.of(context).textTheme.titleLarge?.copyWith(fontFamily: 'Recoleta-Bold', fontSize: 20, color: darkDarkLightLightColor(context))),
                   Divider(color: darkDarkLightLightColor(context), thickness: 0.5, indent: CustomSizes.SPACE_DEFAULT, endIndent: CustomSizes.SPACE_DEFAULT),
                   const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS / 2),
                   Padding(
@@ -359,8 +368,8 @@ class HomeMobileScreen extends CustomState {
               ),
               child: Column(
                 children: [
-                  const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS / 2),
-                  Text('Web', style: Theme.of(context).textTheme.headlineMedium?.copyWith(fontFamily: 'Recoleta-Bold', color: darkDarkLightLightColor(context))),
+                  const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS),
+                  Text('Web', style: Theme.of(context).textTheme.titleLarge?.copyWith(fontFamily: 'Recoleta-Bold', fontSize: 20, color: darkDarkLightLightColor(context))),
                   Divider(color: darkDarkLightLightColor(context), thickness: 0.5, indent: CustomSizes.SPACE_DEFAULT, endIndent: CustomSizes.SPACE_DEFAULT),
                   const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS / 2),
                   Padding(
@@ -409,8 +418,8 @@ class HomeMobileScreen extends CustomState {
               ),
               child: Column(
                 children: [
-                  const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS / 2),
-                  Text('Database', style: Theme.of(context).textTheme.headlineMedium?.copyWith(fontFamily: 'Recoleta-Bold', color: darkDarkLightLightColor(context))),
+                  const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS),
+                  Text('Database', style: Theme.of(context).textTheme.titleLarge?.copyWith(fontFamily: 'Recoleta-Bold', fontSize: 20, color: darkDarkLightLightColor(context))),
                   Divider(color: darkDarkLightLightColor(context), thickness: 0.5, indent: CustomSizes.SPACE_DEFAULT, endIndent: CustomSizes.SPACE_DEFAULT),
                   const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS / 2),
                   Padding(
@@ -488,13 +497,20 @@ class HomeMobileScreen extends CustomState {
                   const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS / 2),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: CustomSizes.SPACE_BETWEEN_ITEMS),
-                    child:  _customSkill(context: context, imgUri: CustomIcons.DESIGN_FIGMA, title: "FIGMA"),
+                    child:  Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      spacing: CustomSizes.SPACE_DEFAULT,
+                      children: [
+                        _customSkill(context: context, imgUri: CustomIcons.DESIGN_FIGMA, title: "FIGMA"),
+                        _customSkill(context: context, imgUri: CustomIcons.DESIGN_CANVA, title: "CANVA"),
+                      ],
+                    ),
                   ),
                   const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS)
                 ],
               ),
             ),
-            const SizedBox(height: CustomSizes.SPACE_DEFAULT * 2),
+            const SizedBox(height: CustomSizes.SPACE_DEFAULT * 3),
 
             // SKILLS
             Container(
@@ -510,7 +526,7 @@ class HomeMobileScreen extends CustomState {
                     )
                 )
             ),
-            const SizedBox(height: CustomSizes.SPACE_DEFAULT * 2),
+            const SizedBox(height: CustomSizes.SPACE_DEFAULT * 3),
 
             // CONTACT ME
             SizedBox(
@@ -522,14 +538,14 @@ class HomeMobileScreen extends CustomState {
                   padding: const EdgeInsets.symmetric(horizontal: CustomSizes.SPACE_DEFAULT),
                   child: Column(
                     children: [
-                      Text("Contact Me", style: Theme.of(context).textTheme.headlineLarge?.copyWith(fontFamily: 'Recoleta-Bold', color: darkDarkLightLightColor(context))),
+                      Text("Contact Me", style: Theme.of(context).textTheme.titleLarge?.copyWith(fontFamily: 'Recoleta-Bold', fontSize: 24, color: darkDarkLightLightColor(context))),
                       const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS / 4),
-                      Text("Let's talk on something great together", style: Theme.of(context).textTheme.titleLarge?.copyWith(fontFamily: 'Recoleta-Medium', fontSize: 16, color: darkDarkLightLightColor(context))),
+                      Text("Let's talk on something great together", style: Theme.of(context).textTheme.titleLarge?.copyWith(fontFamily: 'Recoleta-Medium', fontSize: 16, letterSpacing: 1.2, color: darkDarkLightLightColor(context))),
                       const SizedBox(height: CustomSizes.SPACE_DEFAULT * 2),
                       CustomTextField(
                           controller: controller.fullNameController,
                           hint: "Full Name",
-                          icon: Icons.more_horiz,
+                          icon: Icons.person_outline,
                           validator: (value){
                             if (value == null || value.isEmpty || value.length < 2) { return "Field must not be empty"; }
                             return null;
@@ -555,17 +571,28 @@ class HomeMobileScreen extends CustomState {
                           maxLines: 12
                       ),
                       const SizedBox(height: CustomSizes.SPACE_DEFAULT),
-                      CustomElevatedButton(onPressed: controller.onSend, width: getWidth(context) * 0.6, bgColor: CustomColors.BLACK, textColor: CustomColors.WHITE, child: const Text("Send"),)
-                    ],
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: CustomSizes.SPACE_BETWEEN_SECTIONS * 3),
+                        child: CustomElevatedButton(
+                            onPressed: (){
+                              if(controller.isSending.value) return;
+                              controller.onSend(); },
+                            textColor: darkLightColor(context),
+                            elevation: 0,
+                            child: controller.isSending.value
+                                ? SizedBox(width: CustomSizes.SPACE_DEFAULT, height: CustomSizes.SPACE_DEFAULT, child: CircularProgressIndicator(color: darkLightColor(context), strokeWidth: 3, backgroundColor: darkLightColor(context).withValues(alpha: 0.2)))
+                                : const Text("Send")
+                        ),
+                      )],
                   ),
                 ),
               ),
             ),
-            const SizedBox(height: CustomSizes.SPACE_DEFAULT * 2),
+            const SizedBox(height: CustomSizes.SPACE_DEFAULT * 3),
 
             // FOOTER
             Container(
-              color: darkLightColor(context),
+              color: grayColor(context),
               padding: const EdgeInsets.symmetric(vertical: CustomSizes.SPACE_BETWEEN_SECTIONS, horizontal: CustomSizes.SPACE_DEFAULT),
               child: Column(
                 children: [
@@ -590,11 +617,11 @@ class HomeMobileScreen extends CustomState {
                   Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        _customContact(context: context, imgUri: CustomIcons.CONTACT_LINKEDIN, onPressed: (){}),
+                        _customContact(context: context, imgUri: CustomIcons.CONTACT_LINKEDIN, onPressed: controller.onLinkedIn),
                         const SizedBox(width: CustomSizes.SPACE_BETWEEN_ITEMS / 2),
-                        _customContact(context: context, imgUri: CustomIcons.CONTACT_GMAIL, onPressed: (){}),
+                        _customContact(context: context, imgUri: CustomIcons.CONTACT_GMAIL, onPressed: controller.onGmail),
                         const SizedBox(width: CustomSizes.SPACE_BETWEEN_ITEMS / 2),
-                        _customContact(context: context, imgUri: CustomIcons.CONTACT_GITHUB, color: darkDarkLightLightColor(context), onPressed: (){}),
+                        _customContact(context: context, imgUri: CustomIcons.CONTACT_GITHUB, color: darkDarkLightLightColor(context), onPressed: controller.onGithub),
                       ]
                   )
                 ],
@@ -603,30 +630,22 @@ class HomeMobileScreen extends CustomState {
           ],
         ),
       ),
-      floatingActionButton: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            FloatingActionButton(
-                heroTag: "1",
-                elevation: 16,
-                onPressed: () { controller.onChangeColorTheming(); },
-                backgroundColor: darkDarkLightLightColor(context),
-                child: Icon(Icons.invert_colors_on_outlined, color: darkLightColor(context))
-            ),
-            if(controller.isFabVisible.value) ... [
-              const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS),
-              FloatingActionButton(
-                  heroTag: "2",
-                  onPressed: () { controller.scrollingUp(); },
-                  backgroundColor: CustomColors.WHITE,
-                  foregroundColor: CustomColors.BLACK,
-                  child: WidgetAnimator(
-                    atRestEffect: WidgetRestingEffects.wave(effectStrength: 0.6),
-                    child: const Icon(Icons.keyboard_double_arrow_up, color: CustomColors.BLACK),
-                  )
-              )
-            ]
-          ]
+      floatingActionButton: Transform.scale(
+        scale: 0.8,
+        child: FloatingActionButton(
+            heroTag: "3",
+            elevation: 16,
+            onPressed: () { controller.onChangeColorTheming(); },
+            backgroundColor: darkDarkLightLightColor(context),
+            child: WidgetAnimator(
+                child: InkWell(
+                    onTap: controller.onChangeColorTheming,
+                    child: Obx(() => controller.isDarkTheme.value
+                        ? const Icon(Icons.dark_mode_outlined, color: CustomColors.WHITE)
+                        : WidgetAnimator(atRestEffect: WidgetRestingEffects.rotate(), child: const Icon(Icons.light_mode_outlined, color: CustomColors.BLACK)))
+                )
+            )
+        ),
       ),
     ));
   }
@@ -661,7 +680,7 @@ class HomeMobileScreen extends CustomState {
                   children: [
                     ClipRRect(
                         borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_ITEMS / 2),
-                        child: Image.network(logoUri, height: 32, width: 32)),
+                        child: Image.network(logoUri, height: 35, width: 35)),
                     Text(title, style: Theme.of(context).textTheme.headlineLarge?.copyWith(fontSize: 14, letterSpacing: 0.5, color: darkDarkLightLightColor(context))),
                   ],
                 ),
@@ -670,14 +689,14 @@ class HomeMobileScreen extends CustomState {
             ),
           ),
 
-          const SizedBox(height: CustomSizes.SPACE_BETWEEN_SECTIONS),
+          const SizedBox(height: CustomSizes.SPACE_DEFAULT),
 
           SizedBox(
               width: getWidth(context),
-              height: 150,
+              height: 180,
               child: DecoratedBox(decoration: BoxDecoration(image: DecorationImage(image: NetworkImage(thumbnailUri), fit: BoxFit.cover)))),
 
-          const SizedBox(height: CustomSizes.SPACE_BETWEEN_SECTIONS),
+          const SizedBox(height: CustomSizes.SPACE_DEFAULT),
 
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: CustomSizes.SPACE_DEFAULT),
@@ -689,7 +708,7 @@ class HomeMobileScreen extends CustomState {
                   children: [
                     Expanded(child: CustomElevatedButton(
                         onPressed: onInstallApk,
-                        height: CustomSizes.SPACE_DEFAULT * 1.5,
+                        height: CustomSizes.SPACE_DEFAULT * 1.4,
                         bgColor: darkDarkLightLightColor(context),
                         elevation: 0,
                         child: Row(
@@ -703,7 +722,7 @@ class HomeMobileScreen extends CustomState {
                     )),
                     Expanded(child: CustomElevatedButton(
                         onPressed: onGithub,
-                        height: CustomSizes.SPACE_DEFAULT * 1.5,
+                        height: CustomSizes.SPACE_DEFAULT * 1.4,
                         bgColor: darkDarkLightLightColor(context),
                         elevation: 0,
                         child: Row(
@@ -719,7 +738,7 @@ class HomeMobileScreen extends CustomState {
                 ),
                 CustomElevatedButton(
                     onPressed: onDetails,
-                    height: CustomSizes.SPACE_DEFAULT * 1.5,
+                    height: CustomSizes.SPACE_DEFAULT * 1.4,
                     bgColor: darkDarkLightLightColor(context),
                     elevation: 0,
                     child: Row(
@@ -736,18 +755,19 @@ class HomeMobileScreen extends CustomState {
           ),
 
         ],
-      ));
+      )
+  );
 
   Widget _customSkill({ required BuildContext context, required String imgUri, required String title, Color? color}) => Column(
     children: [
       Container(
-        padding: const EdgeInsets.all(CustomSizes.SPACE_BETWEEN_ITEMS),
+        padding: const EdgeInsets.all(CustomSizes.SPACE_BETWEEN_ITEMS / 1.4),
         decoration: BoxDecoration(
             color: darkLightColor(context),
-            borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_ITEMS),
+            borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_ITEMS / 2),
             border: Border.all(color: darkDarkLightLightColor(context))
         ),
-        child: Image.asset(imgUri, width: 28.0, height: 28.0, fit: BoxFit.cover, color: color),
+        child: Image.asset(imgUri, width: 26.0, height: 26.0, fit: BoxFit.cover, color: color),
       ),
       const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS / 4),
       Text(title, style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: darkDarkLightLightColor(context), fontSize: 10), maxLines: 1, overflow: TextOverflow.ellipsis, textAlign: TextAlign.center)

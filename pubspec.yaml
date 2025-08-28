@@ -21,13 +21,13 @@ dependencies:
 
   # UTILS
   cloudinary: ^1.2.0
+  http: any
   carousel_slider: ^5.0.0
   flutter_card_swiper: ^7.0.2
   url_launcher: ^6.3.0
   avatar_glow: ^3.0.1
-  mailer: ^6.1.1
   widget_and_text_animator: ^1.1.5
-  youtube_player_iframe: ^4.0.4
+  youtube_player_iframe: any
 
 dev_dependencies:
   flutter_test:

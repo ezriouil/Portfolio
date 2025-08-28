@@ -59,7 +59,7 @@ class DetailsController extends GetxController{
   }
 
   // - - - - - - - - - - - - - - - - - - SCROLL UP - - - - - - - - - - - - - - - - - -  //
-  // void scrollingUp(){ scrollController.animateTo(0, duration: const Duration(milliseconds: 500), curve: Curves.easeInOut); }
+  void scrollingUp(){ scrollController.animateTo(0, duration: const Duration(milliseconds: 500), curve: Curves.easeInOut); }
 
   // - - - - - - - - - - - - - - - - - - GOOGLE PLAY - - - - - - - - - - - - - - - - - -  //
   void onGooglePlay() async {
@@ -94,10 +94,19 @@ class DetailsController extends GetxController{
   }
 
   // - - - - - - - - - - - - - - - - - - LINKEDIN - - - - - - - - - - - - - - - - - -  //
-  void onLinkedin() {}
+  void onLinkedIn() async {
+    try{ await launchUrl(Uri.parse(CustomConstants.LIKED_IN)); }
+    catch(_){ CustomSnackBar.error(); }
+  }
 
   // - - - - - - - - - - - - - - - - - - GMAIL - - - - - - - - - - - - - - - - - -  //
-  void onGmail() {}
+  void onGmail() async {
+    try {
+      final Uri gmailUri = Uri(scheme: 'mailto', path: 'Ezriouil.dev@gmail.com');
+      if (await canLaunchUrl(gmailUri)) { await launchUrl(gmailUri); }
+    }
+    catch (_) { CustomSnackBar.error(); }
+  }
 
   // - - - - - - - - - - - - - - - - - - LISTEN TO SCROLL CONTROLLER - - - - - - - - - - - - - - - - - -  //
   void _scrollController() {

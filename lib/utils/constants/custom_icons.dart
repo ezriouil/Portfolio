@@ -9,6 +9,7 @@ class CustomIcons{
   static const String DB_SUPABASE = "assets/icons/db/supabase.png";
 
   static const String DESIGN_FIGMA = "assets/icons/design/figma.png";
+  static const String DESIGN_CANVA = "assets/icons/design/canva.png";
 
   static const String EDITORS_INTELLIJ_IDEA = "assets/icons/editors/intellij_idea.png";
   static const String EDITORS_ANDROID_STUDIO = "assets/icons/editors/android_studio.png";

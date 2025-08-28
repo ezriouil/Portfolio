@@ -23,10 +23,10 @@ class CustomInputTheme {
         borderSide:  BorderSide(color: CustomColors.BLACK.withValues(alpha: 0.8))),
     errorBorder: const OutlineInputBorder().copyWith(
         borderRadius: BorderRadius.circular(8.0),
-        borderSide: const BorderSide(color: CustomColors.RED_LIGHT)),
+        borderSide: const BorderSide(color: CustomColors.RED_DARK)),
     focusedErrorBorder: const OutlineInputBorder().copyWith(
       borderRadius: BorderRadius.circular(8.0),
-      borderSide: BorderSide(color: CustomColors.RED_LIGHT.withValues(alpha: 0.5)),
+      borderSide: BorderSide(color: CustomColors.RED_DARK.withValues(alpha: 0.5)),
     ),
   );
 

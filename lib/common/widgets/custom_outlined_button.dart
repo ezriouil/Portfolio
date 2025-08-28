@@ -25,7 +25,7 @@ class CustomOutlinedButton  extends CustomState {
   Widget execute(BuildContext context) {
     return SizedBox(
       width: width ?? getWidth(context),
-      height: height ?? CustomSizes.SPACE_DEFAULT * 1.7,
+      height: height ?? CustomSizes.SPACE_DEFAULT * 1.6,
       child: OutlinedButton(
           style: ElevatedButton.styleFrom(
             padding: const EdgeInsets.symmetric(horizontal: CustomSizes.SPACE_BETWEEN_ITEMS, vertical: CustomSizes.SPACE_BETWEEN_ITEMS / 4),

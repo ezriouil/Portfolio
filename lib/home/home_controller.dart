@@ -1,10 +1,17 @@
+import 'dart:convert';
+import 'dart:html' as html;
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_card_swiper/flutter_card_swiper.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
 import 'package:portfolio/common/models/project_entity.dart';
 import 'package:portfolio/common/widgets/custom_snackbar.dart';
 import 'package:portfolio/utils/constants/custom_icons.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+import '../utils/constants/custom_constants.dart';
 
 class HomeController extends GetxController{
 
@@ -12,7 +19,7 @@ class HomeController extends GetxController{
   late final ScrollController scrollController, skillsZeroScrollController, skillsFirstScrollController, skillsLastScrollController;
   late final CardSwiperController cardSwiperController;
   late final TextEditingController fullNameController, objectController, messageController;
-  late final RxBool isDarkTheme, isFabVisible;
+  late final RxBool isDarkTheme, isFabVisible, isSending;
   late final GlobalKey<FormState> formState;
   late final GlobalKey homeKey, skillsKey, projectsKey, contactKey;
   late final RxList<ProjectEntity> projects;
@@ -23,6 +30,7 @@ class HomeController extends GetxController{
     CustomIcons.DB_SQL,
     CustomIcons.DB_SUPABASE,
     CustomIcons.DESIGN_FIGMA,
+    CustomIcons.DESIGN_CANVA,
     CustomIcons.EDITORS_INTELLIJ_IDEA,
     CustomIcons.EDITORS_ANDROID_STUDIO,
     CustomIcons.EDITORS_SUBLIME,
@@ -62,6 +70,7 @@ class HomeController extends GetxController{
     messageController = TextEditingController();
     isDarkTheme = false.obs;
     isFabVisible = false.obs;
+    isSending = false.obs;
     formState = GlobalKey<FormState>();
     homeKey = GlobalKey();
     skillsKey = GlobalKey();
@@ -134,12 +143,56 @@ class HomeController extends GetxController{
     }
   }
   void onDownloadResume() {
-    try{}
+    try{
+      const pdfUrl = "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf";
+      html.window.open(pdfUrl, "_blank");
+    }
     catch(_){ CustomSnackBar.error(); }
   }
 
   // - - - - - - - - - - - - - - - - - - CONTACT BUTTON SEND - - - - - - - - - - - - - - - - - -  //
-  void onSend() { if(!formState.currentState!.validate()) return; }
+  void onSend() async {
+    try {
+
+      if (!formState.currentState!.validate()) return;
+      isSending.value = true;
+
+      const email = 'Ezriouil.dev@gmail.com';
+
+      final fullName = fullNameController.text.trim();
+      final subject = objectController.text.trim();
+      final message = messageController.text.trim();
+
+      final url = Uri.parse('https://api.emailjs.com/api/v1.0/email/send');
+
+      final response = await http.post(
+        url,
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          "service_id": "service_8zujzq9",
+          "template_id": "template_uo7rpui",
+          "user_id": "Irf3D8ppyEMw-utpO",
+          "template_params": {
+            "from_name": fullName,
+            "from_email": email,
+            "subject": subject,
+            "message": message,
+            "to_email": "Ezriouil.dev@gmail.com"
+          }
+        }),
+      );
+
+      if (response.statusCode == 200) { CustomSnackBar.emailSent(); }
+
+      fullNameController.clear();
+      objectController.clear();
+      messageController.clear();
+
+      Future.delayed(const Duration(milliseconds: 300), (){ formState.currentState?.reset(); });
+
+    } catch (_) { CustomSnackBar.error(); }
+    finally { isSending.value = false; }
+  }
 
   // - - - - - - - - - - - - - - - - - - ADD AUTO SCROLLING TO LIST VIEW - - - - - - - - - - - - - - - - - -  //
   void _autoScrolling() async {
@@ -180,10 +233,31 @@ class HomeController extends GetxController{
   // - - - - - - - - - - - - - - - - - - CHANGE COLOR THEME - - - - - - - - - - - - - - - - - -  //
   void onChangeColorTheming() {
     try{
-      Get.changeThemeMode(isDarkTheme.value ? ThemeMode.dark : ThemeMode.light);
+      Get.changeThemeMode(isDarkTheme.value ? ThemeMode.light : ThemeMode.dark);
       isDarkTheme.value = !isDarkTheme.value;
     }
     catch(_){}
+  }
+
+  // - - - - - - - - - - - - - - - - - - GITHUB - - - - - - - - - - - - - - - - - -  //
+  void onGithub() async {
+    try{ await launchUrl(Uri.parse(CustomConstants.GITHUB)); }
+    catch(_){ CustomSnackBar.error(); }
+  }
+
+  // - - - - - - - - - - - - - - - - - - LINKEDIN - - - - - - - - - - - - - - - - - -  //
+  void onLinkedIn() async {
+    try{ await launchUrl(Uri.parse(CustomConstants.LIKED_IN)); }
+    catch(_){ CustomSnackBar.error(); }
+  }
+
+  // - - - - - - - - - - - - - - - - - - GMAIL - - - - - - - - - - - - - - - - - -  //
+  void onGmail() async {
+    try {
+      final Uri gmailUri = Uri(scheme: 'mailto', path: 'Ezriouil.dev@gmail.com');
+      if (await canLaunchUrl(gmailUri)) { await launchUrl(gmailUri); }
+    }
+    catch (_) { CustomSnackBar.error(); }
   }
 
   @override

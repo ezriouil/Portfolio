@@ -19,7 +19,7 @@ class DetailsMobileScreen extends CustomState {
   Widget execute(BuildContext context) {
     final DetailsController controller = Get.find<DetailsController>();
     return Obx(() => Scaffold(
-      backgroundColor: grayColor(context),
+      backgroundColor: grayColor(context).withValues(alpha: context.isDarkMode ? 0.6 : 0.9),
       body: controller.isLoading.value
           ? const CustomLoadingScreen()
           : controller.projectEntity.value == null ? const CustomEmptyScreen()
@@ -27,20 +27,20 @@ class DetailsMobileScreen extends CustomState {
         width: getWidth(context),
         child: SingleChildScrollView(
             padding: const EdgeInsets.symmetric(horizontal: CustomSizes.SPACE_DEFAULT * 2),
-          //  controller: controller.scrollController,
+           controller: controller.scrollController,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               spacing: CustomSizes.SPACE_BETWEEN_SECTIONS,
               children: [
 
-                const SizedBox(height: 0),
+                const SizedBox(),
 
-                // VIDEO
+                // THUMBNAIL + VIDEO
                 Container(
-                  width: getWidth(context),
+                  width: 800.0,
                   padding: const EdgeInsets.all(CustomSizes.SPACE_BETWEEN_ITEMS),
                   decoration: BoxDecoration(
-                      color: darkDarkLightLightColor(context).withValues(alpha: 0.05),
+                      color: grayColor(context),
                       border: Border.all(color: darkDarkLightLightColor(context), width: 0.3),
                       borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_ITEMS / 4)
                   ),
@@ -51,15 +51,15 @@ class DetailsMobileScreen extends CustomState {
                         children: [
                           ClipRRect(
                               borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_ITEMS / 4),
-                              child: Image.network(controller.projectEntity.value?.logo ?? "", height: 30, width: 30)),
-                          Flexible(child: Text(controller.projectEntity.value?.title ?? "", overflow: TextOverflow.ellipsis, maxLines: 1, style: Theme.of(context).textTheme.titleLarge?.copyWith(letterSpacing: 0.5, color: darkDarkLightLightColor(context)))),
+                              child: Image.network(controller.projectEntity.value?.logo ?? "", height: 32, width: 32)),
+                          Text(controller.projectEntity.value?.title ?? "", overflow: TextOverflow.ellipsis, style: Theme.of(context).textTheme.titleLarge?.copyWith(fontSize: 12, letterSpacing: 0.5, color: darkDarkLightLightColor(context))),
                         ],
                       ),
                       const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS),
-                      controller.youtubePlayerController.value != null
+                      (controller.projectEntity.value?.videoLink != null || controller.projectEntity.value?.videoLink != '')
                           ? SizedBox(
                         width: getWidth(context),
-                        height: getHeight(context) * 0.55,
+                        height: 350,
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_ITEMS / 2),
                           child: YoutubePlayer(
@@ -69,27 +69,27 @@ class DetailsMobileScreen extends CustomState {
                           ),
                         ),
                       )
-                          :SizedBox(
-                          width: getWidth(context) * 0.7,
-                          height: 350,
-                          child: DecoratedBox(decoration: BoxDecoration(image: DecorationImage(image: NetworkImage(controller.projectEntity.value?.thumbnail ?? ""), fit: BoxFit.cover)
+                          : SizedBox(
+                          width: getWidth(context),
+                          height:  MediaQuery.of(context).size.width < 800 ? 250 : 300,
+                          child: DecoratedBox(decoration: BoxDecoration(image: DecorationImage(image: NetworkImage(controller.projectEntity.value?.thumbnail ?? ""), fit: BoxFit.fitWidth)
                           ))
                       ),
                       const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS),
                       Column(
                         mainAxisSize: MainAxisSize.min,
-                        spacing: CustomSizes.SPACE_BETWEEN_ITEMS,
+                        spacing: CustomSizes.SPACE_BETWEEN_ITEMS / 1.5,
                         children: [
                           Row(
-                            spacing: CustomSizes.SPACE_BETWEEN_ITEMS,
+                            spacing: CustomSizes.SPACE_BETWEEN_ITEMS / 1.5,
                             children: [
                               Expanded(
                                 child: CustomOutlinedButton(
                                     elevation: 0,
                                     onPressed: controller.onGooglePlay,
-                                    height: CustomSizes.SPACE_DEFAULT * 1.6,
+                                    height: CustomSizes.SPACE_DEFAULT * 1.4,
                                     child: Row(
-                                      spacing: CustomSizes.SPACE_BETWEEN_ITEMS / 2,
+                                      spacing: CustomSizes.SPACE_BETWEEN_ITEMS / 1.5,
                                       mainAxisAlignment: MainAxisAlignment.center,
                                       children: [
                                         Image.asset(CustomIcons.STORES_GOOGLE_PLAY, height: 12, width: 12),
@@ -102,9 +102,9 @@ class DetailsMobileScreen extends CustomState {
                                 child: CustomOutlinedButton(
                                     elevation: 0,
                                     onPressed: controller.onAppleStore,
-                                    height: CustomSizes.SPACE_DEFAULT * 1.6,
+                                    height: CustomSizes.SPACE_DEFAULT * 1.4,
                                     child: Row(
-                                      spacing: CustomSizes.SPACE_BETWEEN_ITEMS / 2,
+                                      spacing: CustomSizes.SPACE_BETWEEN_ITEMS / 1.5,
                                       mainAxisAlignment: MainAxisAlignment.center,
                                       children: [
                                         Image.asset(CustomIcons.STORES_APPLE, height: 14, width: 14),
@@ -116,15 +116,15 @@ class DetailsMobileScreen extends CustomState {
                             ],
                           ),
                           Row(
-                            spacing: CustomSizes.SPACE_BETWEEN_ITEMS,
+                            spacing: CustomSizes.SPACE_BETWEEN_ITEMS / 1.5,
                             children: [
                               Expanded(
                                 child: CustomOutlinedButton(
                                     elevation: 0,
                                     onPressed: controller.onAppleStore,
-                                    height: CustomSizes.SPACE_DEFAULT * 1.6,
+                                    height: CustomSizes.SPACE_DEFAULT * 1.4,
                                     child: Row(
-                                      spacing: CustomSizes.SPACE_BETWEEN_ITEMS / 2,
+                                      spacing: CustomSizes.SPACE_BETWEEN_ITEMS / 1.5,
                                       mainAxisAlignment: MainAxisAlignment.center,
                                       children: [
                                         Image.asset(CustomIcons.CONTACT_GITHUB, height: 14, width: 14),
@@ -136,15 +136,15 @@ class DetailsMobileScreen extends CustomState {
                                 child: CustomOutlinedButton(
                                     elevation: 0,
                                     onPressed: controller.onDownloadAPK,
-                                    height: CustomSizes.SPACE_DEFAULT * 1.6,
+                                    height: CustomSizes.SPACE_DEFAULT * 1.4,
                                     child: Row(
-                                      spacing: CustomSizes.SPACE_BETWEEN_ITEMS / 2,
+                                      spacing: CustomSizes.SPACE_BETWEEN_ITEMS / 1.5,
                                       mainAxisAlignment: MainAxisAlignment.center,
                                       children: [
                                         const Icon(Icons.android, color: CustomColors.GREEN_DARK, size: 14),
                                         Flexible(child: Text("Download APK", style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: darkDarkLightLightColor(context), fontSize: 8), maxLines: 1, overflow: TextOverflow.ellipsis)),
-                                ],
-                              )),
+                                      ],
+                                    )),
                               ),
                             ],
                           ),
@@ -156,15 +156,11 @@ class DetailsMobileScreen extends CustomState {
 
                 // LIGHT MODE
                 if(controller.lightImages.isNotEmpty) ... [
-                  SizedBox(
-                      width: getWidth(context),
-                      child: Divider(color: darkDarkLightLightColor(context), thickness: 0.2, height: 0)
-                  ),
                   Container(
                     width: getWidth(context),
                     padding: const EdgeInsets.symmetric(horizontal: CustomSizes.SPACE_BETWEEN_ITEMS, vertical: CustomSizes.SPACE_DEFAULT * 2),
                     decoration: BoxDecoration(
-                        color: darkDarkLightLightColor(context).withValues(alpha: 0.05),
+                        color: grayColor(context),
                         border: Border.all(color: darkDarkLightLightColor(context), width: 0.3),
                         borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_ITEMS / 4)
                     ),
@@ -203,7 +199,7 @@ class DetailsMobileScreen extends CustomState {
                     width: getWidth(context),
                     padding: const EdgeInsets.symmetric(horizontal: CustomSizes.SPACE_BETWEEN_ITEMS, vertical: CustomSizes.SPACE_DEFAULT * 2),
                     decoration: BoxDecoration(
-                        color: darkDarkLightLightColor(context).withValues(alpha: 0.05),
+                        color: grayColor(context),
                         border: Border.all(color: darkDarkLightLightColor(context), width: 0.3),
                         borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_ITEMS / 4)
                     ),
@@ -243,7 +239,7 @@ class DetailsMobileScreen extends CustomState {
                     width: getWidth(context),
                     padding: const EdgeInsets.all(CustomSizes.SPACE_DEFAULT),
                     decoration: BoxDecoration(
-                        color: darkDarkLightLightColor(context).withValues(alpha: 0.05),
+                        color: grayColor(context),
                         border: Border.all(color: darkDarkLightLightColor(context), width: 0.3),
                         borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_ITEMS / 4)
                     ),
@@ -268,7 +264,7 @@ class DetailsMobileScreen extends CustomState {
                     width: getWidth(context),
                     padding: const EdgeInsets.all(CustomSizes.SPACE_DEFAULT),
                     decoration: BoxDecoration(
-                        color: darkDarkLightLightColor(context).withValues(alpha: 0.05),
+                        color: grayColor(context),
                         border: Border.all(color: darkDarkLightLightColor(context), width: 0.3),
                         borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_ITEMS / 4)
                     ),
@@ -293,7 +289,7 @@ class DetailsMobileScreen extends CustomState {
                     width: getWidth(context),
                     padding: const EdgeInsets.all(CustomSizes.SPACE_DEFAULT),
                     decoration: BoxDecoration(
-                        color: darkDarkLightLightColor(context).withValues(alpha: 0.05),
+                        color: grayColor(context),
                         border: Border.all(color: darkDarkLightLightColor(context), width: 0.3),
                         borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_ITEMS / 4)
                     ),
@@ -317,7 +313,7 @@ class DetailsMobileScreen extends CustomState {
                   width: getWidth(context),
                   padding: const EdgeInsets.all(CustomSizes.SPACE_DEFAULT),
                   decoration: BoxDecoration(
-                      color: darkDarkLightLightColor(context).withValues(alpha: 0.05),
+                      color: grayColor(context),
                       border: Border.all(color: darkDarkLightLightColor(context), width: 0.3),
                       borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_ITEMS / 4)
                   ),
@@ -344,7 +340,7 @@ class DetailsMobileScreen extends CustomState {
                       Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            _customContact(context: context, imgUri: CustomIcons.CONTACT_LINKEDIN, onPressed: controller.onLinkedin),
+                            _customContact(context: context, imgUri: CustomIcons.CONTACT_LINKEDIN, onPressed: controller.onLinkedIn),
                             const SizedBox(width: CustomSizes.SPACE_BETWEEN_ITEMS / 2),
                             _customContact(context: context, imgUri: CustomIcons.CONTACT_GMAIL, onPressed: controller.onGmail),
                             const SizedBox(width: CustomSizes.SPACE_BETWEEN_ITEMS / 2),
@@ -360,16 +356,19 @@ class DetailsMobileScreen extends CustomState {
               ],
             )),
       ),
-      floatingActionButton: controller.isFabVisible.value
-          ? FloatingActionButton(
-          onPressed: () {/* controller.scrollingUp(); */},
-          backgroundColor: CustomColors.WHITE,
-          foregroundColor: CustomColors.BLACK,
-          child: WidgetAnimator(
-            atRestEffect: WidgetRestingEffects.wave(effectStrength: 0.6),
-            child: const Icon(Icons.keyboard_double_arrow_up, color: CustomColors.BLACK),
+      floatingActionButton: controller.isFabVisible.value && !controller.isLoading.value
+          ? Transform.scale(
+            scale: 0.8,
+            child: FloatingActionButton(
+            onPressed: () {/* controller.scrollingUp(); */},
+            backgroundColor: CustomColors.WHITE,
+            foregroundColor: CustomColors.BLACK,
+            child: WidgetAnimator(
+              atRestEffect: WidgetRestingEffects.wave(effectStrength: 0.6),
+              child: const Icon(Icons.keyboard_double_arrow_up, color: CustomColors.BLACK),
+            )
+                  ),
           )
-      )
           : null,
     ));
   }

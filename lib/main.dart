@@ -35,36 +35,36 @@ class Portfolio extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-        themeMode: ThemeMode.dark,
-        theme: ThemeApp.lightTheme,
-        darkTheme: ThemeApp.darkTheme,
-        debugShowCheckedModeBanner: false,
-        initialBinding: DependencyInjection(),
-        getPages: [
-          GetPage(name: "/", page: () => const CustomLayout(
+      themeMode: ThemeMode.light,
+      theme: ThemeApp.lightTheme,
+      darkTheme: ThemeApp.darkTheme,
+      debugShowCheckedModeBanner: false,
+      initialBinding: BindingsBuilder(() {
+        Get.put(
+          Cloudinary.signedConfig(
+            apiKey: "336153497372995",
+            apiSecret: "2n4ZVVLFLsmBxY74pSCwiMRXqq0",
+            cloudName: "dwcnliksx",
+          ),
+        );
+
+        Get.lazyPut(() => HomeController(), fenix: true);
+        Get.lazyPut(() => DetailsController(), fenix: true);
+      }),
+      getPages: [
+        GetPage(name: "/", page: () => const CustomLayout(
             mobile: HomeMobileScreen(),
             tablet: HomeTabletScreen(),
             web: HomeWebScreen(),
           )),
-          GetPage(name: "/details/:id", page: () => const CustomLayout(
+        GetPage(name: "/details/:id", page: () => const CustomLayout(
             mobile: DetailsMobileScreen(),
             tablet: DetailsTabletAndWebScreen(),
             web: DetailsTabletAndWebScreen(),
           )),
-        ],
-        initialRoute: '/',
+      ],
+      initialRoute: '/',
     );
-  }
-
-}
-
-class DependencyInjection implements Bindings {
-
-  @override
-  void dependencies() {
-    Get.put(Cloudinary.signedConfig(apiKey: "336153497372995", apiSecret: "2n4ZVVLFLsmBxY74pSCwiMRXqq0", cloudName: "dwcnliksx"));
-    Get.lazyPut(() => HomeController(), fenix: true);
-    Get.lazyPut(() => DetailsController(), fenix: true);
   }
 
 }
