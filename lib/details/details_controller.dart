@@ -43,7 +43,7 @@ class DetailsController extends GetxController{
       projectEntity.value = ProjectEntity.fromJson(getProject.data()!);
       if(projectEntity.value!.lightImages != null && projectEntity.value!.lightImages!.isNotEmpty) lightImages.addAll(projectEntity.value!.lightImages!);
       if(projectEntity.value!.darkImages != null && projectEntity.value!.darkImages!.isNotEmpty) darkImages.addAll(projectEntity.value!.darkImages!);
-      if(projectEntity.value!.videoLink != "") {
+      if(projectEntity.value!.videoLink != null || projectEntity.value!.videoLink != '') {
         youtubePlayerController.value = YoutubePlayerController.fromVideoId(
           videoId: projectEntity.value!.videoLink!,
           params: const YoutubePlayerParams(

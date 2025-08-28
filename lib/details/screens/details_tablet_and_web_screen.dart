@@ -56,7 +56,7 @@ class DetailsTabletAndWebScreen extends CustomState {
                           ],
                         ),
                         const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS),
-                        (controller.projectEntity.value?.videoLink != null || controller.projectEntity.value?.videoLink != '')
+                        (controller.youtubePlayerController.value != null && controller.projectEntity.value?.videoLink != null && controller.projectEntity.value?.videoLink != '')
                             ? SizedBox(
                           width: getWidth(context),
                           height: 350,

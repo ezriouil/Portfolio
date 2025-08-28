@@ -144,7 +144,7 @@ class HomeController extends GetxController{
   }
   void onDownloadResume() {
     try{
-      const pdfUrl = "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf";
+      const pdfUrl = "https://drive.google.com/file/d/1j5N2ef1JqwiV4r2nmWYziK0_ofuXzN3f/view?usp=sharing";
       html.window.open(pdfUrl, "_blank");
     }
     catch(_){ CustomSnackBar.error(); }
