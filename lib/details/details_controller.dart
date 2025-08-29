@@ -31,7 +31,7 @@ class DetailsController extends GetxController{
   }
 
   // - - - - - - - - - - - - - - - - - - INIT - - - - - - - - - - - - - - - - - -  //
-  void init() async { _getProjectInfo(); _scrollController(); }
+  void init() async { _getProjectInfo(); }
 
   // - - - - - - - - - - - - - - - - - - GET PROJECT INFO - - - - - - - - - - - - - - - - - -  //
   void _getProjectInfo() async {
@@ -53,6 +53,7 @@ class DetailsController extends GetxController{
           ),
         );
       }
+      _scrollController();
     }
     catch(_){ projectEntity.value = null; }
     finally{ isLoading.value = false; }
@@ -111,10 +112,12 @@ class DetailsController extends GetxController{
   // - - - - - - - - - - - - - - - - - - LISTEN TO SCROLL CONTROLLER - - - - - - - - - - - - - - - - - -  //
   void _scrollController() {
     scrollController.addListener(() {
-      if (scrollController.offset > 200 && !isFabVisible.value) { isFabVisible.value = true; }
-      else if (scrollController.offset <= 200 && isFabVisible.value) { isFabVisible.value = false; }
+      final offset = scrollController.offset;
+      if (offset > 200 && !isFabVisible.value) { isFabVisible.value = true; }
+      else if (offset <= 200 && isFabVisible.value) { isFabVisible.value = false; }
     });
   }
+
 
   @override
   void dispose() {
