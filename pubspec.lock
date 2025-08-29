@@ -264,6 +264,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.16.0"
+  mouse_follower:
+    dependency: "direct main"
+    description:
+      name: mouse_follower
+      sha256: "50ca9d9710cb974b14d2470476633e4247e38e5e56b310153a612ff147c14fd3"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.4.2"
   path:
     dependency: transitive
     description:

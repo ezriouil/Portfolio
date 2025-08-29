@@ -28,6 +28,7 @@ dependencies:
   avatar_glow: ^3.0.1
   widget_and_text_animator: ^1.1.5
   youtube_player_iframe: any
+  mouse_follower: ^1.4.2
 
 dev_dependencies:
   flutter_test:

@@ -540,7 +540,7 @@ class HomeMobileScreen extends CustomState {
                     children: [
                       Text("Contact Me", style: Theme.of(context).textTheme.titleLarge?.copyWith(fontFamily: 'Recoleta-Bold', fontSize: 24, color: darkDarkLightLightColor(context))),
                       const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS / 4),
-                      Text("Let's talk on something great together", style: Theme.of(context).textTheme.titleLarge?.copyWith(fontFamily: 'Recoleta-Medium', fontSize: 16, letterSpacing: 1.2, color: darkDarkLightLightColor(context))),
+                      Text("Let's talk on something great together", style: Theme.of(context).textTheme.titleLarge?.copyWith(fontFamily: 'Recoleta-Medium', fontSize: 16, letterSpacing: 1.2, color: darkDarkLightLightColor(context)), textAlign: TextAlign.center),
                       const SizedBox(height: CustomSizes.SPACE_DEFAULT * 2),
                       CustomTextField(
                           controller: controller.fullNameController,
