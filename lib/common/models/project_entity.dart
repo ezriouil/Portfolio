@@ -1,5 +1,4 @@
 class ProjectEntity {
-
   final String? id;
   final String? title;
   final String? description;
@@ -11,8 +10,15 @@ class ProjectEntity {
   final String? appStoreLink;
   final String? videoLink;
   final String? codeSourceLink;
-  final String? createAt;
+  final String? createdAt;
   final String? technologies;
+
+  final String? imgSplash;
+  final String? imgRegisterLight;
+  final String? imgLoginLight;
+  final String? imgRegisterDark;
+  final String? imgLoginDark;
+
   final List<String>? lightImages;
   final List<String>? darkImages;
 
@@ -28,8 +34,13 @@ class ProjectEntity {
     this.appStoreLink,
     this.videoLink,
     this.codeSourceLink,
-    this.createAt,
+    this.createdAt,
     this.technologies,
+    this.imgSplash,
+    this.imgRegisterLight,
+    this.imgLoginLight,
+    this.imgRegisterDark,
+    this.imgLoginDark,
     this.lightImages,
     this.darkImages,
   });
@@ -47,8 +58,13 @@ class ProjectEntity {
       appStoreLink: json['appStoreLink'],
       videoLink: json['videoLink'],
       codeSourceLink: json['codeSourceLink'],
-      createAt: json['createAt'],
+      createdAt: json['createdAt'],
       technologies: json['technologies'],
+      imgSplash: json['imgSplash'],
+      imgRegisterLight: json['imgRegisterLight'],
+      imgLoginLight: json['imgLoginLight'],
+      imgRegisterDark: json['imgRegisterDark'],
+      imgLoginDark: json['imgLoginDark'],
       lightImages: json['lightImages'] != null ? List<String>.from(json['lightImages']) : null,
       darkImages: json['darkImages'] != null ? List<String>.from(json['darkImages']) : null,
     );
@@ -67,8 +83,13 @@ class ProjectEntity {
       'appStoreLink': appStoreLink,
       'videoLink': videoLink,
       'codeSourceLink': codeSourceLink,
-      'createAt': createAt,
+      'createdAt': createdAt,
       'technologies': technologies,
+      'imgSplash': imgSplash,
+      'imgRegisterLight': imgRegisterLight,
+      'imgLoginLight': imgLoginLight,
+      'imgRegisterDark': imgRegisterDark,
+      'imgLoginDark': imgLoginDark,
       'lightImages': lightImages,
       'darkImages': darkImages,
     };

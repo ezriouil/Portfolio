@@ -112,9 +112,8 @@ class DetailsController extends GetxController{
   // - - - - - - - - - - - - - - - - - - LISTEN TO SCROLL CONTROLLER - - - - - - - - - - - - - - - - - -  //
   void _scrollController() {
     scrollController.addListener(() {
-      final offset = scrollController.offset;
-      if (offset > 200 && !isFabVisible.value) { isFabVisible.value = true; }
-      else if (offset <= 200 && isFabVisible.value) { isFabVisible.value = false; }
+      if (scrollController.offset > 200 && !isFabVisible.value) { isFabVisible.value = true; }
+      else if (scrollController.offset <= 200 && isFabVisible.value) { isFabVisible.value = false; }
     });
   }
 

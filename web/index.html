@@ -81,7 +81,6 @@
 <script defer src="/__/firebase/init.js"></script>
 
 <script>
-  // إزالة Splash بعد 5 ثواني
   setTimeout(() => {
     const splash = document.getElementById('splash');
     if (splash) {
@@ -89,7 +88,7 @@
       splash.style.opacity = '0';
       setTimeout(() => splash.remove(), 500);
     }
-  }, 5000);
+  }, 3000);
 </script>
 </body>
 </html>

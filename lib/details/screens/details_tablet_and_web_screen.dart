@@ -1,3 +1,5 @@
+import 'dart:html' as html;
+
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -35,45 +37,184 @@ class DetailsTabletAndWebScreen extends CustomState {
 
                   const SizedBox(),
 
-                  // THUMBNAIL + VIDEO
+                  // STORES
                   Container(
                     width: 800.0,
-                    padding: const EdgeInsets.all(CustomSizes.SPACE_BETWEEN_ITEMS),
+                    padding: const EdgeInsets.all(CustomSizes.SPACE_DEFAULT),
                     decoration: BoxDecoration(
-                        color: grayColor(context),
-                        border: Border.all(color: darkDarkLightLightColor(context), width: 0.3),
-                        borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_ITEMS / 4)
+                      color: grayColor(context),
+                      border: Border.all(color: darkDarkLightLightColor(context), width: 0.3),
+                      borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_ITEMS / 4),
                     ),
+                    alignment: Alignment.center,
                     child: Column(
                       children: [
-                        Row(
-                          spacing: CustomSizes.SPACE_BETWEEN_ITEMS,
-                          children: [
-                            ClipRRect(
-                                borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_ITEMS / 4),
-                                child: Image.network(controller.projectEntity.value?.logo ?? "", height: 36, width: 36)),
-                            Text(controller.projectEntity.value?.title ?? "", overflow: TextOverflow.ellipsis, style: Theme.of(context).textTheme.headlineLarge?.copyWith(fontSize: 16, letterSpacing: 0.5, color: darkDarkLightLightColor(context))),
-                          ],
-                        ),
-                        const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS),
-                        (controller.youtubePlayerController.value != null && controller.projectEntity.value?.videoLink != null && controller.projectEntity.value?.videoLink != '')
-                            ? SizedBox(
-                          width: getWidth(context),
-                          height: 350,
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_ITEMS / 2),
-                            child: YoutubePlayer(
-                              controller: controller.youtubePlayerController.value!,
-                              aspectRatio: 9 / 16,
-                              backgroundColor: redColor(context),
-                            ),
+                        SizedBox(
+                          width: 600,
+                          height: 340,
+                          child: Stack(
+                            alignment: Alignment.center,
+                            children: [
+
+                              Positioned(
+                                left: 0,
+                                top: 60,
+                                child: SizedBox(
+                                  width: 105,
+                                  height: 240,
+                                  child: WidgetAnimator(
+                                    atRestEffect: WidgetRestingEffects.wave(duration: const Duration(seconds: 3)),
+                                    child: Transform.rotate(
+                                      angle: -0.08,
+                                      alignment: Alignment.topCenter,
+                                      child: DecoratedBox(
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(18),
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color: CustomColors.BLACK.withValues(alpha: 0.15),
+                                              blurRadius: 20,
+                                              spreadRadius: 2,
+                                              offset: const Offset(6, 12),
+                                            )
+                                          ],
+                                          image: DecorationImage(
+                                            image: NetworkImage(controller.projectEntity.value?.imgLoginLight ?? ''),
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+
+                              Positioned(
+                                left: 85,
+                                top: 30,
+                                child: SizedBox(
+                                  width: 105,
+                                  height: 240,
+                                  child: WidgetAnimator(
+                                    atRestEffect: WidgetRestingEffects.wave(duration: const Duration(seconds: 3)),
+                                    child: Transform.rotate(
+                                      angle: -0.08,
+                                      alignment: Alignment.topCenter,
+                                      child: DecoratedBox(
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(18),
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color: CustomColors.BLACK.withValues(alpha: 0.15),
+                                              blurRadius: 20,
+                                              spreadRadius: 2,
+                                              offset: const Offset(6, 12),
+                                            )
+                                          ],
+                                          image: DecorationImage(
+                                            image: NetworkImage(controller.projectEntity.value?.imgRegisterLight ?? ''),
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+
+                              Positioned(
+                                right: 0,
+                                top: 60,
+                                child: SizedBox(
+                                  width: 105,
+                                  height: 240,
+                                  child: WidgetAnimator(
+                                    atRestEffect: WidgetRestingEffects.wave(duration: const Duration(seconds: 3)),
+                                    child: Transform.rotate(
+                                      angle: 0.08,
+                                      alignment: Alignment.topCenter,
+                                      child: DecoratedBox(
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(18),
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color: CustomColors.BLACK.withValues(alpha: 0.15),
+                                              blurRadius: 20,
+                                              spreadRadius: 2,
+                                              offset: const Offset(-6, 12),
+                                            )
+                                          ],
+                                          image: DecorationImage(
+                                            image: NetworkImage((controller.projectEntity.value?.imgRegisterDark == '' ? controller.projectEntity.value?.imgRegisterLight : controller.projectEntity.value?.imgRegisterDark) ?? ''),
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+
+                              Positioned(
+                                right: 85,
+                                top: 30,
+                                child: SizedBox(
+                                  width: 105,
+                                  height: 240,
+                                  child: WidgetAnimator(
+                                    atRestEffect: WidgetRestingEffects.wave(duration: const Duration(seconds: 3)),
+                                    child: Transform.rotate(
+                                      angle: 0.08,
+                                      alignment: Alignment.topCenter,
+                                      child: DecoratedBox(
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(18),
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color: CustomColors.BLACK.withValues(alpha: 0.15),
+                                              blurRadius: 20,
+                                              spreadRadius: 2,
+                                              offset: const Offset(-6, 12),
+                                            )
+                                          ],
+                                          image: DecorationImage(
+                                            image: NetworkImage((controller.projectEntity.value?.imgLoginDark == '' ? controller.projectEntity.value?.imgLoginLight : controller.projectEntity.value?.imgLoginDark) ?? ''),
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+
+                              Positioned(
+                                top: 0,
+                                child: SizedBox(
+                                  width: 150,
+                                  height: 320,
+                                  child: DecoratedBox(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(18),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: CustomColors.BLACK.withValues(alpha: 0.15),
+                                          blurRadius: 20,
+                                          spreadRadius: 2,
+                                          offset: const Offset(0, 12),
+                                        )
+                                      ],
+                                      image: DecorationImage(
+                                        image: NetworkImage(controller.projectEntity.value?.imgSplash ?? ''),
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+
+                            ],
                           ),
-                        )
-                            : SizedBox(
-                            width: getWidth(context),
-                            height:  MediaQuery.of(context).size.width < 800 ? 250 : 300,
-                            child: DecoratedBox(decoration: BoxDecoration(image: DecorationImage(image: NetworkImage(controller.projectEntity.value?.thumbnail ?? ""), fit: BoxFit.fitWidth)
-                            ))
                         ),
                         const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS),
                         Column(
@@ -142,8 +283,61 @@ class DetailsTabletAndWebScreen extends CustomState {
                           ],
                         ),
                       ],
-                    ),
+                    )
                   ),
+
+                  // VIDEO
+                  if(controller.youtubePlayerController.value != null && controller.projectEntity.value?.videoLink != '') ... [
+                    SizedBox(
+                        width: 800.0,
+                        child: Divider(color: darkDarkLightLightColor(context), thickness: 0.2, height: 0)
+                    ),
+                    Container(
+                      width: 800.0,
+                      padding: const EdgeInsets.all(CustomSizes.SPACE_DEFAULT),
+                      decoration: BoxDecoration(
+                          color: grayColor(context),
+                          border: Border.all(color: darkDarkLightLightColor(context), width: 0.3),
+                          borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_ITEMS / 4)
+                      ),
+                      child: Column(
+                        children: [
+                          Text(
+                            "App Demo",
+                            style: Theme.of(context).textTheme.headlineLarge?.copyWith(
+                              fontSize: 24,
+                              decoration: TextDecoration.underline,
+                              decorationColor: darkDarkLightLightColor(context),
+                              fontFamily: 'Recoleta-Bold',
+                              color: darkDarkLightLightColor(context),
+                            ),
+                          ),
+                          const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS / 2),
+                          Text(
+                            "Watch how the app works in real time and explore its main features.",
+                            style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                              fontFamily: 'Recoleta-Medium',
+                              fontSize: 16,
+                              color: darkDarkLightLightColor(context),
+                            ),
+                          ),
+                          const SizedBox(height: CustomSizes.SPACE_DEFAULT),
+                          SizedBox(
+                            width: getWidth(context),
+                            height: 400,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_ITEMS / 2),
+                              child: YoutubePlayer(
+                                controller: controller.youtubePlayerController.value!,
+                                aspectRatio: 9 / 16,
+                                backgroundColor: redColor(context),
+                              ),
+                            ),
+                          ),
+                        ],
+                      )
+                    ),
+                  ],
 
                   // LIGHT MODE
                   if(controller.lightImages.isNotEmpty) ... [
@@ -177,7 +371,7 @@ class DetailsTabletAndWebScreen extends CustomState {
                                 autoPlayAnimationDuration: const Duration(milliseconds: 500),
                                 enlargeStrategy: CenterPageEnlargeStrategy.zoom
                             ),
-                            items: controller.lightImages.map((imageUrl) { return _customScreen(context: context, imageUrl: imageUrl); }).toList(),
+                            items: controller.lightImages.map((imageUrl) { return _customScreen(context: context, imageUrl: imageUrl, onTap: () { html.window.open(imageUrl, '_blank'); }); }).toList(),
                           ),
                         ],
                       ),
@@ -215,9 +409,7 @@ class DetailsTabletAndWebScreen extends CustomState {
                                 autoPlayAnimationDuration: const Duration(milliseconds: 500),
                                 enlargeStrategy: CenterPageEnlargeStrategy.zoom
                             ),
-                            items: controller.darkImages.map((imageUrl) {
-                              return _customScreen(context: context, imageUrl: imageUrl);
-                            }).toList(),
+                            items: controller.darkImages.map((imageUrl) { return _customScreen(context: context, imageUrl: imageUrl, onTap: () { html.window.open(imageUrl, '_blank'); }); }).toList(),
                           ),
                         ],
                       ),
@@ -355,7 +547,7 @@ class DetailsTabletAndWebScreen extends CustomState {
             ? Transform.scale(
               scale: 0.8,
               child: FloatingActionButton(
-              onPressed: () { /*controller.scrollingUp();*/ },
+              onPressed: () { controller.scrollingUp(); },
               backgroundColor: CustomColors.WHITE,
               foregroundColor: CustomColors.BLACK,
               child: WidgetAnimator(
@@ -368,21 +560,25 @@ class DetailsTabletAndWebScreen extends CustomState {
     ));
   }
 
-  Widget _customScreen({ required BuildContext context, required String imageUrl }) {
+  Widget _customScreen({ required BuildContext context, required String imageUrl, required GestureTapCallback onTap }) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8.0),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_ITEMS / 4),
-        child: Image.network(
-          imageUrl,
-          fit: BoxFit.cover,
-          width: 140,
-          height: 300,
-          loadingBuilder: (context, child, loadingProgress) {
-            if (loadingProgress == null) return child;
-            return const Center(child: CircularProgressIndicator());
-          },
-          errorBuilder: (context, error, stackTrace) => const Icon(Icons.error),
+      child: InkWell(
+        onTap: onTap,
+        overlayColor: const WidgetStatePropertyAll<Color?>(CustomColors.TRANSPARENT),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_ITEMS / 4),
+          child: Image.network(
+            imageUrl,
+            fit: BoxFit.cover,
+            width: 140,
+            height: 300,
+            loadingBuilder: (context, child, loadingProgress) {
+              if (loadingProgress == null) return child;
+              return const Center(child: CircularProgressIndicator());
+            },
+            errorBuilder: (context, error, stackTrace) => const Icon(Icons.error),
+          ),
         ),
       ),
     );
