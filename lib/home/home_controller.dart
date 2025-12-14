@@ -16,12 +16,12 @@ import '../utils/constants/custom_constants.dart';
 class HomeController extends GetxController{
 
   // - - - - - - - - - - - - - - - - - - CREATE STATES - - - - - - - - - - - - - - - - - -  //
-  late final ScrollController scrollController, skillsZeroScrollController, skillsFirstScrollController, skillsLastScrollController;
+  late final ScrollController scrollController, skillsZeroScrollController, skillsFirstScrollController, skillsSecondScrollController, skillsLastScrollController;
   late final CardSwiperController cardSwiperController;
   late final TextEditingController fullNameController, objectController, messageController;
   late final RxBool isDarkTheme, isFabVisible, isSending;
   late final GlobalKey<FormState> formState;
-  late final GlobalKey homeKey, skillsKey, projectsKey, contactKey;
+  late final GlobalKey homeKey, skillsKey, projectsKey, experiencesKey, contactKey;
   late final RxList<ProjectEntity> projects;
 
   final List<String> skills = [
@@ -63,6 +63,7 @@ class HomeController extends GetxController{
     scrollController = ScrollController();
     skillsZeroScrollController = ScrollController();
     skillsFirstScrollController = ScrollController();
+    skillsSecondScrollController = ScrollController();
     skillsLastScrollController = ScrollController();
     cardSwiperController = CardSwiperController();
     fullNameController = TextEditingController();
@@ -75,6 +76,7 @@ class HomeController extends GetxController{
     homeKey = GlobalKey();
     skillsKey = GlobalKey();
     projectsKey = GlobalKey();
+    experiencesKey = GlobalKey();
     contactKey = GlobalKey();
     projects = RxList.empty(growable: true);
     init();
@@ -132,6 +134,17 @@ class HomeController extends GetxController{
       );
     }
   }
+  void onExperiences() {
+    final context = experiencesKey.currentContext;
+    if (context != null) {
+      Scrollable.ensureVisible(
+        context,
+        duration: const Duration(milliseconds: 500),
+        curve: Curves.easeInOut,
+      );
+    }
+  }
+
   void onContact() {
     final context = contactKey.currentContext;
     if (context != null) {
@@ -199,26 +212,105 @@ class HomeController extends GetxController{
 
     await Future.delayed(const Duration(seconds: 3));
 
-    skillsZeroScrollController.addListener(() { if (skillsZeroScrollController.position.pixels == skillsZeroScrollController.position.maxScrollExtent) skillsZeroScrollController.jumpTo(0); });
-    skillsZeroScrollController.animateTo(
-      skillsFirstScrollController.position.maxScrollExtent,
-      curve: Curves.linear,
-      duration: const Duration(seconds: 40),
-    );
+    // Setup auto-scrolling for skillsZeroScrollController
+    void startZeroScrolling() {
+      if (skillsZeroScrollController.hasClients && skillsZeroScrollController.position.maxScrollExtent > 0) {
+        skillsZeroScrollController.animateTo(
+          skillsZeroScrollController.position.maxScrollExtent,
+          curve: Curves.linear,
+          duration: const Duration(seconds: 40),
+        ).then((_) {
+          if (skillsZeroScrollController.hasClients) {
+            skillsZeroScrollController.jumpTo(0);
+            Future.delayed(const Duration(milliseconds: 100), () => startZeroScrolling());
+          }
+        });
+      } else {
+        // Retry if not ready yet
+        Future.delayed(const Duration(milliseconds: 500), () => startZeroScrolling());
+      }
+    }
+    skillsZeroScrollController.addListener(() {
+      if (skillsZeroScrollController.hasClients && skillsZeroScrollController.position.pixels >= skillsZeroScrollController.position.maxScrollExtent && skillsZeroScrollController.position.maxScrollExtent > 0) {
+        skillsZeroScrollController.jumpTo(0);
+      }
+    });
+    startZeroScrolling();
 
-    skillsFirstScrollController.addListener(() { if (skillsFirstScrollController.position.pixels == skillsFirstScrollController.position.maxScrollExtent) skillsFirstScrollController.jumpTo(0); });
-    skillsFirstScrollController.animateTo(
-      skillsFirstScrollController.position.maxScrollExtent,
-      curve: Curves.linear,
-      duration: const Duration(seconds: 40),
-    );
+    // Setup auto-scrolling for skillsFirstScrollController
+    void startFirstScrolling() {
+      if (skillsFirstScrollController.hasClients && skillsFirstScrollController.position.maxScrollExtent > 0) {
+        skillsFirstScrollController.animateTo(
+          skillsFirstScrollController.position.maxScrollExtent,
+          curve: Curves.linear,
+          duration: const Duration(seconds: 40),
+        ).then((_) {
+          if (skillsFirstScrollController.hasClients) {
+            skillsFirstScrollController.jumpTo(0);
+            Future.delayed(const Duration(milliseconds: 100), () => startFirstScrolling());
+          }
+        });
+      } else {
+        // Retry if not ready yet
+        Future.delayed(const Duration(milliseconds: 500), () => startFirstScrolling());
+      }
+    }
+    skillsFirstScrollController.addListener(() {
+      if (skillsFirstScrollController.hasClients && skillsFirstScrollController.position.pixels >= skillsFirstScrollController.position.maxScrollExtent && skillsFirstScrollController.position.maxScrollExtent > 0) {
+        skillsFirstScrollController.jumpTo(0);
+      }
+    });
+    startFirstScrolling();
 
-    skillsLastScrollController.addListener(() { if (skillsLastScrollController.position.pixels == skillsLastScrollController.position.maxScrollExtent) skillsLastScrollController.jumpTo(0); });
-    skillsLastScrollController.animateTo(
-      skillsLastScrollController.position.maxScrollExtent,
-      curve: Curves.linear,
-      duration: const Duration(seconds: 40),
-    );
+    // Setup auto-scrolling for skillsLastScrollController
+    void startLastScrolling() {
+      if (skillsLastScrollController.hasClients && skillsLastScrollController.position.maxScrollExtent > 0) {
+        skillsLastScrollController.animateTo(
+          skillsLastScrollController.position.maxScrollExtent,
+          curve: Curves.linear,
+          duration: const Duration(seconds: 40),
+        ).then((_) {
+          if (skillsLastScrollController.hasClients) {
+            skillsLastScrollController.jumpTo(0);
+            Future.delayed(const Duration(milliseconds: 100), () => startLastScrolling());
+          }
+        });
+      } else {
+        // Retry if not ready yet
+        Future.delayed(const Duration(milliseconds: 500), () => startLastScrolling());
+      }
+    }
+    skillsLastScrollController.addListener(() {
+      if (skillsLastScrollController.hasClients && skillsLastScrollController.position.pixels >= skillsLastScrollController.position.maxScrollExtent && skillsLastScrollController.position.maxScrollExtent > 0) {
+        skillsLastScrollController.jumpTo(0);
+      }
+    });
+    startLastScrolling();
+
+    // Setup auto-scrolling for skillsSecondScrollController
+    void startSecondScrolling() {
+      if (skillsSecondScrollController.hasClients && skillsSecondScrollController.position.maxScrollExtent > 0) {
+        skillsSecondScrollController.animateTo(
+          skillsSecondScrollController.position.maxScrollExtent,
+          curve: Curves.linear,
+          duration: const Duration(seconds: 40),
+        ).then((_) {
+          if (skillsSecondScrollController.hasClients) {
+            skillsSecondScrollController.jumpTo(0);
+            Future.delayed(const Duration(milliseconds: 100), () => startSecondScrolling());
+          }
+        });
+      } else {
+        // Retry if not ready yet
+        Future.delayed(const Duration(milliseconds: 500), () => startSecondScrolling());
+      }
+    }
+    skillsSecondScrollController.addListener(() {
+      if (skillsSecondScrollController.hasClients && skillsSecondScrollController.position.pixels >= skillsSecondScrollController.position.maxScrollExtent && skillsSecondScrollController.position.maxScrollExtent > 0) {
+        skillsSecondScrollController.jumpTo(0);
+      }
+    });
+    startSecondScrolling();
 
     scrollController.addListener(() {
       if (scrollController.offset > 200 && !isFabVisible.value) { isFabVisible.value = true; }
@@ -263,7 +355,14 @@ class HomeController extends GetxController{
   @override
   void dispose() {
     scrollController.dispose();
+    skillsZeroScrollController.dispose();
     skillsFirstScrollController.dispose();
+    skillsSecondScrollController.dispose();
+    skillsLastScrollController.dispose();
+    cardSwiperController.dispose();
+    fullNameController.dispose();
+    objectController.dispose();
+    messageController.dispose();
     super.dispose();
   }
 

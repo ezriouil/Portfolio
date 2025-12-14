@@ -11,6 +11,7 @@ import 'package:portfolio/utils/constants/custom_colors.dart';
 import 'package:portfolio/utils/constants/custom_icons.dart';
 import 'package:portfolio/utils/constants/custom_sizes.dart';
 import 'package:portfolio/utils/state/custom_state.dart';
+import 'package:parallax_rain/parallax_rain.dart';
 import 'package:widget_and_text_animator/widget_and_text_animator.dart';
 import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 
@@ -21,16 +22,37 @@ class DetailsTabletAndWebScreen extends CustomState {
   Widget execute(BuildContext context) {
     final DetailsController controller = Get.find<DetailsController>();
     return Obx(() => Scaffold(
-        backgroundColor: grayColor(context).withValues(alpha: context.isDarkMode ? 0.6 : 0.9),
+        backgroundColor: Colors.transparent,
         body: controller.isLoading.value
             ? const CustomLoadingScreen()
             : controller.projectEntity.value == null ? const CustomEmptyScreen()
-            : SizedBox(
-          width: getWidth(context),
-          child: SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(horizontal: CustomSizes.SPACE_DEFAULT * 2),
-              controller: controller.scrollController,
-              child: Column(
+            : Stack(
+          children: [
+            ParallaxRain(
+              dropColors: context.isDarkMode
+                  ? [
+                      CustomColors.BLUE_DARK.withValues(alpha: 0.3),
+                      CustomColors.PURPLE_DARK.withValues(alpha: 0.3),
+                      CustomColors.GREEN_DARK.withValues(alpha: 0.3),
+                      CustomColors.PRIMARY.withValues(alpha: 0.3),
+                    ]
+                  : [
+                      CustomColors.BLUE_LIGHT.withValues(alpha: 0.2),
+                      CustomColors.PURPLE_LIGHT.withValues(alpha: 0.2),
+                      CustomColors.GREEN_LIGHT.withValues(alpha: 0.2),
+                      CustomColors.PRIMARY.withValues(alpha: 0.2),
+                    ],
+              trail: true,
+              dropFallSpeed: 2.0,
+            ),
+            Container(
+              color: grayColor(context).withValues(alpha: context.isDarkMode ? 0.6 : 0.9),
+              child: SizedBox(
+                width: getWidth(context),
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.symmetric(horizontal: CustomSizes.SPACE_DEFAULT * 2),
+                  controller: controller.scrollController,
+                  child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 spacing: CustomSizes.SPACE_BETWEEN_SECTIONS,
                 children: [
@@ -541,7 +563,11 @@ class DetailsTabletAndWebScreen extends CustomState {
                   const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS / 2),
 
                 ],
-              )),
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
         floatingActionButton: controller.isFabVisible.value && !controller.isLoading.value
             ? Transform.scale(

@@ -26,7 +26,7 @@ class CustomElevatedButton  extends CustomState {
             elevation: elevation ?? 3,
             shadowColor: bgColor ?? darkDarkLightLightColor(context),
             side: BorderSide.none,
-            shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(CustomSizes.SPACE_BETWEEN_ITEMS / 2))),
+            shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(CustomSizes.SPACE_DEFAULT))),
           ),
           onPressed: onPressed,
           child: child

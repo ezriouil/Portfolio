@@ -14,8 +14,10 @@ import 'package:portfolio/utils/constants/custom_icons.dart';
 import 'package:portfolio/utils/constants/custom_images.dart';
 import 'package:portfolio/utils/constants/custom_sizes.dart';
 import 'package:portfolio/utils/state/custom_state.dart';
+import 'package:parallax_rain/parallax_rain.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:widget_and_text_animator/widget_and_text_animator.dart';
+import 'package:timeline_tile/timeline_tile.dart';
 
 class HomeMobileScreen extends CustomState {
   const HomeMobileScreen({super.key});
@@ -24,9 +26,22 @@ class HomeMobileScreen extends CustomState {
   Widget execute(BuildContext context) {
    final HomeController controller = Get.find<HomeController>();
     return Obx(() => Scaffold(
-      backgroundColor: grayColor(context).withValues(alpha: context.isDarkMode ? 0.6 : 0.9),
-      body: SingleChildScrollView(
-        child: Column(
+      backgroundColor: grayColor(context),
+      body: Stack(
+        children: [
+          ParallaxRain(
+            dropColors: [
+              CustomColors.GRAY_DARK,
+              CustomColors.GRAY_LIGHT,
+              CustomColors.WHITE
+            ],
+            trail: true,
+            dropWidth: 0.2,
+            dropFallSpeed: 2.5,
+            numberOfDrops: 100,
+          ),
+          SingleChildScrollView(
+            child: Column(
           children: [
 
             // HOME
@@ -45,7 +60,7 @@ class HomeMobileScreen extends CustomState {
                           decoration: BoxDecoration(
                               color: grayColor(context),
                               borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_SECTIONS * 3),
-                              border: Border.all(color: darkDarkLightLightColor(context))
+                              border: Border.all(width: 0.6, color: darkDarkLightLightColor(context))
                           ),
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_SECTIONS * 3),
@@ -71,7 +86,7 @@ class HomeMobileScreen extends CustomState {
                               decoration: BoxDecoration(
                                   color: grayColor(context),
                                   borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_ITEMS),
-                                  border: Border.all(color: darkDarkLightLightColor(context), width: 0.2)
+                                  border: Border.all(width: 0.6, color: darkDarkLightLightColor(context))
                               ),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -179,20 +194,64 @@ class HomeMobileScreen extends CustomState {
             ),
 
             // SKILLS
-            Container(
+            SizedBox(
                 height: 40,
-                color: darkDarkLightLightColor(context),
-                child: ListView.builder(
-                    controller: controller.skillsZeroScrollController,
-                    scrollDirection: Axis.horizontal,
-                    itemCount: controller.skills.length,
-                    itemBuilder: (context, index) => Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: CustomSizes.SPACE_BETWEEN_ITEMS),
-                      child: Image.asset(controller.skills[index], width: 24, height: 24),
-                    )
-                )
-            ),
-            const SizedBox(height: CustomSizes.SPACE_DEFAULT * 3),
+                width: getWidth(context),
+                child: Stack(
+                  children: [
+                    ListView.builder(
+                        controller: controller.skillsZeroScrollController,
+                        scrollDirection: Axis.horizontal,
+                        itemCount: controller.skills.length,
+                        itemBuilder: (context, index) => Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: CustomSizes.SPACE_BETWEEN_ITEMS),
+                          child: Image.asset(controller.skills[index], width: 24, height: 24),
+                        )),
+                    Positioned(
+                      left: 0,
+                      top: 0,
+                      bottom: 0,
+                      width: 100,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.centerLeft,
+                            end: Alignment.centerRight,
+                            colors: [
+                              grayColor(context),
+                              grayColor(context).withOpacity(0.8),
+                              grayColor(context).withOpacity(0.5),
+                              grayColor(context).withOpacity(0.3),
+                              grayColor(context).withOpacity(0.0),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    Positioned(
+                      right: 0,
+                      top: 0,
+                      bottom: 0,
+                      width: 100,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.centerRight,
+                            end: Alignment.centerLeft,
+                            colors: [
+                              grayColor(context),
+                              grayColor(context).withOpacity(0.8),
+                              grayColor(context).withOpacity(0.5),
+                              grayColor(context).withOpacity(0.3),
+                              grayColor(context).withOpacity(0.0),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                )),
+            const SizedBox(height: CustomSizes.SPACE_BETWEEN_SECTIONS * 3),
 
             // PROJECTS
             Column(
@@ -211,7 +270,7 @@ class HomeMobileScreen extends CustomState {
                             padding: const EdgeInsets.all(CustomSizes.SPACE_BETWEEN_ITEMS / 4),
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(CustomSizes.SPACE_DEFAULT * 2),
-                                border: Border.all(color: darkDarkLightLightColor(context))),
+                                border: Border.all(width: 0.6, color: darkDarkLightLightColor(context))),
                             child: WidgetAnimator(atRestEffect: WidgetRestingEffects.dangle(effectStrength: 0.6), child: Obx(() =>  Icon(Icons.keyboard_double_arrow_left, size: 16, color: controller.isDarkTheme.value ? CustomColors.BLACK : CustomColors.WHITE)))
                         )
                     ),
@@ -223,7 +282,7 @@ class HomeMobileScreen extends CustomState {
                             padding: const EdgeInsets.all(CustomSizes.SPACE_BETWEEN_ITEMS / 4),
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(CustomSizes.SPACE_DEFAULT * 2),
-                                border: Border.all(color: darkDarkLightLightColor(context))),
+                                border: Border.all(width: 0.6, color: darkDarkLightLightColor(context))),
                             child: WidgetAnimator(atRestEffect: WidgetRestingEffects.dangle(effectStrength: 0.6), child: Obx(() =>  Icon(Icons.keyboard_double_arrow_right, size: 16, color: controller.isDarkTheme.value ? CustomColors.BLACK : CustomColors.WHITE)))
                         )
                     ),
@@ -261,19 +320,181 @@ class HomeMobileScreen extends CustomState {
             ),
 
             // SKILLS
-            const SizedBox(height: CustomSizes.SPACE_DEFAULT * 3),
-            Container(
+            const SizedBox(height: CustomSizes.SPACE_BETWEEN_SECTIONS * 3),
+            SizedBox(
                 height: 40,
-                color: darkDarkLightLightColor(context),
-                child: ListView.builder(
-                    controller: controller.skillsFirstScrollController,
-                    scrollDirection: Axis.horizontal,
-                    itemCount: controller.skills.length,
-                    itemBuilder: (context, index) => Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: CustomSizes.SPACE_BETWEEN_ITEMS),
-                      child: Image.asset(controller.skills[index], width: 24, height: 24),
-                    ))),
-            const SizedBox(height: CustomSizes.SPACE_DEFAULT * 3),
+                width: getWidth(context),
+                child: Stack(
+                  children: [
+                    ListView.builder(
+                        controller: controller.skillsFirstScrollController,
+                        scrollDirection: Axis.horizontal,
+                        itemCount: controller.skills.length,
+                        itemBuilder: (context, index) => Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: CustomSizes.SPACE_BETWEEN_ITEMS),
+                          child: Image.asset(controller.skills[index], width: 24, height: 24),
+                        )),
+                    Positioned(
+                      left: 0,
+                      top: 0,
+                      bottom: 0,
+                      width: 100,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.centerLeft,
+                            end: Alignment.centerRight,
+                            colors: [
+                              grayColor(context),
+                              grayColor(context).withOpacity(0.8),
+                              grayColor(context).withOpacity(0.5),
+                              grayColor(context).withOpacity(0.3),
+                              grayColor(context).withOpacity(0.0),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    Positioned(
+                      right: 0,
+                      top: 0,
+                      bottom: 0,
+                      width: 100,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.centerRight,
+                            end: Alignment.centerLeft,
+                            colors: [
+                              grayColor(context),
+                              grayColor(context).withOpacity(0.8),
+                              grayColor(context).withOpacity(0.5),
+                              grayColor(context).withOpacity(0.3),
+                              grayColor(context).withOpacity(0.0),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                )),
+            const SizedBox(height: CustomSizes.SPACE_BETWEEN_SECTIONS * 3),
+
+            // EXPERIENCES
+            Column(
+              key: controller.experiencesKey,
+              children: [
+                Text("Experiences", style: Theme.of(context).textTheme.titleLarge?.copyWith(fontFamily: 'Recoleta-Bold', fontSize: 24, color: darkDarkLightLightColor(context))),
+                const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS / 2),
+                Text("My professional journey and achievements", style: Theme.of(context).textTheme.titleLarge?.copyWith(fontFamily: 'Recoleta-Medium', fontSize: 16, letterSpacing: 1.2, color: darkDarkLightLightColor(context)), textAlign: TextAlign.center),
+                const SizedBox(height: CustomSizes.SPACE_DEFAULT * 2),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: CustomSizes.SPACE_DEFAULT),
+                  child: SizedBox(
+                    width: getWidth(context),
+                    child: Column(
+                      children: [
+                        _buildTimelineItem(
+                          context: context,
+                          isLeft: false,
+                          isFirst: true,
+                          isLast: false,
+                          fromDate: "October 2024",
+                          toDate: "Present",
+                          title: "Business Intelligence Agency",
+                          subtitle: "Full Stack Mobile Developer",
+                          description: "Designing and developing cross-platform mobile applications using Dart and Flutter. Collaborating with design and backend teams to deliver scalable, reactive, and user-friendly applications.\n\nKey Responsibilities:\n• Mobile Development: Dart and Flutter for cross-platform applications\n• Architecture & State Management: Clean Architecture, BLoC/GetX for maintainable and reactive code\n• Backend & Services: Firebase (authentication, real-time database, cloud storage, notifications)\n• UI/UX Design: Implementing reactive interfaces and animations based on Figma prototypes\n• Collaboration: Agile methodologies, Git version control, and CI/CD pipelines",
+                        ),
+                        _buildTimelineItem(
+                          context: context,
+                          isLeft: false,
+                          isFirst: false,
+                          isLast: false,
+                          fromDate: "March 2024",
+                          toDate: "August 2024",
+                          title: "AGRI 4.0",
+                          subtitle: "Mobile Developer",
+                          description: "Designing and developing cross-platform mobile applications using Dart and Flutter, focusing on reactive interfaces, smooth user experience, and backend integration.\n\nKey Responsibilities:\n• Mobile Development: Dart and Flutter for cross-platform applications\n• Architecture & State Management: Modular and maintainable code structure\n• Backend & Services: Integration with APIs and Firebase services\n• UI/UX Design: Reactive user interface and smooth animations",
+                        ),
+                        _buildTimelineItem(
+                          context: context,
+                          isLeft: false,
+                          isFirst: false,
+                          isLast: true,
+                          fromDate: "November 2023",
+                          toDate: "February 2024",
+                          title: "DÉVELOPPEUR INFORMATIQUE MA",
+                          subtitle: "Mobile Developer",
+                          description: "Creating mobile applications using Java, Kotlin, Jetpack Compose, Dart, and Flutter, implementing clean and modular architectures with a focus on usability and functionality.\n\nKey Responsibilities:\n• Mobile Development: Java, Kotlin, Jetpack Compose, Dart, and Flutter\n• Architecture & State Management: Modular design for maintainable and scalable applications\n• Backend & Services: Integration with APIs and local databases\n• UI/UX Design: Implementing intuitive and reactive interfaces",
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(height: CustomSizes.SPACE_BETWEEN_SECTIONS * 3),
+              ],
+            ),
+
+    
+            // SKILLS
+            SizedBox(
+                height: 40,
+                width: getWidth(context),
+                child: Stack(
+                  children: [
+                    ListView.builder(
+                        controller: controller.skillsSecondScrollController,
+                        scrollDirection: Axis.horizontal,
+                        itemCount: controller.skills.length,
+                        itemBuilder: (context, index) => Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: CustomSizes.SPACE_BETWEEN_ITEMS),
+                          child: Image.asset(controller.skills[index], width: 24, height: 24),
+                        )),
+                    Positioned(
+                      left: 0,
+                      top: 0,
+                      bottom: 0,
+                      width: 100,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.centerLeft,
+                            end: Alignment.centerRight,
+                            colors: [
+                              grayColor(context),
+                              grayColor(context).withOpacity(0.8),
+                              grayColor(context).withOpacity(0.5),
+                              grayColor(context).withOpacity(0.3),
+                              grayColor(context).withOpacity(0.0),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    Positioned(
+                      right: 0,
+                      top: 0,
+                      bottom: 0,
+                      width: 100,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.centerRight,
+                            end: Alignment.centerLeft,
+                            colors: [
+                              grayColor(context),
+                              grayColor(context).withOpacity(0.8),
+                              grayColor(context).withOpacity(0.5),
+                              grayColor(context).withOpacity(0.3),
+                              grayColor(context).withOpacity(0.0),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                    )),
+            const SizedBox(height: CustomSizes.SPACE_BETWEEN_SECTIONS * 3),
 
             // MOBILE + STORES
             Text("Skills", style: Theme.of(context).textTheme.titleLarge?.copyWith(fontFamily: 'Recoleta-Bold', fontSize: 24, color: darkDarkLightLightColor(context))),
@@ -291,7 +512,7 @@ class HomeMobileScreen extends CustomState {
                     bottomLeft: Radius.circular(CustomSizes.SPACE_DEFAULT),
                     bottomRight: Radius.circular(CustomSizes.SPACE_DEFAULT),
                   ),
-                  border: Border.all(color: darkDarkLightLightColor(context))
+                  border: Border.all(width: 0.6, color: darkDarkLightLightColor(context))
               ),
               child: Column(
                 children: [
@@ -327,7 +548,7 @@ class HomeMobileScreen extends CustomState {
                     bottomLeft: Radius.circular(CustomSizes.SPACE_DEFAULT),
                     bottomRight: Radius.circular(CustomSizes.SPACE_DEFAULT),
                   ),
-                  border: Border.all(color: darkDarkLightLightColor(context))
+                  border: Border.all(width: 0.6, color: darkDarkLightLightColor(context))
               ),
               child: Column(
                 children: [
@@ -364,7 +585,7 @@ class HomeMobileScreen extends CustomState {
                     bottomLeft: Radius.circular(CustomSizes.SPACE_DEFAULT),
                     bottomRight: Radius.circular(CustomSizes.SPACE_DEFAULT),
                   ),
-                  border: Border.all(color: darkDarkLightLightColor(context))
+                  border: Border.all(width: 0.6, color: darkDarkLightLightColor(context))
               ),
               child: Column(
                 children: [
@@ -414,7 +635,7 @@ class HomeMobileScreen extends CustomState {
                     bottomLeft: Radius.circular(CustomSizes.SPACE_DEFAULT),
                     bottomRight: Radius.circular(CustomSizes.SPACE_DEFAULT),
                   ),
-                  border: Border.all(color: darkDarkLightLightColor(context))
+                  border: Border.all(width: 0.6, color: darkDarkLightLightColor(context))
               ),
               child: Column(
                 children: [
@@ -451,7 +672,7 @@ class HomeMobileScreen extends CustomState {
                     bottomLeft: Radius.circular(CustomSizes.SPACE_DEFAULT),
                     bottomRight: Radius.circular(CustomSizes.SPACE_DEFAULT),
                   ),
-                  border: Border.all(color: darkDarkLightLightColor(context))
+                  border: Border.all(width: 0.6, color: darkDarkLightLightColor(context))
               ),
               child: Column(
                 children: [
@@ -487,7 +708,7 @@ class HomeMobileScreen extends CustomState {
                     bottomLeft: Radius.circular(CustomSizes.SPACE_DEFAULT),
                     bottomRight: Radius.circular(CustomSizes.SPACE_DEFAULT),
                   ),
-                  border: Border.all(color: darkDarkLightLightColor(context))
+                  border: Border.all(width: 0.6, color: darkDarkLightLightColor(context))
               ),
               child: Column(
                 children: [
@@ -510,23 +731,67 @@ class HomeMobileScreen extends CustomState {
                 ],
               ),
             ),
-            const SizedBox(height: CustomSizes.SPACE_DEFAULT * 3),
+            const SizedBox(height: CustomSizes.SPACE_BETWEEN_SECTIONS * 3),
 
             // SKILLS
-            Container(
+            SizedBox(
                 height: 40,
-                color: darkDarkLightLightColor(context),
-                child: ListView.builder(
-                    controller: controller.skillsLastScrollController,
-                    scrollDirection: Axis.horizontal,
-                    itemCount: controller.skills.length,
-                    itemBuilder: (context, index) => Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: CustomSizes.SPACE_BETWEEN_ITEMS),
-                      child: Image.asset(controller.skills[index], width: 24, height: 24),
-                    )
-                )
-            ),
-            const SizedBox(height: CustomSizes.SPACE_DEFAULT * 3),
+                width: getWidth(context),
+                child: Stack(
+                  children: [
+                    ListView.builder(
+                        controller: controller.skillsLastScrollController,
+                        scrollDirection: Axis.horizontal,
+                        itemCount: controller.skills.length,
+                        itemBuilder: (context, index) => Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: CustomSizes.SPACE_BETWEEN_ITEMS),
+                          child: Image.asset(controller.skills[index], width: 24, height: 24),
+                        )),
+                    Positioned(
+                      left: 0,
+                      top: 0,
+                      bottom: 0,
+                      width: 100,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.centerLeft,
+                            end: Alignment.centerRight,
+                            colors: [
+                              grayColor(context),
+                              grayColor(context).withOpacity(0.8),
+                              grayColor(context).withOpacity(0.5),
+                              grayColor(context).withOpacity(0.3),
+                              grayColor(context).withOpacity(0.0),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    Positioned(
+                      right: 0,
+                      top: 0,
+                      bottom: 0,
+                      width: 100,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.centerRight,
+                            end: Alignment.centerLeft,
+                            colors: [
+                              grayColor(context),
+                              grayColor(context).withOpacity(0.8),
+                              grayColor(context).withOpacity(0.5),
+                              grayColor(context).withOpacity(0.3),
+                              grayColor(context).withOpacity(0.0),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                    )),
+            const SizedBox(height: CustomSizes.SPACE_BETWEEN_SECTIONS * 3),
 
             // CONTACT ME
             SizedBox(
@@ -588,11 +853,10 @@ class HomeMobileScreen extends CustomState {
                 ),
               ),
             ),
-            const SizedBox(height: CustomSizes.SPACE_DEFAULT * 3),
+            const SizedBox(height: CustomSizes.SPACE_BETWEEN_SECTIONS),
 
             // FOOTER
-            Container(
-              color: grayColor(context),
+            Padding(
               padding: const EdgeInsets.symmetric(vertical: CustomSizes.SPACE_BETWEEN_SECTIONS, horizontal: CustomSizes.SPACE_DEFAULT),
               child: Column(
                 children: [
@@ -628,8 +892,10 @@ class HomeMobileScreen extends CustomState {
               ),
             )
           ],
+              ),
+            ),
+          ],
         ),
-      ),
       floatingActionButton: Transform.scale(
         scale: 0.8,
         child: FloatingActionButton(
@@ -663,7 +929,7 @@ class HomeMobileScreen extends CustomState {
       width: getWidth(context), padding: const EdgeInsets.symmetric(vertical: CustomSizes.SPACE_BETWEEN_ITEMS), decoration: BoxDecoration(
       borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_ITEMS / 2),
       color: grayColor(context),
-      border: Border.all(color: darkDarkLightLightColor(context))
+      border: Border.all(width: 0.6, color: darkDarkLightLightColor(context))
   ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -765,7 +1031,7 @@ class HomeMobileScreen extends CustomState {
         decoration: BoxDecoration(
             color: darkLightColor(context),
             borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_ITEMS / 2),
-            border: Border.all(color: darkDarkLightLightColor(context))
+            border: Border.all(width: 0.6, color: darkDarkLightLightColor(context))
         ),
         child: Image.asset(imgUri, width: 26.0, height: 26.0, fit: BoxFit.cover, color: color),
       ),
@@ -782,9 +1048,141 @@ class HomeMobileScreen extends CustomState {
       decoration: BoxDecoration(
           color: darkLightColor(context),
           borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_ITEMS / 2),
-          border: Border.all(color: darkDarkLightLightColor(context))
+          border: Border.all(width: 0.6, color: darkDarkLightLightColor(context))
       ),
       child: Image.asset(imgUri, width: 18.0, height: 18.0, fit: BoxFit.cover, color: color,),
     ),
   );
+
+  Widget _buildTimelineItem({
+    required BuildContext context,
+    required bool isLeft,
+    required bool isFirst,
+    required bool isLast,
+    required String fromDate,
+    required String toDate,
+    required String title,
+    required String subtitle,
+    required String description,
+  }) {
+    return TimelineTile(
+      alignment: TimelineAlign.start,
+      isFirst: isFirst,
+      isLast: isLast,
+      indicatorStyle: IndicatorStyle(
+        width: 12,
+        height: 12,
+        indicator: Container(
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: darkDarkLightLightColor(context)
+          ),
+        ),
+      ),
+      beforeLineStyle: LineStyle(
+        color: darkDarkLightLightColor(context),
+        thickness: 0.5,
+      ),
+      afterLineStyle: LineStyle(
+        color: darkDarkLightLightColor(context),
+        thickness: 0.5,
+      ),
+      endChild: Padding(
+        padding: const EdgeInsets.only(left: CustomSizes.SPACE_DEFAULT, bottom: CustomSizes.SPACE_DEFAULT),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: CustomSizes.SPACE_BETWEEN_ITEMS,
+                      vertical: CustomSizes.SPACE_BETWEEN_ITEMS / 2,
+                    ),
+                    decoration: BoxDecoration(
+                      color: darkDarkLightLightColor(context),
+                      borderRadius: BorderRadius.only(
+                        topRight: Radius.circular(CustomSizes.SPACE_DEFAULT * 2),
+                        bottomRight: Radius.circular(CustomSizes.SPACE_DEFAULT * 2)
+                      ),
+                    ),
+                    child: Text(
+                      '$fromDate – $toDate',
+                      style: Theme.of(context).textTheme.bodyMedium
+                    ),
+                  ),
+                  const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS / 2),
+                  _buildExperienceCard(
+                    context: context,
+                    fromDate: fromDate,
+                    toDate: toDate,
+                    title: title,
+                    isLeft: false,
+                    subtitle: subtitle,
+                    description: description,
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildExperienceCard({
+    required BuildContext context,
+    required String fromDate,
+    required String toDate,
+    required String title,
+    required bool isLeft,
+    required String subtitle,
+    required String description,
+  }) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(CustomSizes.SPACE_DEFAULT),
+      decoration: BoxDecoration(
+        color: darkDarkLightLightColor(context),
+        borderRadius: BorderRadius.only(
+          topRight: Radius.circular(CustomSizes.SPACE_DEFAULT * 2),
+          bottomRight: Radius.circular(CustomSizes.SPACE_DEFAULT * 2)
+        ),
+        border: Border.all(
+          width: 0.6,
+          color: grayColor(context),
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            title,
+            style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+              fontSize: 18,
+              fontFamily: 'Manrope-Bold'
+            ),
+          ),
+          const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS / 4),
+          Text(
+            subtitle,
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+              fontSize: 14,
+              fontFamily: 'Manrope-Bold'
+            ),
+          ),
+          const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS),
+          Text(
+            description,
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+              fontSize: 12,
+              height: 1.5,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }

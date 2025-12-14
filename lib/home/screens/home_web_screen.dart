@@ -2,7 +2,6 @@ import 'package:avatar_glow/avatar_glow.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_card_swiper/flutter_card_swiper.dart';
 import 'package:get/get.dart';
-import 'package:mouse_follower/mouse_follower.dart';
 import 'package:portfolio/common/screens/custom_loading_screen.dart';
 import 'package:portfolio/common/widgets/custom_elevated_button.dart';
 import 'package:portfolio/common/widgets/custom_snackbar.dart';
@@ -13,8 +12,10 @@ import 'package:portfolio/utils/constants/custom_constants.dart';
 import 'package:portfolio/utils/constants/custom_icons.dart';
 import 'package:portfolio/utils/constants/custom_sizes.dart';
 import 'package:portfolio/utils/state/custom_state.dart';
+import 'package:parallax_rain/parallax_rain.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:widget_and_text_animator/widget_and_text_animator.dart';
+import 'package:timeline_tile/timeline_tile.dart';
 
 import '../../common/widgets/custom_outlined_button.dart';
 import '../../utils/constants/custom_images.dart';
@@ -26,17 +27,16 @@ class HomeWebScreen extends CustomState {
   Widget execute(BuildContext context) {
     final HomeController controller = Get.find<HomeController>();
     return Obx(() => Scaffold(
-      backgroundColor: grayColor(context).withValues(alpha: context.isDarkMode ? 0.6 : 0.9),
+      backgroundColor: grayColor(context),
       appBar: AppBar(
         centerTitle: true,
-        backgroundColor: Colors.transparent,
+        backgroundColor: CustomColors.TRANSPARENT,
         elevation: 0,
         title: Container(
           padding: const EdgeInsets.symmetric(horizontal: CustomSizes.SPACE_DEFAULT * 2, vertical: CustomSizes.SPACE_BETWEEN_ITEMS / 1.5),
           decoration: BoxDecoration(
-            color: grayColor(context),
             borderRadius: BorderRadius.circular(24),
-            border: Border.all(width: 0.5, color: darkDarkLightLightColor(context)),
+            border: Border.all(width: 0.6, color: darkDarkLightLightColor(context)),
           ),
           child: Row(
             mainAxisSize: MainAxisSize.min,
@@ -52,6 +52,12 @@ class HomeWebScreen extends CustomState {
                 onTap: controller.onProjects,
                 overlayColor: const WidgetStatePropertyAll(CustomColors.TRANSPARENT),
                 child: Text('Works', style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: darkDarkLightLightColor(context))),
+              ),
+              const SizedBox(width: CustomSizes.SPACE_DEFAULT * 2),
+              InkWell(
+                onTap: controller.onExperiences,
+                overlayColor: const WidgetStatePropertyAll(CustomColors.TRANSPARENT),
+                child: Text('Experiences', style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: darkDarkLightLightColor(context))),
               ),
               const SizedBox(width: CustomSizes.SPACE_DEFAULT * 2),
               InkWell(
@@ -80,11 +86,24 @@ class HomeWebScreen extends CustomState {
           const SizedBox(width: CustomSizes.SPACE_DEFAULT)
         ],
       ),
-      body: SingleChildScrollView(
-        controller: controller.scrollController,
-        child: SizedBox(
-          width: getWidth(context),
-          child: Column(
+      body: Stack(
+        children: [
+          ParallaxRain(
+            dropColors: [
+              CustomColors.GRAY_DARK,
+              CustomColors.GRAY_LIGHT,
+              CustomColors.WHITE
+            ],
+            trail: true,
+            dropWidth: 0.2,
+            dropFallSpeed: 2.5,
+            numberOfDrops: 10,
+          ),
+          SingleChildScrollView(
+            controller: controller.scrollController,
+            child: SizedBox(
+              width: getWidth(context),
+              child: Column(
             children: [
 
               Column(
@@ -100,7 +119,7 @@ class HomeWebScreen extends CustomState {
                           decoration: BoxDecoration(
                               color: grayColor(context),
                               borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_SECTIONS * 3),
-                              border: Border.all(color: darkDarkLightLightColor(context))
+                              border: Border.all(width: 0.6, color: darkDarkLightLightColor(context))
                           ),
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_SECTIONS * 3),
@@ -126,7 +145,7 @@ class HomeWebScreen extends CustomState {
                               decoration: BoxDecoration(
                                   color: grayColor(context),
                                   borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_ITEMS),
-                                  border: Border.all(color: darkDarkLightLightColor(context), width: 0.2)
+                                  border: Border.all(width: 0.6, color: darkDarkLightLightColor(context))
                               ),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -220,17 +239,64 @@ class HomeWebScreen extends CustomState {
               ),
 
               // SKILLS
-              Container(
+              SizedBox(
                   height: 50,
-                  color: grayColor(context),
-                  child: ListView.builder(
-                      controller: controller.skillsZeroScrollController,
-                      scrollDirection: Axis.horizontal,
-                      itemCount: controller.skills.length,
-                      itemBuilder: (context, index) => Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: CustomSizes.SPACE_BETWEEN_ITEMS),
-                        child: Image.asset(controller.skills[index], width: 28, height: 28),
-                      ))),
+                  width: getWidth(context),
+                  child: Stack(
+                    children: [
+                      ListView.builder(
+                          controller: controller.skillsZeroScrollController,
+                          scrollDirection: Axis.horizontal,
+                          itemCount: controller.skills.length,
+                          itemBuilder: (context, index) => Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: CustomSizes.SPACE_BETWEEN_ITEMS),
+                            child: Image.asset(controller.skills[index], width: 28, height: 28),
+                          )),
+                      Positioned(
+                        left: 0,
+                        top: 0,
+                        bottom: 0,
+                        width: 500,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              begin: Alignment.centerLeft,
+                              end: Alignment.centerRight,
+                              colors: [
+                                grayColor(context),
+                                grayColor(context).withOpacity(0.8),
+                                grayColor(context).withOpacity(0.5),
+                                grayColor(context).withOpacity(0.3),
+                                grayColor(context).withOpacity(0.0),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                        right: 0,
+                        top: 0,
+                        bottom: 0,
+                        width: 500,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              begin: Alignment.centerRight,
+                              end: Alignment.centerLeft,
+                              colors: [
+                                grayColor(context),
+                                grayColor(context).withOpacity(0.8),
+                                grayColor(context).withOpacity(0.5),
+                                grayColor(context).withOpacity(0.3),
+                                grayColor(context).withOpacity(0.0),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  )),
+              
               const SizedBox(height: CustomSizes.SPACE_BETWEEN_SECTIONS * 3),
 
               // PROJECTS
@@ -243,28 +309,20 @@ class HomeWebScreen extends CustomState {
                     spacing: CustomSizes.SPACE_DEFAULT * 2,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      InkWell(
-                          onTap: () { controller.cardSwiperController.swipe(CardSwiperDirection.left); },
-                          overlayColor: const WidgetStatePropertyAll(CustomColors.TRANSPARENT),
-                          child: Container(
-                              padding: const EdgeInsets.all(CustomSizes.SPACE_BETWEEN_ITEMS / 4),
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(CustomSizes.SPACE_DEFAULT * 2),
-                                  border: Border.all(color: darkDarkLightLightColor(context))),
-                              child: WidgetAnimator(atRestEffect: WidgetRestingEffects.dangle(), child: Obx(() => Icon(Icons.keyboard_double_arrow_left, size: 20, color: controller.isDarkTheme.value ? CustomColors.BLACK : CustomColors.WHITE)))
-                          )
+                      Container(
+                          padding: const EdgeInsets.all(CustomSizes.SPACE_BETWEEN_ITEMS / 4),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(CustomSizes.SPACE_DEFAULT * 2),
+                              border: Border.all(width: 0.6, color: darkDarkLightLightColor(context))),
+                          child: WidgetAnimator(atRestEffect: WidgetRestingEffects.dangle(), child: Obx(() => Icon(Icons.keyboard_double_arrow_left, size: 20, color: controller.isDarkTheme.value ? CustomColors.BLACK : CustomColors.WHITE)))
                       ),
                       Text("Some projects i have worked", style: Theme.of(context).textTheme.headlineMedium?.copyWith(fontFamily: 'Recoleta-Medium', fontSize: 18, color: darkDarkLightLightColor(context))),
-                      InkWell(
-                          onTap: () { controller.cardSwiperController.swipe(CardSwiperDirection.right); },
-                          overlayColor: const WidgetStatePropertyAll(CustomColors.TRANSPARENT),
-                          child: Container(
-                              padding: const EdgeInsets.all(CustomSizes.SPACE_BETWEEN_ITEMS / 4),
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(CustomSizes.SPACE_DEFAULT * 2),
-                                  border: Border.all(color: darkDarkLightLightColor(context))),
-                              child: WidgetAnimator(atRestEffect: WidgetRestingEffects.dangle(), child: Obx(() => Icon(Icons.keyboard_double_arrow_right, size: 20, color: controller.isDarkTheme.value ? CustomColors.BLACK : CustomColors.WHITE)))
-                          )
+                      Container(
+                          padding: const EdgeInsets.all(CustomSizes.SPACE_BETWEEN_ITEMS / 4),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(CustomSizes.SPACE_DEFAULT * 2),
+                              border: Border.all(width: 0.6, color: darkDarkLightLightColor(context))),
+                          child: WidgetAnimator(atRestEffect: WidgetRestingEffects.dangle(), child: Obx(() => Icon(Icons.keyboard_double_arrow_right, size: 20, color: controller.isDarkTheme.value ? CustomColors.BLACK : CustomColors.WHITE)))
                       ),
                     ],
                   ),
@@ -296,24 +354,182 @@ class HomeWebScreen extends CustomState {
                           ),
                     ),
                   ),
-                  const SizedBox(height: CustomSizes.SPACE_DEFAULT * 4),
+                  const SizedBox(height: CustomSizes.SPACE_BETWEEN_SECTIONS * 3),
                 ],
               ),
 
               // SKILLS
-              Container(
+              SizedBox(
                   height: 50,
-                  color: grayColor(context),
-                  child: ListView.builder(
-                      controller: controller.skillsFirstScrollController,
-                      scrollDirection: Axis.horizontal,
-                      itemCount: controller.skills.length,
-                      itemBuilder: (context, index) => Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: CustomSizes.SPACE_BETWEEN_ITEMS),
-                        child: Image.asset(controller.skills[index], width: 28, height: 28),
-                      )
-                  )
+                  width: getWidth(context),
+                  child: Stack(
+                    children: [
+                      ListView.builder(
+                          controller: controller.skillsFirstScrollController,
+                          scrollDirection: Axis.horizontal,
+                          itemCount: controller.skills.length,
+                          itemBuilder: (context, index) => Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: CustomSizes.SPACE_BETWEEN_ITEMS),
+                            child: Image.asset(controller.skills[index], width: 28, height: 28),
+                          )),
+                      Positioned(
+                        left: 0,
+                        top: 0,
+                        bottom: 0,
+                        width: 500,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              begin: Alignment.centerLeft,
+                              end: Alignment.centerRight,
+                              colors: [
+                                grayColor(context),
+                                grayColor(context).withOpacity(0.8),
+                                grayColor(context).withOpacity(0.5),
+                                grayColor(context).withOpacity(0.3),
+                                grayColor(context).withOpacity(0.0),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                        right: 0,
+                        top: 0,
+                        bottom: 0,
+                        width: 500,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              begin: Alignment.centerRight,
+                              end: Alignment.centerLeft,
+                              colors: [
+                                grayColor(context),
+                                grayColor(context).withOpacity(0.8),
+                                grayColor(context).withOpacity(0.5),
+                                grayColor(context).withOpacity(0.3),
+                                grayColor(context).withOpacity(0.0),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  )),
+              
+              const SizedBox(height: CustomSizes.SPACE_BETWEEN_SECTIONS * 3),
+
+              // EXPERIENCES
+              Column(
+                key: controller.experiencesKey,
+                children: [
+                  Text("Experiences", style: Theme.of(context).textTheme.headlineMedium?.copyWith(fontFamily: 'Recoleta-Bold', fontSize: 40, color: darkDarkLightLightColor(context))),
+                  const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS / 2),
+                  Text("My professional journey and achievements", style: Theme.of(context).textTheme.headlineMedium?.copyWith(fontFamily: 'Recoleta-Medium', fontSize: 20, color: darkDarkLightLightColor(context))),
+                  const SizedBox(height: CustomSizes.SPACE_DEFAULT * 2),
+                  SizedBox(
+                    width: 700,
+                    child: Column(
+                      children: [
+                        _buildTimelineItem(
+                          context: context,
+                          isLeft: true,
+                          isFirst: true,
+                          isLast: false,
+                          fromDate: "October 2024",
+                          toDate: "Present",
+                          title: "Business Intelligence Agency",
+                          subtitle: "Full Stack Mobile Developer",
+                          description: "Designing and developing cross-platform mobile applications using Dart and Flutter. Collaborating with design and backend teams to deliver scalable, reactive, and user-friendly applications.\n\nKey Responsibilities:\n• Mobile Development: Dart and Flutter for cross-platform applications\n• Architecture & State Management: Clean Architecture, BLoC/GetX for maintainable and reactive code\n• Backend & Services: Firebase (authentication, real-time database, cloud storage, notifications)\n• UI/UX Design: Implementing reactive interfaces and animations based on Figma prototypes\n• Collaboration: Agile methodologies, Git version control, and CI/CD pipelines",
+                        ),
+                        _buildTimelineItem(
+                          context: context,
+                          isLeft: false,
+                          isFirst: false,
+                          isLast: false,
+                          fromDate: "March 2024",
+                          toDate: "August 2024",
+                          title: "AGRI 4.0",
+                          subtitle: "Mobile Developer",
+                          description: "Designing and developing cross-platform mobile applications using Dart and Flutter, focusing on reactive interfaces, smooth user experience, and backend integration.\n\nKey Responsibilities:\n• Mobile Development: Dart and Flutter for cross-platform applications\n• Architecture & State Management: Modular and maintainable code structure\n• Backend & Services: Integration with APIs and Firebase services\n• UI/UX Design: Reactive user interface and smooth animations",
+                        ),
+                        _buildTimelineItem(
+                          context: context,
+                          isLeft: true,
+                          isFirst: false,
+                          isLast: true,
+                          fromDate: "November 2023",
+                          toDate: "February 2024",
+                          title: "DÉVELOPPEUR INFORMATIQUE MA",
+                          subtitle: "Mobile Developer",
+                          description: "Creating mobile applications using Java, Kotlin, Jetpack Compose, Dart, and Flutter, implementing clean and modular architectures with a focus on usability and functionality.\n\nKey Responsibilities:\n• Mobile Development: Java, Kotlin, Jetpack Compose, Dart, and Flutter\n• Architecture & State Management: Modular design for maintainable and scalable applications\n• Backend & Services: Integration with APIs and local databases\n• UI/UX Design: Implementing intuitive and reactive interfaces",
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: CustomSizes.SPACE_BETWEEN_SECTIONS * 3),
+                ],
               ),
+
+              // SKILLS
+              SizedBox(
+                  height: 50,
+                  width: getWidth(context),
+                  child: Stack(
+                    children: [
+                      ListView.builder(
+                          controller: controller.skillsSecondScrollController,
+                          scrollDirection: Axis.horizontal,
+                          itemCount: controller.skills.length,
+                          itemBuilder: (context, index) => Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: CustomSizes.SPACE_BETWEEN_ITEMS),
+                            child: Image.asset(controller.skills[index], width: 28, height: 28),
+                          )),
+                      Positioned(
+                        left: 0,
+                        top: 0,
+                        bottom: 0,
+                        width: 500,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              begin: Alignment.centerLeft,
+                              end: Alignment.centerRight,
+                              colors: [
+                                grayColor(context),
+                                grayColor(context).withOpacity(0.8),
+                                grayColor(context).withOpacity(0.5),
+                                grayColor(context).withOpacity(0.3),
+                                grayColor(context).withOpacity(0.0),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                        right: 0,
+                        top: 0,
+                        bottom: 0,
+                        width: 500,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              begin: Alignment.centerRight,
+                              end: Alignment.centerLeft,
+                              colors: [
+                                grayColor(context),
+                                grayColor(context).withOpacity(0.8),
+                                grayColor(context).withOpacity(0.5),
+                                grayColor(context).withOpacity(0.3),
+                                grayColor(context).withOpacity(0.0),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  )),
+              
               const SizedBox(height: CustomSizes.SPACE_BETWEEN_SECTIONS * 3),
 
               Column(
@@ -338,7 +554,7 @@ class HomeWebScreen extends CustomState {
                               bottomLeft: Radius.circular(CustomSizes.SPACE_DEFAULT),
                               bottomRight: Radius.circular(CustomSizes.SPACE_DEFAULT),
                             ),
-                            border: Border.all(color: darkDarkLightLightColor(context))
+                            border: Border.all(width: 0.6, color: darkDarkLightLightColor(context))
                         ),
                         child: Column(
                           children: [
@@ -373,7 +589,7 @@ class HomeWebScreen extends CustomState {
                               bottomLeft: Radius.circular(CustomSizes.SPACE_DEFAULT),
                               bottomRight: Radius.circular(CustomSizes.SPACE_DEFAULT),
                             ),
-                            border: Border.all(color: darkDarkLightLightColor(context))
+                            border: Border.all(width: 0.6, color: darkDarkLightLightColor(context))
                         ),
                         child: Column(
                           children: [
@@ -415,7 +631,7 @@ class HomeWebScreen extends CustomState {
                               bottomLeft: Radius.circular(CustomSizes.SPACE_DEFAULT),
                               bottomRight: Radius.circular(CustomSizes.SPACE_DEFAULT),
                             ),
-                            border: Border.all(color: darkDarkLightLightColor(context))
+                            border: Border.all(width: 0.6, color: darkDarkLightLightColor(context))
                         ),
                         child: Column(
                           children: [
@@ -464,7 +680,7 @@ class HomeWebScreen extends CustomState {
                               bottomLeft: Radius.circular(CustomSizes.SPACE_DEFAULT),
                               bottomRight: Radius.circular(CustomSizes.SPACE_DEFAULT),
                             ),
-                            border: Border.all(color: darkDarkLightLightColor(context))
+                            border: Border.all(width: 0.6, color: darkDarkLightLightColor(context))
                         ),
                         child: Column(
                           children: [
@@ -506,7 +722,7 @@ class HomeWebScreen extends CustomState {
                               bottomLeft: Radius.circular(CustomSizes.SPACE_DEFAULT),
                               bottomRight: Radius.circular(CustomSizes.SPACE_DEFAULT),
                             ),
-                            border: Border.all(color: darkDarkLightLightColor(context))
+                            border: Border.all(width: 0.6, color: darkDarkLightLightColor(context))
                         ),
                         child: Column(
                           children: [
@@ -541,7 +757,7 @@ class HomeWebScreen extends CustomState {
                               bottomLeft: Radius.circular(CustomSizes.SPACE_DEFAULT),
                               bottomRight: Radius.circular(CustomSizes.SPACE_DEFAULT),
                             ),
-                            border: Border.all(color: darkDarkLightLightColor(context))
+                            border: Border.all(width: 0.6, color: darkDarkLightLightColor(context))
                         ),
                         child: Column(
                           children: [
@@ -572,19 +788,63 @@ class HomeWebScreen extends CustomState {
               const SizedBox(height: CustomSizes.SPACE_BETWEEN_SECTIONS * 3),
 
               // SKILLS
-              Container(
+              SizedBox(
                   height: 50,
-                  color: grayColor(context),
-                  child: ListView.builder(
-                      controller: controller.skillsLastScrollController,
-                      scrollDirection: Axis.horizontal,
-                      itemCount: controller.skills.length,
-                      itemBuilder: (context, index) => Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: CustomSizes.SPACE_BETWEEN_ITEMS),
-                        child: Image.asset(controller.skills[index], width: 28, height: 28),
-                      )
-                  )
-              ),
+                  width: getWidth(context),
+                  child: Stack(
+                    children: [
+                      ListView.builder(
+                          controller: controller.skillsLastScrollController,
+                          scrollDirection: Axis.horizontal,
+                          itemCount: controller.skills.length,
+                          itemBuilder: (context, index) => Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: CustomSizes.SPACE_BETWEEN_ITEMS),
+                            child: Image.asset(controller.skills[index], width: 28, height: 28),
+                          )),
+                      Positioned(
+                        left: 0,
+                        top: 0,
+                        bottom: 0,
+                        width: 500,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              begin: Alignment.centerLeft,
+                              end: Alignment.centerRight,
+                              colors: [
+                                grayColor(context),
+                                grayColor(context).withOpacity(0.8),
+                                grayColor(context).withOpacity(0.5),
+                                grayColor(context).withOpacity(0.3),
+                                grayColor(context).withOpacity(0.0),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                        right: 0,
+                        top: 0,
+                        bottom: 0,
+                        width: 500,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              begin: Alignment.centerRight,
+                              end: Alignment.centerLeft,
+                              colors: [
+                                grayColor(context),
+                                grayColor(context).withOpacity(0.8),
+                                grayColor(context).withOpacity(0.5),
+                                grayColor(context).withOpacity(0.3),
+                                grayColor(context).withOpacity(0.0),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  )),
               const SizedBox(height: CustomSizes.SPACE_BETWEEN_SECTIONS * 3),
 
               // CONTACT ME
@@ -648,8 +908,7 @@ class HomeWebScreen extends CustomState {
               const SizedBox(height: CustomSizes.SPACE_BETWEEN_SECTIONS),
 
               // FOOTER
-              Container(
-                color: grayColor(context),
+              Padding(
                 padding: const EdgeInsets.symmetric(vertical: CustomSizes.SPACE_DEFAULT * 2),
                 child: Column(
                   children: [
@@ -686,9 +945,11 @@ class HomeWebScreen extends CustomState {
               ),
 
             ],
-          ),
+                ),
+              ),
+            ),
+          ],
         ),
-      ),
       floatingActionButton: controller.isFabVisible.value ? Transform.scale(
         scale: 0.8,
         child: FloatingActionButton(
@@ -713,10 +974,27 @@ class HomeWebScreen extends CustomState {
       width: getWidth(context),
       padding: const EdgeInsets.symmetric(vertical: CustomSizes.SPACE_BETWEEN_ITEMS / 3),
       decoration: BoxDecoration(
+                border: Border.all(width: 0.6, color: context.isDarkMode ? CustomColors.GRAY_DARK : CustomColors.GRAY_LIGHT),
         borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_ITEMS / 2),
-        color: grayColor(context),
-        border: Border.all(color: context.isDarkMode ? CustomColors.GRAY_DARK : CustomColors.GRAY_LIGHT)
-    ),
+        gradient: LinearGradient(
+                            begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                            colors: [
+                              (context.isDarkMode ? CustomColors.GRAY_LIGHT : CustomColors.GRAY_DARK),
+                             (context.isDarkMode ? CustomColors.WHITE : CustomColors.BLACK),
+
+                              (context.isDarkMode ? CustomColors.GRAY_LIGHT : CustomColors.GRAY_DARK),
+                             ]),
+                          boxShadow: [
+                            BoxShadow(
+                              color: context.isDarkMode ? CustomColors.GRAY_LIGHT : CustomColors.GRAY_DARK,
+                              blurRadius: 1,
+                              blurStyle: BlurStyle.inner,
+                              offset: const Offset(2, 2),
+                            ),
+                          ],
+                        ),
+    
       child: Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -810,9 +1088,8 @@ class HomeWebScreen extends CustomState {
       Container(
         padding: const EdgeInsets.all(CustomSizes.SPACE_BETWEEN_ITEMS / 1.5),
         decoration: BoxDecoration(
-            color: darkLightColor(context),
-            borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_ITEMS),
-            border: Border.all(color: darkDarkLightLightColor(context))
+            borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_ITEMS / 2),
+            border: Border.all(width: 0.6, color: darkDarkLightLightColor(context))
         ),
         child: Image.asset(imgUri, width: 24.0, height: 24.0, fit: BoxFit.cover, color: color),
       ),
@@ -827,12 +1104,199 @@ class HomeWebScreen extends CustomState {
     child: Container(
       padding: const EdgeInsets.all(CustomSizes.SPACE_BETWEEN_ITEMS / 2),
       decoration: BoxDecoration(
-          color: darkLightColor(context),
+          color: CustomColors.TRANSPARENT,
           borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_ITEMS / 2),
-          border: Border.all(color: darkDarkLightLightColor(context))
+          border: Border.all(width: 0.6, color: darkDarkLightLightColor(context))
       ),
       child: Image.asset(imgUri, width: 18.0, height: 18.0, fit: BoxFit.cover, color: color,),
     ),
   );
 
+  Widget _buildTimelineItem({
+    required BuildContext context,
+    required bool isLeft,
+    required bool isFirst,
+    required bool isLast,
+    required String fromDate,
+    required String toDate,
+    required String title,
+    required String subtitle,
+    required String description,
+  }) {
+    return TimelineTile(
+      alignment: TimelineAlign.center,
+      isFirst: isFirst,
+      isLast: isLast,
+      indicatorStyle: IndicatorStyle(
+        width: 12,
+        height: 12,
+        indicator: Container(
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: darkDarkLightLightColor(context)
+          ),
+        ),
+      ),
+      beforeLineStyle: LineStyle(
+        color: darkDarkLightLightColor(context),
+        thickness: 0.5,
+      ),
+      afterLineStyle: LineStyle(
+        color: darkDarkLightLightColor(context),
+        thickness: 0.5,
+      ),
+      startChild: isLeft
+          ? Padding(
+              padding: const EdgeInsets.only(right: CustomSizes.SPACE_DEFAULT, bottom: CustomSizes.SPACE_DEFAULT),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Container(
+                    width: 320,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: CustomSizes.SPACE_BETWEEN_ITEMS,
+                            vertical: CustomSizes.SPACE_BETWEEN_ITEMS / 2,
+                          ),
+                          decoration: BoxDecoration(
+                            color: darkDarkLightLightColor(context),
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(CustomSizes.SPACE_DEFAULT * 2),
+                              bottomLeft: Radius.circular(CustomSizes.SPACE_DEFAULT * 2)
+                            ),
+                          ),
+                          child: Text(
+                            '$fromDate – $toDate',
+                            style: Theme.of(context).textTheme.bodyMedium
+                          ),
+                        ),
+                        const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS / 2),
+                        _buildExperienceCard(
+                          context: context,
+                          fromDate: fromDate,
+                          toDate: toDate,
+                          title: title,
+                          isLeft: isLeft,
+                          subtitle: subtitle,
+                          description: description,
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            )
+          : Container(),
+      endChild: !isLeft
+          ? Padding(
+              padding: const EdgeInsets.only(left: CustomSizes.SPACE_DEFAULT, bottom: CustomSizes.SPACE_DEFAULT),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Container(
+                    width: 320,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: CustomSizes.SPACE_BETWEEN_ITEMS,
+                            vertical: CustomSizes.SPACE_BETWEEN_ITEMS / 2,
+                          ),
+                          decoration: BoxDecoration(
+                            color: darkDarkLightLightColor(context),
+                            borderRadius: BorderRadius.only(
+                              topRight: Radius.circular(CustomSizes.SPACE_DEFAULT * 2),
+                              bottomRight: Radius.circular(CustomSizes.SPACE_DEFAULT * 2)
+                            ),
+                          ),
+                          child: Text(
+                            '$fromDate – $toDate',
+                            style: Theme.of(context).textTheme.bodyMedium
+                          ),
+                        ),
+                        const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS / 2),
+                        _buildExperienceCard(
+                          context: context,
+                          fromDate: fromDate,
+                          toDate: toDate,
+                          title: title,
+                          isLeft: isLeft,
+                          subtitle: subtitle,
+                          description: description,
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            )
+          : Container(),
+    );
+  }
+
+  Widget _buildExperienceCard({
+    required BuildContext context,
+    required String fromDate,
+    required String toDate,
+    required String title,
+    required bool isLeft,
+    required String subtitle,
+    required String description,
+  }) {
+    return Container(
+      width: 320,
+      padding: const EdgeInsets.all(CustomSizes.SPACE_DEFAULT),
+      decoration: BoxDecoration(
+        color: darkDarkLightLightColor(context),
+        // borderRadius: BorderRadius.circular(CustomSizes.SPACE_DEFAULT),
+        borderRadius : isLeft 
+        ? BorderRadius.only(
+                              topLeft: Radius.circular(CustomSizes.SPACE_DEFAULT * 2),
+                              bottomLeft : Radius.circular(CustomSizes.SPACE_DEFAULT * 2)
+                            )
+        : BorderRadius.only(
+                              topRight: Radius.circular(CustomSizes.SPACE_DEFAULT * 2),
+                              bottomRight : Radius.circular(CustomSizes.SPACE_DEFAULT * 2)
+                            ),
+        border: Border.all(
+          width: 0.6,
+          color: grayColor(context),
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            title,
+            style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+              fontSize: 18,
+              fontFamily: 'Manrope-Bold'
+            ),
+          ),
+          const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS / 4),
+          Text(
+            subtitle,
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+              fontSize: 14,
+              fontFamily: 'Manrope-Bold'
+            ),
+          ),
+          const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS),
+          Text(
+            description,
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+              fontSize: 12,
+              height: 1.5,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
 }
+

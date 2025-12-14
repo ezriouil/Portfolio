@@ -6,8 +6,8 @@ class CustomColors{
   CustomColors._();
 
   /*___________________ BASIC COLORS _____________________*/
-  static const WHITE = Color(0xFFFFFFFF);
-  static const BLACK = Color(0xFF000000);
+  static const WHITE = Color(0xFFF7F7F7);
+  static const BLACK = Color.fromARGB(255, 0, 0, 0);
   static const TRANSPARENT = Color(0x00000000);
 
   /*__________________ PRIMARY COLOR ______________________*/

@@ -66,20 +66,35 @@ class DetailsMobileScreen extends CustomState {
                                     child: Transform.rotate(
                                       angle: -0.08,
                                       alignment: Alignment.topCenter,
-                                      child: DecoratedBox(
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(18),
-                                          boxShadow: [
-                                            BoxShadow(
-                                              color: CustomColors.BLACK.withValues(alpha: 0.15),
-                                              blurRadius: 20,
-                                              spreadRadius: 2,
-                                              offset: const Offset(6, 12),
-                                            )
-                                          ],
-                                          image: DecorationImage(
-                                            image: NetworkImage(controller.projectEntity.value?.imgLoginLight ?? ''),
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(18),
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(18),
+                                            boxShadow: [
+                                              BoxShadow(
+                                                color: CustomColors.BLACK.withValues(alpha: 0.15),
+                                                blurRadius: 20,
+                                                spreadRadius: 2,
+                                                offset: const Offset(6, 12),
+                                              )
+                                            ],
+                                          ),
+                                          child: Image.network(
+                                            controller.projectEntity.value?.imgLoginLight ?? '',
                                             fit: BoxFit.cover,
+                                            width: double.infinity,
+                                            height: double.infinity,
+                                            loadingBuilder: (context, child, loadingProgress) {
+                                              if (loadingProgress == null) return child;
+                                              return Center(
+                                                child: CircularProgressIndicator(
+                                                  color: grayColor(context),
+                                                  backgroundColor: grayColor(context).withValues(alpha: 0.4),
+                                                ),
+                                              );
+                                            },
+                                            errorBuilder: (context, error, stackTrace) => const Center(child: Icon(Icons.broken_image, size: 40, color: Colors.grey),),
                                           ),
                                         ),
                                       ),
@@ -98,21 +113,36 @@ class DetailsMobileScreen extends CustomState {
                                     child: Transform.rotate(
                                       angle: 0.08,
                                       alignment: Alignment.topCenter,
-                                      child: DecoratedBox(
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(18),
-                                          boxShadow: [
-                                            BoxShadow(
-                                              color: CustomColors.BLACK.withValues(alpha: 0.15),
-                                              blurRadius: 20,
-                                              spreadRadius: 2,
-                                              offset: const Offset(-6, 12),
-                                            )
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(18),
+                                        child: Stack(
+                                          children: [
+                                            Image.network((controller.projectEntity.value?.imgLoginDark == ''
+                                                  ? controller.projectEntity.value?.imgRegisterLight
+                                                  : controller.projectEntity.value?.imgLoginDark) ?? '',
+                                              fit: BoxFit.cover,
+                                              width: double.infinity,
+                                              height: double.infinity,
+                                              loadingBuilder: (context, child, loadingProgress) {
+                                                if (loadingProgress == null) return child;
+                                                return Center(child: CircularProgressIndicator(color: grayColor(context), backgroundColor: grayColor(context).withValues(alpha: 0.4)));
+                                              },
+                                              errorBuilder: (context, error, stackTrace) => Center(child: Icon(Icons.broken_image, size: 40, color: grayColor(context))),
+                                            ),
+                                            Container(
+                                              decoration: BoxDecoration(
+                                                borderRadius: BorderRadius.circular(18),
+                                                boxShadow: [
+                                                  BoxShadow(
+                                                    color: CustomColors.BLACK.withValues(alpha: 0.15),
+                                                    blurRadius: 20,
+                                                    spreadRadius: 2,
+                                                    offset: const Offset(-6, 12),
+                                                  )
+                                                ],
+                                              ),
+                                            ),
                                           ],
-                                          image: DecorationImage(
-                                            image: NetworkImage((controller.projectEntity.value?.imgLoginDark == '' ? controller.projectEntity.value?.imgRegisterLight : controller.projectEntity.value?.imgLoginDark) ?? ''),
-                                            fit: BoxFit.cover,
-                                          ),
                                         ),
                                       ),
                                     ),
@@ -122,20 +152,35 @@ class DetailsMobileScreen extends CustomState {
                               SizedBox(
                                 width: 105,
                                 height: 240,
-                                child: DecoratedBox(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(18),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: CustomColors.BLACK.withValues(alpha: 0.15),
-                                        blurRadius: 20,
-                                        spreadRadius: 2,
-                                        offset: const Offset(6, 12),
-                                      )
-                                    ],
-                                    image: DecorationImage(
-                                      image: NetworkImage(controller.projectEntity.value?.imgSplash ?? ''),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(18),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(18),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: CustomColors.BLACK.withValues(alpha: 0.15),
+                                          blurRadius: 20,
+                                          spreadRadius: 2,
+                                          offset: const Offset(6, 12),
+                                        )
+                                      ],
+                                    ),
+                                    child: Image.network(
+                                      controller.projectEntity.value?.imgSplash ?? '',
                                       fit: BoxFit.cover,
+                                      width: double.infinity,
+                                      height: double.infinity,
+                                      loadingBuilder: (context, child, loadingProgress) {
+                                        if (loadingProgress == null) return child;
+                                        return Center(
+                                          child: CircularProgressIndicator(
+                                            color: grayColor(context),
+                                            backgroundColor: grayColor(context).withValues(alpha: 0.4),
+                                          ),
+                                        );
+                                      },
+                                      errorBuilder: (context, error, stackTrace) => Center(child: Icon(Icons.broken_image, size: 40, color: grayColor(context)))
                                     ),
                                   ),
                                 ),
