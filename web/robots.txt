@@ -2,5 +2,5 @@ User-agent: *
 Allow: /
 
 # Sitemap location
-Sitemap: https://mohamedezriouil.com/sitemap.xml
+Sitemap: https://mohamedezriouil.web.app/sitemap.xml
 

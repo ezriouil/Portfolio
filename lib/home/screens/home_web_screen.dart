@@ -428,7 +428,7 @@ class HomeWebScreen extends CustomState {
                   Text("My professional journey and achievements", style: Theme.of(context).textTheme.headlineMedium?.copyWith(fontFamily: 'Recoleta-Medium', fontSize: 20, color: darkDarkLightLightColor(context))),
                   const SizedBox(height: CustomSizes.SPACE_DEFAULT * 2),
                   SizedBox(
-                    width: 700,
+                    width: 780,
                     child: Obx(() => controller.experiences.isEmpty
                         ? const CustomLoadingScreen()
                         : Column(
@@ -1139,7 +1139,7 @@ class HomeWebScreen extends CustomState {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   Container(
-                    width: 320,
+                    width: 350,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
@@ -1182,7 +1182,7 @@ class HomeWebScreen extends CustomState {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Container(
-                    width: 320,
+                    width: 350,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -1229,7 +1229,7 @@ class HomeWebScreen extends CustomState {
     required String description,
   }) {
     return Container(
-      width: 320,
+      width: 350,
       padding: const EdgeInsets.all(CustomSizes.SPACE_DEFAULT),
       decoration: BoxDecoration(
         color: darkDarkLightLightColor(context),
