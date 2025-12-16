@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class ProjectEntity {
   final String? id;
   final String? title;
@@ -10,7 +12,7 @@ class ProjectEntity {
   final String? appStoreLink;
   final String? videoLink;
   final String? codeSourceLink;
-  final String? createdAt;
+  final DateTime? createdAt;
   final String? technologies;
 
   final String? imgSplash;
@@ -58,7 +60,13 @@ class ProjectEntity {
       appStoreLink: json['appStoreLink'],
       videoLink: json['videoLink'],
       codeSourceLink: json['codeSourceLink'],
-      createdAt: json['createdAt'],
+      createdAt: json['createdAt'] != null
+          ? (json['createdAt'] is Timestamp
+              ? (json['createdAt'] as Timestamp).toDate()
+              : json['createdAt'] is DateTime
+                  ? json['createdAt'] as DateTime
+                  : DateTime.tryParse(json['createdAt'].toString()))
+          : null,
       technologies: json['technologies'],
       imgSplash: json['imgSplash'],
       imgRegisterLight: json['imgRegisterLight'],
@@ -83,7 +91,7 @@ class ProjectEntity {
       'appStoreLink': appStoreLink,
       'videoLink': videoLink,
       'codeSourceLink': codeSourceLink,
-      'createdAt': createdAt,
+      'createdAt': createdAt != null ? Timestamp.fromDate(createdAt!) : null,
       'technologies': technologies,
       'imgSplash': imgSplash,
       'imgRegisterLight': imgRegisterLight,

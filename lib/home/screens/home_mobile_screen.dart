@@ -93,16 +93,16 @@ class HomeMobileScreen extends CustomState {
                                 children: [
                                   AvatarGlow(
                                     glowCount: 5,
-                                    glowColor: darkDarkLightLightColor(context).withValues(alpha: 0.1),
+                                    glowColor: (controller.isDarkTheme.value ? CustomColors.GRAY_DARK : CustomColors.GREEN_DARK).withValues(alpha: 0.1),
                                     glowRadiusFactor: 0.2,
                                     child: Icon(
                                         Icons.add_circle,
                                         size: 15,
-                                        color: darkDarkLightLightColor(context)
+                                        color: controller.isDarkTheme.value ? CustomColors.GRAY_DARK : CustomColors.GREEN_DARK
                                     ),
                                   ),
                                   const SizedBox(width: CustomSizes.SPACE_BETWEEN_ITEMS / 1.2),
-                                  Text("Available", style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: darkDarkLightLightColor(context))),
+                                  Text("Available", style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: controller.isDarkTheme.value ? CustomColors.GRAY_DARK : CustomColors.GREEN_DARK)),
                                 ],
                               ),
                             ))
@@ -122,7 +122,7 @@ class HomeMobileScreen extends CustomState {
                   const SizedBox(height: CustomSizes.SPACE_DEFAULT),
                   Text.rich(
                     textAlign: TextAlign.center,
-                    maxLines: 2,
+                    maxLines: 3,
                     overflow: TextOverflow.ellipsis,
                     TextSpan(
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(color: darkDarkLightLightColor(context)),
@@ -188,7 +188,7 @@ class HomeMobileScreen extends CustomState {
                       ),
                     ],
                   ),
-                  const SizedBox(height: CustomSizes.SPACE_DEFAULT * 2),
+                  const SizedBox(height: CustomSizes.SPACE_BETWEEN_SECTIONS * 2.5),
                 ],
               ),
             ),
@@ -251,7 +251,7 @@ class HomeMobileScreen extends CustomState {
                     ),
                   ],
                 )),
-            const SizedBox(height: CustomSizes.SPACE_BETWEEN_SECTIONS * 3),
+            const SizedBox(height: CustomSizes.SPACE_BETWEEN_SECTIONS * 2.5),
 
             // PROJECTS
             Column(
@@ -320,7 +320,7 @@ class HomeMobileScreen extends CustomState {
             ),
 
             // SKILLS
-            const SizedBox(height: CustomSizes.SPACE_BETWEEN_SECTIONS * 3),
+            const SizedBox(height: CustomSizes.SPACE_BETWEEN_SECTIONS * 2.5),
             SizedBox(
                 height: 40,
                 width: getWidth(context),
@@ -378,7 +378,7 @@ class HomeMobileScreen extends CustomState {
                     ),
                   ],
                 )),
-            const SizedBox(height: CustomSizes.SPACE_BETWEEN_SECTIONS * 3),
+            const SizedBox(height: CustomSizes.SPACE_BETWEEN_SECTIONS * 2.5),
 
             // EXPERIENCES
             Column(
@@ -392,46 +392,33 @@ class HomeMobileScreen extends CustomState {
                   padding: const EdgeInsets.symmetric(horizontal: CustomSizes.SPACE_DEFAULT),
                   child: SizedBox(
                     width: getWidth(context),
-                    child: Column(
-                      children: [
-                        _buildTimelineItem(
-                          context: context,
-                          isLeft: false,
-                          isFirst: true,
-                          isLast: false,
-                          fromDate: "October 2024",
-                          toDate: "Present",
-                          title: "Business Intelligence Agency",
-                          subtitle: "Full Stack Mobile Developer",
-                          description: "Designing and developing cross-platform mobile applications using Dart and Flutter. Collaborating with design and backend teams to deliver scalable, reactive, and user-friendly applications.\n\nKey Responsibilities:\n• Mobile Development: Dart and Flutter for cross-platform applications\n• Architecture & State Management: Clean Architecture, BLoC/GetX for maintainable and reactive code\n• Backend & Services: Firebase (authentication, real-time database, cloud storage, notifications)\n• UI/UX Design: Implementing reactive interfaces and animations based on Figma prototypes\n• Collaboration: Agile methodologies, Git version control, and CI/CD pipelines",
-                        ),
-                        _buildTimelineItem(
-                          context: context,
-                          isLeft: false,
-                          isFirst: false,
-                          isLast: false,
-                          fromDate: "March 2024",
-                          toDate: "August 2024",
-                          title: "AGRI 4.0",
-                          subtitle: "Mobile Developer",
-                          description: "Designing and developing cross-platform mobile applications using Dart and Flutter, focusing on reactive interfaces, smooth user experience, and backend integration.\n\nKey Responsibilities:\n• Mobile Development: Dart and Flutter for cross-platform applications\n• Architecture & State Management: Modular and maintainable code structure\n• Backend & Services: Integration with APIs and Firebase services\n• UI/UX Design: Reactive user interface and smooth animations",
-                        ),
-                        _buildTimelineItem(
-                          context: context,
-                          isLeft: false,
-                          isFirst: false,
-                          isLast: true,
-                          fromDate: "November 2023",
-                          toDate: "February 2024",
-                          title: "DÉVELOPPEUR INFORMATIQUE MA",
-                          subtitle: "Mobile Developer",
-                          description: "Creating mobile applications using Java, Kotlin, Jetpack Compose, Dart, and Flutter, implementing clean and modular architectures with a focus on usability and functionality.\n\nKey Responsibilities:\n• Mobile Development: Java, Kotlin, Jetpack Compose, Dart, and Flutter\n• Architecture & State Management: Modular design for maintainable and scalable applications\n• Backend & Services: Integration with APIs and local databases\n• UI/UX Design: Implementing intuitive and reactive interfaces",
-                        ),
-                      ],
-                    ),
+                    child: Obx(() => controller.experiences.isEmpty
+                        ? const CustomLoadingScreen()
+                        : Column(
+                            children: List.generate(
+                              controller.experiences.length,
+                              (index) {
+                                final experience = controller.experiences[index];
+                                final isLeft = false;
+                                final isFirst = index == 0;
+                                final isLast = index == controller.experiences.length - 1;
+                                return _buildTimelineItem(
+                                  context: context,
+                                  isLeft: isLeft,
+                                  isFirst: isFirst,
+                                  isLast: isLast,
+                                  fromDate: experience.fromDate ?? "",
+                                  toDate: experience.toDate ?? "",
+                                  title: experience.title ?? "",
+                                  subtitle: experience.subTitle ?? "",
+                                  description: experience.description ?? "",
+                                );
+                              },
+                            ),
+                          )),
                   ),
                 ),
-                const SizedBox(height: CustomSizes.SPACE_BETWEEN_SECTIONS * 3),
+                const SizedBox(height: CustomSizes.SPACE_BETWEEN_SECTIONS * 2.5),
               ],
             ),
 
@@ -494,7 +481,7 @@ class HomeMobileScreen extends CustomState {
                     ),
                   ],
                     )),
-            const SizedBox(height: CustomSizes.SPACE_BETWEEN_SECTIONS * 3),
+            const SizedBox(height: CustomSizes.SPACE_BETWEEN_SECTIONS * 2.5),
 
             // MOBILE + STORES
             Text("Skills", style: Theme.of(context).textTheme.titleLarge?.copyWith(fontFamily: 'Recoleta-Bold', fontSize: 24, color: darkDarkLightLightColor(context))),
@@ -731,7 +718,7 @@ class HomeMobileScreen extends CustomState {
                 ],
               ),
             ),
-            const SizedBox(height: CustomSizes.SPACE_BETWEEN_SECTIONS * 3),
+            const SizedBox(height: CustomSizes.SPACE_BETWEEN_SECTIONS * 2.5),
 
             // SKILLS
             SizedBox(
@@ -791,7 +778,7 @@ class HomeMobileScreen extends CustomState {
                     ),
                   ],
                     )),
-            const SizedBox(height: CustomSizes.SPACE_BETWEEN_SECTIONS * 3),
+            const SizedBox(height: CustomSizes.SPACE_BETWEEN_SECTIONS * 2.5),
 
             // CONTACT ME
             SizedBox(
@@ -864,14 +851,14 @@ class HomeMobileScreen extends CustomState {
                     textAlign: TextAlign.center,
                     TextSpan(
                       style: Theme.of(context).textTheme.titleLarge?.copyWith(color: darkDarkLightLightColor(context)),
-                      text: "Designed and built by",
+                      text: "Built by",
                       children: <TextSpan>[
                         TextSpan(
-                            text: '  Mohamed Ezriouil  ',
+                            text: ' Mohamed Ezriouil ',
                             style: Theme.of(context).textTheme.headlineMedium?.copyWith(color: darkDarkLightLightColor(context), fontFamily: 'Recoleta-Bold', fontSize: 16)
                         ),
                         TextSpan(
-                            text: "with love and coffee",
+                            text: "with love",
                             style: Theme.of(context).textTheme.titleLarge?.copyWith(color: darkDarkLightLightColor(context))
                         ),
                       ],
@@ -1175,10 +1162,10 @@ class HomeMobileScreen extends CustomState {
           ),
           const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS),
           Text(
-            description,
+            description.replaceAll('\\n', '\n'),
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
               fontSize: 12,
-              height: 1.5,
+              height: 1.6,
             ),
           ),
         ],

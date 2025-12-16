@@ -7,22 +7,33 @@ import 'package:flutter_card_swiper/flutter_card_swiper.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:portfolio/common/models/project_entity.dart';
+import 'package:portfolio/common/models/experience_entity.dart';
 import 'package:portfolio/common/widgets/custom_snackbar.dart';
 import 'package:portfolio/utils/constants/custom_icons.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../utils/constants/custom_constants.dart';
 
-class HomeController extends GetxController{
-
+class HomeController extends GetxController {
   // - - - - - - - - - - - - - - - - - - CREATE STATES - - - - - - - - - - - - - - - - - -  //
-  late final ScrollController scrollController, skillsZeroScrollController, skillsFirstScrollController, skillsSecondScrollController, skillsLastScrollController;
+  late final ScrollController scrollController,
+      skillsZeroScrollController,
+      skillsFirstScrollController,
+      skillsSecondScrollController,
+      skillsLastScrollController;
   late final CardSwiperController cardSwiperController;
-  late final TextEditingController fullNameController, objectController, messageController;
+  late final TextEditingController fullNameController,
+      objectController,
+      messageController;
   late final RxBool isDarkTheme, isFabVisible, isSending;
   late final GlobalKey<FormState> formState;
-  late final GlobalKey homeKey, skillsKey, projectsKey, experiencesKey, contactKey;
+  late final GlobalKey homeKey,
+      skillsKey,
+      projectsKey,
+      experiencesKey,
+      contactKey;
   late final RxList<ProjectEntity> projects;
+  late final RxList<ExperienceEntity> experiences;
 
   final List<String> skills = [
     CustomIcons.DB_FIREBASE,
@@ -55,7 +66,6 @@ class HomeController extends GetxController{
     CustomIcons.WEB_TAILWIND_CSS
   ];
 
-
   // - - - - - - - - - - - - - - - - - - INIT STATES - - - - - - - - - - - - - - - - - -  //
   @override
   void onInit() {
@@ -79,6 +89,7 @@ class HomeController extends GetxController{
     experiencesKey = GlobalKey();
     contactKey = GlobalKey();
     projects = RxList.empty(growable: true);
+    experiences = RxList.empty(growable: true);
     init();
   }
 
@@ -87,20 +98,44 @@ class HomeController extends GetxController{
     skills.shuffle();
     _autoScrolling();
     _getProjects();
+    _getExperiences();
   }
 
   // - - - - - - - - - - - - - - - - - - GET PROJECTS - - - - - - - - - - - - - - - - - -  //
   void _getProjects() async {
-    try{
-      final QuerySnapshot<Map<String, dynamic>> getAllProjects = await FirebaseFirestore.instance.collection('PROJECTS').get();
-      if(getAllProjects.size <= 0) return;
-      for(QueryDocumentSnapshot<Map<String, dynamic>> projectJson in getAllProjects.docs){
-        final ProjectEntity customProjectEntity = ProjectEntity.fromJson(projectJson.data());
+    try {
+      final QuerySnapshot<Map<String, dynamic>> getAllProjects =
+          await FirebaseFirestore.instance.collection('PROJECTS').get();
+      if (getAllProjects.size <= 0) return;
+      for (QueryDocumentSnapshot<Map<String, dynamic>> projectJson
+          in getAllProjects.docs) {
+        final ProjectEntity customProjectEntity =
+            ProjectEntity.fromJson(projectJson.data());
         projects.add(customProjectEntity);
       }
+    } catch (_) {}
+  }
 
+  // - - - - - - - - - - - - - - - - - - GET EXPERIENCES - - - - - - - - - - - - - - - - - -  //
+  void _getExperiences() async {
+    try {
+      final QuerySnapshot<Map<String, dynamic>> getAllExperiences =
+          await FirebaseFirestore.instance
+              .collection('EXPERIENCES')
+              .orderBy('createdAt', descending: true)
+              .get();
+      if (getAllExperiences.size <= 0) return;
+      for (QueryDocumentSnapshot<Map<String, dynamic>> experienceJson
+          in getAllExperiences.docs) {
+        final ExperienceEntity customExperienceEntity =
+            ExperienceEntity.fromJson(experienceJson.data());
+        experiences.add(customExperienceEntity);
+      }
+    } catch (e) {
+      print('+++++');
+      print(e.toString());
+      print('+++++');
     }
-    catch(_){}
   }
 
   // - - - - - - - - - - - - - - - - - - MENU CLICKS - - - - - - - - - - - - - - - - - -  //
@@ -114,6 +149,7 @@ class HomeController extends GetxController{
       );
     }
   }
+
   void onSkills() {
     final context = skillsKey.currentContext;
     if (context != null) {
@@ -124,6 +160,7 @@ class HomeController extends GetxController{
       );
     }
   }
+
   void onProjects() {
     final context = projectsKey.currentContext;
     if (context != null) {
@@ -134,6 +171,7 @@ class HomeController extends GetxController{
       );
     }
   }
+
   void onExperiences() {
     final context = experiencesKey.currentContext;
     if (context != null) {
@@ -155,18 +193,20 @@ class HomeController extends GetxController{
       );
     }
   }
+
   void onDownloadResume() {
-    try{
-      const pdfUrl = "https://drive.google.com/file/d/1j5N2ef1JqwiV4r2nmWYziK0_ofuXzN3f/view?usp=sharing";
+    try {
+      const pdfUrl =
+          "https://drive.google.com/file/d/1j5N2ef1JqwiV4r2nmWYziK0_ofuXzN3f/view?usp=sharing";
       html.window.open(pdfUrl, "_blank");
+    } catch (_) {
+      CustomSnackBar.error();
     }
-    catch(_){ CustomSnackBar.error(); }
   }
 
   // - - - - - - - - - - - - - - - - - - CONTACT BUTTON SEND - - - - - - - - - - - - - - - - - -  //
   void onSend() async {
     try {
-
       if (!formState.currentState!.validate()) return;
       isSending.value = true;
 
@@ -195,43 +235,57 @@ class HomeController extends GetxController{
         }),
       );
 
-      if (response.statusCode == 200) { CustomSnackBar.emailSent(); }
+      if (response.statusCode == 200) {
+        CustomSnackBar.emailSent();
+      }
 
       fullNameController.clear();
       objectController.clear();
       messageController.clear();
 
-      Future.delayed(const Duration(milliseconds: 300), (){ formState.currentState?.reset(); });
-
-    } catch (_) { CustomSnackBar.error(); }
-    finally { isSending.value = false; }
+      Future.delayed(const Duration(milliseconds: 300), () {
+        formState.currentState?.reset();
+      });
+    } catch (_) {
+      CustomSnackBar.error();
+    } finally {
+      isSending.value = false;
+    }
   }
 
   // - - - - - - - - - - - - - - - - - - ADD AUTO SCROLLING TO LIST VIEW - - - - - - - - - - - - - - - - - -  //
   void _autoScrolling() async {
-
     await Future.delayed(const Duration(seconds: 3));
 
     // Setup auto-scrolling for skillsZeroScrollController
     void startZeroScrolling() {
-      if (skillsZeroScrollController.hasClients && skillsZeroScrollController.position.maxScrollExtent > 0) {
-        skillsZeroScrollController.animateTo(
+      if (skillsZeroScrollController.hasClients &&
+          skillsZeroScrollController.position.maxScrollExtent > 0) {
+        skillsZeroScrollController
+            .animateTo(
           skillsZeroScrollController.position.maxScrollExtent,
           curve: Curves.linear,
           duration: const Duration(seconds: 40),
-        ).then((_) {
+        )
+            .then((_) {
           if (skillsZeroScrollController.hasClients) {
             skillsZeroScrollController.jumpTo(0);
-            Future.delayed(const Duration(milliseconds: 100), () => startZeroScrolling());
+            Future.delayed(
+                const Duration(milliseconds: 100), () => startZeroScrolling());
           }
         });
       } else {
         // Retry if not ready yet
-        Future.delayed(const Duration(milliseconds: 500), () => startZeroScrolling());
+        Future.delayed(
+            const Duration(milliseconds: 500), () => startZeroScrolling());
       }
     }
+
     skillsZeroScrollController.addListener(() {
-      if (skillsZeroScrollController.hasClients && skillsZeroScrollController.position.pixels >= skillsZeroScrollController.position.maxScrollExtent && skillsZeroScrollController.position.maxScrollExtent > 0) {
+      if (skillsZeroScrollController.hasClients &&
+          skillsZeroScrollController.position.pixels >=
+              skillsZeroScrollController.position.maxScrollExtent &&
+          skillsZeroScrollController.position.maxScrollExtent > 0) {
         skillsZeroScrollController.jumpTo(0);
       }
     });
@@ -239,24 +293,33 @@ class HomeController extends GetxController{
 
     // Setup auto-scrolling for skillsFirstScrollController
     void startFirstScrolling() {
-      if (skillsFirstScrollController.hasClients && skillsFirstScrollController.position.maxScrollExtent > 0) {
-        skillsFirstScrollController.animateTo(
+      if (skillsFirstScrollController.hasClients &&
+          skillsFirstScrollController.position.maxScrollExtent > 0) {
+        skillsFirstScrollController
+            .animateTo(
           skillsFirstScrollController.position.maxScrollExtent,
           curve: Curves.linear,
           duration: const Duration(seconds: 40),
-        ).then((_) {
+        )
+            .then((_) {
           if (skillsFirstScrollController.hasClients) {
             skillsFirstScrollController.jumpTo(0);
-            Future.delayed(const Duration(milliseconds: 100), () => startFirstScrolling());
+            Future.delayed(
+                const Duration(milliseconds: 100), () => startFirstScrolling());
           }
         });
       } else {
         // Retry if not ready yet
-        Future.delayed(const Duration(milliseconds: 500), () => startFirstScrolling());
+        Future.delayed(
+            const Duration(milliseconds: 500), () => startFirstScrolling());
       }
     }
+
     skillsFirstScrollController.addListener(() {
-      if (skillsFirstScrollController.hasClients && skillsFirstScrollController.position.pixels >= skillsFirstScrollController.position.maxScrollExtent && skillsFirstScrollController.position.maxScrollExtent > 0) {
+      if (skillsFirstScrollController.hasClients &&
+          skillsFirstScrollController.position.pixels >=
+              skillsFirstScrollController.position.maxScrollExtent &&
+          skillsFirstScrollController.position.maxScrollExtent > 0) {
         skillsFirstScrollController.jumpTo(0);
       }
     });
@@ -264,24 +327,33 @@ class HomeController extends GetxController{
 
     // Setup auto-scrolling for skillsLastScrollController
     void startLastScrolling() {
-      if (skillsLastScrollController.hasClients && skillsLastScrollController.position.maxScrollExtent > 0) {
-        skillsLastScrollController.animateTo(
+      if (skillsLastScrollController.hasClients &&
+          skillsLastScrollController.position.maxScrollExtent > 0) {
+        skillsLastScrollController
+            .animateTo(
           skillsLastScrollController.position.maxScrollExtent,
           curve: Curves.linear,
           duration: const Duration(seconds: 40),
-        ).then((_) {
+        )
+            .then((_) {
           if (skillsLastScrollController.hasClients) {
             skillsLastScrollController.jumpTo(0);
-            Future.delayed(const Duration(milliseconds: 100), () => startLastScrolling());
+            Future.delayed(
+                const Duration(milliseconds: 100), () => startLastScrolling());
           }
         });
       } else {
         // Retry if not ready yet
-        Future.delayed(const Duration(milliseconds: 500), () => startLastScrolling());
+        Future.delayed(
+            const Duration(milliseconds: 500), () => startLastScrolling());
       }
     }
+
     skillsLastScrollController.addListener(() {
-      if (skillsLastScrollController.hasClients && skillsLastScrollController.position.pixels >= skillsLastScrollController.position.maxScrollExtent && skillsLastScrollController.position.maxScrollExtent > 0) {
+      if (skillsLastScrollController.hasClients &&
+          skillsLastScrollController.position.pixels >=
+              skillsLastScrollController.position.maxScrollExtent &&
+          skillsLastScrollController.position.maxScrollExtent > 0) {
         skillsLastScrollController.jumpTo(0);
       }
     });
@@ -289,67 +361,90 @@ class HomeController extends GetxController{
 
     // Setup auto-scrolling for skillsSecondScrollController
     void startSecondScrolling() {
-      if (skillsSecondScrollController.hasClients && skillsSecondScrollController.position.maxScrollExtent > 0) {
-        skillsSecondScrollController.animateTo(
+      if (skillsSecondScrollController.hasClients &&
+          skillsSecondScrollController.position.maxScrollExtent > 0) {
+        skillsSecondScrollController
+            .animateTo(
           skillsSecondScrollController.position.maxScrollExtent,
           curve: Curves.linear,
           duration: const Duration(seconds: 40),
-        ).then((_) {
+        )
+            .then((_) {
           if (skillsSecondScrollController.hasClients) {
             skillsSecondScrollController.jumpTo(0);
-            Future.delayed(const Duration(milliseconds: 100), () => startSecondScrolling());
+            Future.delayed(const Duration(milliseconds: 100),
+                () => startSecondScrolling());
           }
         });
       } else {
         // Retry if not ready yet
-        Future.delayed(const Duration(milliseconds: 500), () => startSecondScrolling());
+        Future.delayed(
+            const Duration(milliseconds: 500), () => startSecondScrolling());
       }
     }
+
     skillsSecondScrollController.addListener(() {
-      if (skillsSecondScrollController.hasClients && skillsSecondScrollController.position.pixels >= skillsSecondScrollController.position.maxScrollExtent && skillsSecondScrollController.position.maxScrollExtent > 0) {
+      if (skillsSecondScrollController.hasClients &&
+          skillsSecondScrollController.position.pixels >=
+              skillsSecondScrollController.position.maxScrollExtent &&
+          skillsSecondScrollController.position.maxScrollExtent > 0) {
         skillsSecondScrollController.jumpTo(0);
       }
     });
     startSecondScrolling();
 
     scrollController.addListener(() {
-      if (scrollController.offset > 200 && !isFabVisible.value) { isFabVisible.value = true; }
-      else if (scrollController.offset <= 200 && isFabVisible.value) { isFabVisible.value = false; }
+      if (scrollController.offset > 200 && !isFabVisible.value) {
+        isFabVisible.value = true;
+      } else if (scrollController.offset <= 200 && isFabVisible.value) {
+        isFabVisible.value = false;
+      }
     });
-
   }
 
   // - - - - - - - - - - - - - - - - - - SCROLL UP - - - - - - - - - - - - - - - - - -  //
-  void scrollingUp(){ scrollController.animateTo(0, duration: const Duration(milliseconds: 500), curve: Curves.easeInOut); }
+  void scrollingUp() {
+    scrollController.animateTo(0,
+        duration: const Duration(milliseconds: 500), curve: Curves.easeInOut);
+  }
 
   // - - - - - - - - - - - - - - - - - - CHANGE COLOR THEME - - - - - - - - - - - - - - - - - -  //
   void onChangeColorTheming() {
-    try{
+    try {
       Get.changeThemeMode(isDarkTheme.value ? ThemeMode.light : ThemeMode.dark);
       isDarkTheme.value = !isDarkTheme.value;
-    }
-    catch(_){}
+    } catch (_) {}
   }
 
   // - - - - - - - - - - - - - - - - - - GITHUB - - - - - - - - - - - - - - - - - -  //
   void onGithub() async {
-    try{ await launchUrl(Uri.parse(CustomConstants.GITHUB)); }
-    catch(_){ CustomSnackBar.error(); }
+    try {
+      await launchUrl(Uri.parse(CustomConstants.GITHUB));
+    } catch (_) {
+      CustomSnackBar.error();
+    }
   }
 
   // - - - - - - - - - - - - - - - - - - LINKEDIN - - - - - - - - - - - - - - - - - -  //
   void onLinkedIn() async {
-    try{ await launchUrl(Uri.parse(CustomConstants.LIKED_IN)); }
-    catch(_){ CustomSnackBar.error(); }
+    try {
+      await launchUrl(Uri.parse(CustomConstants.LIKED_IN));
+    } catch (_) {
+      CustomSnackBar.error();
+    }
   }
 
   // - - - - - - - - - - - - - - - - - - GMAIL - - - - - - - - - - - - - - - - - -  //
   void onGmail() async {
     try {
-      final Uri gmailUri = Uri(scheme: 'mailto', path: 'Ezriouil.dev@gmail.com');
-      if (await canLaunchUrl(gmailUri)) { await launchUrl(gmailUri); }
+      final Uri gmailUri =
+          Uri(scheme: 'mailto', path: 'Ezriouil.dev@gmail.com');
+      if (await canLaunchUrl(gmailUri)) {
+        await launchUrl(gmailUri);
+      }
+    } catch (_) {
+      CustomSnackBar.error();
     }
-    catch (_) { CustomSnackBar.error(); }
   }
 
   @override
@@ -365,5 +460,4 @@ class HomeController extends GetxController{
     messageController.dispose();
     super.dispose();
   }
-
 }
