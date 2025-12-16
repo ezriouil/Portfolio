@@ -1103,8 +1103,6 @@ class HomeMobileScreen extends CustomState {
                   const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS / 2),
                   _buildExperienceCard(
                     context: context,
-                    fromDate: fromDate,
-                    toDate: toDate,
                     title: title,
                     isLeft: false,
                     subtitle: subtitle,
@@ -1121,8 +1119,6 @@ class HomeMobileScreen extends CustomState {
 
   Widget _buildExperienceCard({
     required BuildContext context,
-    required String fromDate,
-    required String toDate,
     required String title,
     required bool isLeft,
     required String subtitle,

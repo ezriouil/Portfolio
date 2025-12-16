@@ -106,7 +106,7 @@ class HomeController extends GetxController {
     try {
       final QuerySnapshot<Map<String, dynamic>> getAllProjects =
           await FirebaseFirestore.instance.collection('PROJECTS').get();
-      if (getAllProjects.size <= 0) return;
+      if (getAllProjects.docs.isEmpty) return;
       for (QueryDocumentSnapshot<Map<String, dynamic>> projectJson
           in getAllProjects.docs) {
         final ProjectEntity customProjectEntity =
@@ -124,18 +124,14 @@ class HomeController extends GetxController {
               .collection('EXPERIENCES')
               .orderBy('createdAt', descending: true)
               .get();
-      if (getAllExperiences.size <= 0) return;
+      if (getAllExperiences.docs.isEmpty) return;
       for (QueryDocumentSnapshot<Map<String, dynamic>> experienceJson
           in getAllExperiences.docs) {
         final ExperienceEntity customExperienceEntity =
             ExperienceEntity.fromJson(experienceJson.data());
         experiences.add(customExperienceEntity);
       }
-    } catch (e) {
-      print('+++++');
-      print(e.toString());
-      print('+++++');
-    }
+    } catch (_) {}
   }
 
   // - - - - - - - - - - - - - - - - - - MENU CLICKS - - - - - - - - - - - - - - - - - -  //
@@ -257,141 +253,44 @@ class HomeController extends GetxController {
   void _autoScrolling() async {
     await Future.delayed(const Duration(seconds: 3));
 
-    // Setup auto-scrolling for skillsZeroScrollController
-    void startZeroScrolling() {
-      if (skillsZeroScrollController.hasClients &&
-          skillsZeroScrollController.position.maxScrollExtent > 0) {
-        skillsZeroScrollController
-            .animateTo(
-          skillsZeroScrollController.position.maxScrollExtent,
-          curve: Curves.linear,
-          duration: const Duration(seconds: 40),
-        )
-            .then((_) {
-          if (skillsZeroScrollController.hasClients) {
-            skillsZeroScrollController.jumpTo(0);
-            Future.delayed(
-                const Duration(milliseconds: 100), () => startZeroScrolling());
-          }
-        });
-      } else {
-        // Retry if not ready yet
-        Future.delayed(
-            const Duration(milliseconds: 500), () => startZeroScrolling());
+    void _setupAutoScrolling(ScrollController controller) {
+      void startScrolling() {
+        if (controller.hasClients &&
+            controller.position.maxScrollExtent > 0) {
+          controller
+              .animateTo(
+            controller.position.maxScrollExtent,
+            curve: Curves.linear,
+            duration: const Duration(seconds: 40),
+          )
+              .then((_) {
+            if (controller.hasClients) {
+              controller.jumpTo(0);
+              Future.delayed(
+                  const Duration(milliseconds: 100), () => startScrolling());
+            }
+          });
+        } else {
+          Future.delayed(
+              const Duration(milliseconds: 500), () => startScrolling());
+        }
       }
+
+      controller.addListener(() {
+        if (controller.hasClients &&
+            controller.position.pixels >=
+                controller.position.maxScrollExtent &&
+            controller.position.maxScrollExtent > 0) {
+          controller.jumpTo(0);
+        }
+      });
+      startScrolling();
     }
 
-    skillsZeroScrollController.addListener(() {
-      if (skillsZeroScrollController.hasClients &&
-          skillsZeroScrollController.position.pixels >=
-              skillsZeroScrollController.position.maxScrollExtent &&
-          skillsZeroScrollController.position.maxScrollExtent > 0) {
-        skillsZeroScrollController.jumpTo(0);
-      }
-    });
-    startZeroScrolling();
-
-    // Setup auto-scrolling for skillsFirstScrollController
-    void startFirstScrolling() {
-      if (skillsFirstScrollController.hasClients &&
-          skillsFirstScrollController.position.maxScrollExtent > 0) {
-        skillsFirstScrollController
-            .animateTo(
-          skillsFirstScrollController.position.maxScrollExtent,
-          curve: Curves.linear,
-          duration: const Duration(seconds: 40),
-        )
-            .then((_) {
-          if (skillsFirstScrollController.hasClients) {
-            skillsFirstScrollController.jumpTo(0);
-            Future.delayed(
-                const Duration(milliseconds: 100), () => startFirstScrolling());
-          }
-        });
-      } else {
-        // Retry if not ready yet
-        Future.delayed(
-            const Duration(milliseconds: 500), () => startFirstScrolling());
-      }
-    }
-
-    skillsFirstScrollController.addListener(() {
-      if (skillsFirstScrollController.hasClients &&
-          skillsFirstScrollController.position.pixels >=
-              skillsFirstScrollController.position.maxScrollExtent &&
-          skillsFirstScrollController.position.maxScrollExtent > 0) {
-        skillsFirstScrollController.jumpTo(0);
-      }
-    });
-    startFirstScrolling();
-
-    // Setup auto-scrolling for skillsLastScrollController
-    void startLastScrolling() {
-      if (skillsLastScrollController.hasClients &&
-          skillsLastScrollController.position.maxScrollExtent > 0) {
-        skillsLastScrollController
-            .animateTo(
-          skillsLastScrollController.position.maxScrollExtent,
-          curve: Curves.linear,
-          duration: const Duration(seconds: 40),
-        )
-            .then((_) {
-          if (skillsLastScrollController.hasClients) {
-            skillsLastScrollController.jumpTo(0);
-            Future.delayed(
-                const Duration(milliseconds: 100), () => startLastScrolling());
-          }
-        });
-      } else {
-        // Retry if not ready yet
-        Future.delayed(
-            const Duration(milliseconds: 500), () => startLastScrolling());
-      }
-    }
-
-    skillsLastScrollController.addListener(() {
-      if (skillsLastScrollController.hasClients &&
-          skillsLastScrollController.position.pixels >=
-              skillsLastScrollController.position.maxScrollExtent &&
-          skillsLastScrollController.position.maxScrollExtent > 0) {
-        skillsLastScrollController.jumpTo(0);
-      }
-    });
-    startLastScrolling();
-
-    // Setup auto-scrolling for skillsSecondScrollController
-    void startSecondScrolling() {
-      if (skillsSecondScrollController.hasClients &&
-          skillsSecondScrollController.position.maxScrollExtent > 0) {
-        skillsSecondScrollController
-            .animateTo(
-          skillsSecondScrollController.position.maxScrollExtent,
-          curve: Curves.linear,
-          duration: const Duration(seconds: 40),
-        )
-            .then((_) {
-          if (skillsSecondScrollController.hasClients) {
-            skillsSecondScrollController.jumpTo(0);
-            Future.delayed(const Duration(milliseconds: 100),
-                () => startSecondScrolling());
-          }
-        });
-      } else {
-        // Retry if not ready yet
-        Future.delayed(
-            const Duration(milliseconds: 500), () => startSecondScrolling());
-      }
-    }
-
-    skillsSecondScrollController.addListener(() {
-      if (skillsSecondScrollController.hasClients &&
-          skillsSecondScrollController.position.pixels >=
-              skillsSecondScrollController.position.maxScrollExtent &&
-          skillsSecondScrollController.position.maxScrollExtent > 0) {
-        skillsSecondScrollController.jumpTo(0);
-      }
-    });
-    startSecondScrolling();
+    _setupAutoScrolling(skillsZeroScrollController);
+    _setupAutoScrolling(skillsFirstScrollController);
+    _setupAutoScrolling(skillsLastScrollController);
+    _setupAutoScrolling(skillsSecondScrollController);
 
     scrollController.addListener(() {
       if (scrollController.offset > 200 && !isFabVisible.value) {

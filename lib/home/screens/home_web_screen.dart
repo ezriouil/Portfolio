@@ -1163,8 +1163,6 @@ class HomeWebScreen extends CustomState {
                         const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS / 2),
                         _buildExperienceCard(
                           context: context,
-                          fromDate: fromDate,
-                          toDate: toDate,
                           title: title,
                           isLeft: isLeft,
                           subtitle: subtitle,
@@ -1208,8 +1206,6 @@ class HomeWebScreen extends CustomState {
                         const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS / 2),
                         _buildExperienceCard(
                           context: context,
-                          fromDate: fromDate,
-                          toDate: toDate,
                           title: title,
                           isLeft: isLeft,
                           subtitle: subtitle,
@@ -1227,8 +1223,6 @@ class HomeWebScreen extends CustomState {
 
   Widget _buildExperienceCard({
     required BuildContext context,
-    required String fromDate,
-    required String toDate,
     required String title,
     required bool isLeft,
     required String subtitle,
@@ -1239,8 +1233,7 @@ class HomeWebScreen extends CustomState {
       padding: const EdgeInsets.all(CustomSizes.SPACE_DEFAULT),
       decoration: BoxDecoration(
         color: darkDarkLightLightColor(context),
-        // borderRadius: BorderRadius.circular(CustomSizes.SPACE_DEFAULT),
-        borderRadius : isLeft 
+        borderRadius: isLeft 
         ? BorderRadius.only(
                               topLeft: Radius.circular(CustomSizes.SPACE_DEFAULT * 2),
                               bottomLeft : Radius.circular(CustomSizes.SPACE_DEFAULT * 2)
