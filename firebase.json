@@ -20,8 +20,19 @@
     ],
     "rewrites": [
       {
-        "source": "**",
+        "source": "!/{images,icons,assets,canvaskit,version.json,manifest.json,robots.txt,sitemap.xml,favicon.png}/**",
         "destination": "/index.html"
+      }
+    ],
+    "headers": [
+      {
+        "source": "**/*.@(png|jpg|jpeg|gif|svg|webp|ico)",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "public, max-age=31536000, immutable"
+          }
+        ]
       }
     ]
   }
