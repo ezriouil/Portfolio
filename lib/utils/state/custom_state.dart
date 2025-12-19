@@ -8,16 +8,6 @@ abstract class CustomState extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-    darkLightColor(context);
-    darkDarkLightLightColor(context);
-    grayColor(context);
-    blueColor(context);
-    greenColor(context);
-    yellowColor(context);
-    redColor(context);
-    purpleColor(context);
-
     return execute(context);
   }
 

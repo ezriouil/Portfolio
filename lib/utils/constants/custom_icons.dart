@@ -24,7 +24,7 @@ class CustomIcons{
   static const String MOBILE_XML = "assets/icons/mobile/xml.png";
 
   static const String STORES_AMAZON = "assets/icons/stores/amazon_appstore.png";
-  static const String STORES_APPLE = "assets/icons/stores/apple_app_store.png";
+  static const String STORES_APPLE = "assets/icons/stores/app_store.png";
   static const String STORES_GOOGLE_PLAY = "assets/icons/stores/google_play.png";
   static const String STORES_HUAWEI = "assets/icons/stores/huawei.png";
 
@@ -41,5 +41,9 @@ class CustomIcons{
   static const String CONTACT_LINKEDIN = "assets/icons/contact/linkedin.png";
   static const String CONTACT_WHATSAPP = "assets/icons/contact/whatsapp.png";
   static const String CONTACT_GITHUB = "assets/icons/contact/github.png";
+
+  static const String YOUTUBE = "assets/icons/contact/youtube.png";
+  static const String APK = "assets/icons/contact/apk.png";
+  static const String WEBSITE = "assets/icons/contact/website.png";
 
 }

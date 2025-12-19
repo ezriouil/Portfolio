@@ -3,8 +3,7 @@ import 'package:flutter/material.dart';
 import '../../utils/constants/custom_sizes.dart';
 import '../../utils/state/custom_state.dart';
 
-class CustomElevatedButton  extends CustomState {
-
+class CustomElevatedButton extends CustomState {
   final double? width, height, elevation;
   final Color? bgColor;
   final Color? textColor;

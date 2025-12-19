@@ -3,8 +3,7 @@ import 'package:flutter/material.dart';
 import '../../utils/constants/custom_sizes.dart';
 import '../../utils/state/custom_state.dart';
 
-class CustomTextField extends CustomState{
-
+class CustomTextField extends CustomState {
   final String? Function(String? value)? validator;
   final TextEditingController controller;
   final String hint;

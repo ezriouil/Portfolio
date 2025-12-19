@@ -8,7 +8,6 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:portfolio/common/models/project_entity.dart';
 import 'package:portfolio/common/models/experience_entity.dart';
-import 'package:portfolio/common/widgets/custom_snackbar.dart';
 import 'package:portfolio/utils/constants/custom_icons.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -35,7 +34,7 @@ class HomeController extends GetxController {
   late final RxList<ProjectEntity> projects;
   late final RxList<ExperienceEntity> experiences;
 
-  final List<String> skills = [
+  static const List<String> _skillsList = [
     CustomIcons.DB_FIREBASE,
     CustomIcons.DB_MONGO_DB,
     CustomIcons.DB_SQL,
@@ -66,6 +65,8 @@ class HomeController extends GetxController {
     CustomIcons.WEB_TAILWIND_CSS
   ];
 
+  late final List<String> skills;
+
   // - - - - - - - - - - - - - - - - - - INIT STATES - - - - - - - - - - - - - - - - - -  //
   @override
   void onInit() {
@@ -94,49 +95,56 @@ class HomeController extends GetxController {
   }
 
   // - - - - - - - - - - - - - - - - - - INIT - - - - - - - - - - - - - - - - - -  //
-  void init() async {
-    skills.shuffle();
+  void init() {
+    skills = List.from(_skillsList)..shuffle();
     _autoScrolling();
     _getProjects();
     _getExperiences();
   }
 
   // - - - - - - - - - - - - - - - - - - GET PROJECTS - - - - - - - - - - - - - - - - - -  //
-  void _getProjects() async {
+  Future<void> _getProjects() async {
     try {
-      final QuerySnapshot<Map<String, dynamic>> getAllProjects =
-          await FirebaseFirestore.instance.collection('PROJECTS').get();
-      if (getAllProjects.docs.isEmpty) return;
-      for (QueryDocumentSnapshot<Map<String, dynamic>> projectJson
-          in getAllProjects.docs) {
-        final ProjectEntity customProjectEntity =
-            ProjectEntity.fromJson(projectJson.data());
-        projects.add(customProjectEntity);
-      }
-    } catch (_) {}
+      final QuerySnapshot<Map<String, dynamic>> snapshot =
+          await FirebaseFirestore.instance
+              .collection('PROJECTS')
+              .orderBy('createdAt', descending: true)
+              .get();
+      
+      if (snapshot.docs.isEmpty) return;
+      
+      projects.value = snapshot.docs.map((doc) {
+        final data = {...doc.data()};
+        data['id'] ??= doc.id;
+        return ProjectEntity.fromJson(data);
+      }).toList();
+    } catch (_) {
+      // Silently handle errors
+    }
   }
 
   // - - - - - - - - - - - - - - - - - - GET EXPERIENCES - - - - - - - - - - - - - - - - - -  //
-  void _getExperiences() async {
+  Future<void> _getExperiences() async {
     try {
-      final QuerySnapshot<Map<String, dynamic>> getAllExperiences =
+      final QuerySnapshot<Map<String, dynamic>> snapshot =
           await FirebaseFirestore.instance
               .collection('EXPERIENCES')
               .orderBy('createdAt', descending: true)
               .get();
-      if (getAllExperiences.docs.isEmpty) return;
-      for (QueryDocumentSnapshot<Map<String, dynamic>> experienceJson
-          in getAllExperiences.docs) {
-        final ExperienceEntity customExperienceEntity =
-            ExperienceEntity.fromJson(experienceJson.data());
-        experiences.add(customExperienceEntity);
-      }
-    } catch (_) {}
+      
+      if (snapshot.docs.isEmpty) return;
+      
+      experiences.value = snapshot.docs
+          .map((doc) => ExperienceEntity.fromJson(doc.data()))
+          .toList();
+    } catch (_) {
+      // Silently handle errors
+    }
   }
 
   // - - - - - - - - - - - - - - - - - - MENU CLICKS - - - - - - - - - - - - - - - - - -  //
-  void onHome() {
-    final context = homeKey.currentContext;
+  void _scrollToKey(GlobalKey key) {
+    final context = key.currentContext;
     if (context != null) {
       Scrollable.ensureVisible(
         context,
@@ -146,58 +154,17 @@ class HomeController extends GetxController {
     }
   }
 
-  void onSkills() {
-    final context = skillsKey.currentContext;
-    if (context != null) {
-      Scrollable.ensureVisible(
-        context,
-        duration: const Duration(milliseconds: 500),
-        curve: Curves.easeInOut,
-      );
-    }
-  }
-
-  void onProjects() {
-    final context = projectsKey.currentContext;
-    if (context != null) {
-      Scrollable.ensureVisible(
-        context,
-        duration: const Duration(milliseconds: 500),
-        curve: Curves.easeInOut,
-      );
-    }
-  }
-
-  void onExperiences() {
-    final context = experiencesKey.currentContext;
-    if (context != null) {
-      Scrollable.ensureVisible(
-        context,
-        duration: const Duration(milliseconds: 500),
-        curve: Curves.easeInOut,
-      );
-    }
-  }
-
-  void onContact() {
-    final context = contactKey.currentContext;
-    if (context != null) {
-      Scrollable.ensureVisible(
-        context,
-        duration: const Duration(milliseconds: 500),
-        curve: Curves.easeInOut,
-      );
-    }
-  }
+  void onHome() => _scrollToKey(homeKey);
+  void onSkills() => _scrollToKey(skillsKey);
+  void onProjects() => _scrollToKey(projectsKey);
+  void onExperiences() => _scrollToKey(experiencesKey);
+  void onContact() => _scrollToKey(contactKey);
 
   void onDownloadResume() {
     try {
-      const pdfUrl =
-          "https://drive.google.com/file/d/1j5N2ef1JqwiV4r2nmWYziK0_ofuXzN3f/view?usp=sharing";
+      const pdfUrl = "https://drive.google.com/file/d/1fyUBU8oJ6wWHaXo4Cd2qW79klP0I5HYi/view?usp=sharing";
       html.window.open(pdfUrl, "_blank");
-    } catch (_) {
-      CustomSnackBar.error();
-    }
+    } catch (_) {}
   }
 
   // - - - - - - - - - - - - - - - - - - CONTACT BUTTON SEND - - - - - - - - - - - - - - - - - -  //
@@ -214,7 +181,7 @@ class HomeController extends GetxController {
 
       final url = Uri.parse('https://api.emailjs.com/api/v1.0/email/send');
 
-      final response = await http.post(
+      await http.post(
         url,
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
@@ -231,10 +198,6 @@ class HomeController extends GetxController {
         }),
       );
 
-      if (response.statusCode == 200) {
-        CustomSnackBar.emailSent();
-      }
-
       fullNameController.clear();
       objectController.clear();
       messageController.clear();
@@ -243,7 +206,7 @@ class HomeController extends GetxController {
         formState.currentState?.reset();
       });
     } catch (_) {
-      CustomSnackBar.error();
+      // Silently handle errors
     } finally {
       isSending.value = false;
     }
@@ -319,18 +282,14 @@ class HomeController extends GetxController {
   void onGithub() async {
     try {
       await launchUrl(Uri.parse(CustomConstants.GITHUB));
-    } catch (_) {
-      CustomSnackBar.error();
-    }
+    } catch (_) {}
   }
 
   // - - - - - - - - - - - - - - - - - - LINKEDIN - - - - - - - - - - - - - - - - - -  //
   void onLinkedIn() async {
     try {
       await launchUrl(Uri.parse(CustomConstants.LIKED_IN));
-    } catch (_) {
-      CustomSnackBar.error();
-    }
+    } catch (_) {}
   }
 
   // - - - - - - - - - - - - - - - - - - GMAIL - - - - - - - - - - - - - - - - - -  //
@@ -341,8 +300,16 @@ class HomeController extends GetxController {
       if (await canLaunchUrl(gmailUri)) {
         await launchUrl(gmailUri);
       }
+    } catch (_) {}
+  }
+
+  // - - - - - - - - - - - - - - - - - - HELPER: LAUNCH URL WITH GITHUB FALLBACK - - - - - - - - - - - -  //
+  Future<void> launchProjectLink(String? link) async {
+    try {
+      final url = (link != null && link.isNotEmpty) ? link : CustomConstants.GITHUB;
+      await launchUrl(Uri.parse(url));
     } catch (_) {
-      CustomSnackBar.error();
+      // Silently handle errors
     }
   }
 

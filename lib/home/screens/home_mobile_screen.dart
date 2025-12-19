@@ -5,17 +5,14 @@ import 'package:get/get.dart';
 import 'package:portfolio/common/screens/custom_loading_screen.dart';
 import 'package:portfolio/common/widgets/custom_elevated_button.dart';
 import 'package:portfolio/common/widgets/custom_outlined_button.dart';
-import 'package:portfolio/common/widgets/custom_snackbar.dart';
 import 'package:portfolio/common/widgets/custom_text_field.dart';
 import 'package:portfolio/home/home_controller.dart';
 import 'package:portfolio/utils/constants/custom_colors.dart';
-import 'package:portfolio/utils/constants/custom_constants.dart';
 import 'package:portfolio/utils/constants/custom_icons.dart';
 import 'package:portfolio/utils/constants/custom_images.dart';
 import 'package:portfolio/utils/constants/custom_sizes.dart';
 import 'package:portfolio/utils/state/custom_state.dart';
 import 'package:parallax_rain/parallax_rain.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:widget_and_text_animator/widget_and_text_animator.dart';
 import 'package:timeline_tile/timeline_tile.dart';
 
@@ -49,7 +46,7 @@ class HomeMobileScreen extends CustomState {
               padding: const EdgeInsets.symmetric(horizontal: CustomSizes.SPACE_DEFAULT),
               child: Column(
                 children: [
-                  const SizedBox(height: CustomSizes.SPACE_DEFAULT),
+                  const SizedBox(height: CustomSizes.SPACE_BETWEEN_SECTIONS),
                   SizedBox(
                     key: controller.homeKey,
                     width: 250,
@@ -65,8 +62,8 @@ class HomeMobileScreen extends CustomState {
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_SECTIONS * 3),
                             child: SizedBox(
-                                width: 120,
-                                height: 120,
+                                width: 130,
+                                height: 130,
                                 child: Image.asset(CustomImages.MOHAMED_EZRIOUIL,
                                   width: getWidth(context),
                                   height: getHeight(context),
@@ -291,30 +288,33 @@ class HomeMobileScreen extends CustomState {
                 const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS),
                 SizedBox(
                   width: getWidth(context),
-                  height: 500,
+                  height: 520,
                   child: controller.projects.isEmpty
                       ? const CustomLoadingScreen()
                       : CardSwiper(
-                    cardsCount: controller.projects.length <= 3 ? controller.projects.length : 3,
-                    numberOfCardsDisplayed: controller.projects.length <= 3 ? controller.projects.length : 3,
-                    cardBuilder: (context, index, percentThresholdX, percentThresholdY) =>
-                        _customProject(
-                          context: context,
-                          logoUri: controller.projects[index].logo ?? "",
-                          title: controller.projects[index].title ?? "",
-                          description: controller.projects[index].description ?? "",
-                          thumbnailUri: controller.projects[index].thumbnail ?? "",
-                          onInstallApk: () async {
-                            try{ await launchUrl(Uri.parse(controller.projects[index].apkLink ?? CustomConstants.GITHUB)); }
-                            catch(_){ CustomSnackBar.error(); }
-                          },
-                          onDetails: () { Get.toNamed('/details/${controller.projects[index].id}'); },
-                          onGithub: () async {
-                            try{ await launchUrl(Uri.parse(controller.projects[index].codeSourceLink ?? CustomConstants.GITHUB)); }
-                            catch(_){ CustomSnackBar.error(); }
+                          cardsCount: controller.projects.length <= 3
+                              ? controller.projects.length
+                              : 3,
+                          numberOfCardsDisplayed:
+                              controller.projects.length <= 3
+                                  ? controller.projects.length
+                                  : 3,
+                          cardBuilder: (context, index, percentThresholdX,
+                              percentThresholdY) {
+                            final project = controller.projects[index];
+                            return _customProject(
+                              context: context,
+                              logoUri: project.logo ?? "",
+                              title: project.title ?? "",
+                              description: project.description ?? "",
+                              thumbnailUri: project.thumbnail ?? "",
+                              
+                              onGooglePlay: () => controller.launchProjectLink(project.googlePlayLink),
+                              onAppStore: () => controller.launchProjectLink(project.appStoreLink),
+                              onVideo: () => controller.launchProjectLink(project.videoLink),
+                            );
                           },
                         ),
-                  ),
                 ),
               ],
             ),
@@ -909,15 +909,43 @@ class HomeMobileScreen extends CustomState {
         required String title,
         required String description,
         required String thumbnailUri,
-        required GestureTapCallback onInstallApk,
-        required GestureTapCallback onDetails,
-        required GestureTapCallback onGithub
+        required GestureTapCallback onGooglePlay,
+        required GestureTapCallback onAppStore,
+        required GestureTapCallback onVideo
       }) => Container(
       width: getWidth(context), padding: const EdgeInsets.symmetric(vertical: CustomSizes.SPACE_BETWEEN_ITEMS), decoration: BoxDecoration(
-      borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_ITEMS / 2),
-      color: grayColor(context),
-      border: Border.all(width: 0.6, color: darkDarkLightLightColor(context))
-  ),
+            border: Border.all(
+                width: 0.6,
+                color: context.isDarkMode
+                    ? CustomColors.GRAY_DARK
+                    : CustomColors.GRAY_LIGHT),
+            borderRadius:
+                BorderRadius.circular(CustomSizes.SPACE_BETWEEN_ITEMS / 2),
+            gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  (context.isDarkMode
+                      ? CustomColors.GRAY_LIGHT
+                      : CustomColors.GRAY_DARK),
+                  (context.isDarkMode
+                      ? CustomColors.WHITE
+                      : CustomColors.BLACK),
+                  (context.isDarkMode
+                      ? CustomColors.GRAY_LIGHT
+                      : CustomColors.GRAY_DARK),
+                ]),
+            boxShadow: [
+              BoxShadow(
+                color: context.isDarkMode
+                    ? CustomColors.GRAY_LIGHT
+                    : CustomColors.GRAY_DARK,
+                blurRadius: 1,
+                blurStyle: BlurStyle.inner,
+                offset: const Offset(2, 2),
+              ),
+            ],
+          ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -937,7 +965,7 @@ class HomeMobileScreen extends CustomState {
                     Text(title, style: Theme.of(context).textTheme.headlineLarge?.copyWith(fontSize: 14, letterSpacing: 0.5, color: darkDarkLightLightColor(context))),
                   ],
                 ),
-                Text(description, style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontSize: 12, color: darkDarkLightLightColor(context)), maxLines: 2, overflow: TextOverflow.ellipsis),
+                Text(description, style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontSize: 12, color: darkDarkLightLightColor(context)), maxLines: 3, overflow: TextOverflow.ellipsis),
               ],
             ),
           ),
@@ -960,7 +988,7 @@ class HomeMobileScreen extends CustomState {
                   spacing: CustomSizes.SPACE_BETWEEN_ITEMS,
                   children: [
                     Expanded(child: CustomElevatedButton(
-                        onPressed: onInstallApk,
+                        onPressed: onGooglePlay,
                         height: CustomSizes.SPACE_DEFAULT * 1.4,
                         bgColor: darkDarkLightLightColor(context),
                         elevation: 0,
@@ -968,13 +996,13 @@ class HomeMobileScreen extends CustomState {
                           mainAxisAlignment: MainAxisAlignment.center,
                           spacing: CustomSizes.SPACE_BETWEEN_ITEMS / 2,
                           children: [
-                            Icon(Icons.arrow_circle_down, size: 20, color: darkLightColor(context),),
-                            Flexible(child: Text('Install APK', style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontSize: 10, color: darkLightColor(context)))),
+                            Image.asset(CustomIcons.STORES_GOOGLE_PLAY, width: 20, height: 20),
+                            Flexible(child: Text('Google Play', style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontSize: 10, color: darkLightColor(context)))),
                           ],
                         )
                     )),
                     Expanded(child: CustomElevatedButton(
-                        onPressed: onGithub,
+                        onPressed: onAppStore,
                         height: CustomSizes.SPACE_DEFAULT * 1.4,
                         bgColor: darkDarkLightLightColor(context),
                         elevation: 0,
@@ -982,27 +1010,27 @@ class HomeMobileScreen extends CustomState {
                           mainAxisAlignment: MainAxisAlignment.center,
                           spacing: CustomSizes.SPACE_BETWEEN_ITEMS / 2,
                           children: [
-                            Image.asset(CustomIcons.CONTACT_GITHUB, color: darkLightColor(context), width: 20, height: 20),
-                            Flexible(child: Text('Code Source', style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontSize: 10, color: darkLightColor(context)))),
+                            Image.asset(CustomIcons.STORES_APPLE, width: 20, height: 20),
+                            Flexible(child: Text('App Store', style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontSize: 10, color: darkLightColor(context)))),
                           ],
                         )
                     )),
                   ],
                 ),
                 CustomElevatedButton(
-                    onPressed: onDetails,
-                    height: CustomSizes.SPACE_DEFAULT * 1.4,
-                    bgColor: darkDarkLightLightColor(context),
-                    elevation: 0,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      spacing: CustomSizes.SPACE_BETWEEN_ITEMS / 2,
-                      children: [
-                        Icon(Icons.more_horiz, size: 20, color: darkLightColor(context),),
-                        Flexible(child: Text('More Details', style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontSize: 10, color: darkLightColor(context)))),
-                      ],
-                    )
-                )
+                        onPressed: onVideo,
+                        height: CustomSizes.SPACE_DEFAULT * 1.4,
+                        bgColor: darkDarkLightLightColor(context),
+                        elevation: 0,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          spacing: CustomSizes.SPACE_BETWEEN_ITEMS / 2,
+                          children: [
+                            Image.asset(CustomIcons.YOUTUBE, width: 20, height: 20),
+                            Flexible(child: Text('App Demo', style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontSize: 10, color: darkLightColor(context)))),
+                          ],
+                        )
+                    ),
               ],
             ),
           ),
@@ -1033,7 +1061,6 @@ class HomeMobileScreen extends CustomState {
     child: Container(
       padding: const EdgeInsets.all(CustomSizes.SPACE_BETWEEN_ITEMS / 2),
       decoration: BoxDecoration(
-          color: darkLightColor(context),
           borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_ITEMS / 2),
           border: Border.all(width: 0.6, color: darkDarkLightLightColor(context))
       ),

@@ -4,16 +4,13 @@ import 'package:flutter_card_swiper/flutter_card_swiper.dart';
 import 'package:get/get.dart';
 import 'package:portfolio/common/screens/custom_loading_screen.dart';
 import 'package:portfolio/common/widgets/custom_elevated_button.dart';
-import 'package:portfolio/common/widgets/custom_snackbar.dart';
 import 'package:portfolio/common/widgets/custom_text_field.dart';
 import 'package:portfolio/home/home_controller.dart';
 import 'package:portfolio/utils/constants/custom_colors.dart';
-import 'package:portfolio/utils/constants/custom_constants.dart';
 import 'package:portfolio/utils/constants/custom_icons.dart';
 import 'package:portfolio/utils/constants/custom_sizes.dart';
 import 'package:portfolio/utils/state/custom_state.dart';
 import 'package:parallax_rain/parallax_rain.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:widget_and_text_animator/widget_and_text_animator.dart';
 import 'package:timeline_tile/timeline_tile.dart';
 
@@ -127,8 +124,8 @@ class HomeTabletScreen extends CustomState {
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_SECTIONS * 3),
                           child: SizedBox(
-                              width: 130,
-                              height: 130,
+                              width: 140,
+                              height: 140,
                               child: Image.asset(CustomImages.MOHAMED_EZRIOUIL,
                                 width: getWidth(context),
                                 height: getHeight(context),
@@ -261,7 +258,7 @@ class HomeTabletScreen extends CustomState {
                           left: 0,
                           top: 0,
                           bottom: 0,
-                          width: 500,
+                          width: 350,
                           child: Container(
                             decoration: BoxDecoration(
                               gradient: LinearGradient(
@@ -282,7 +279,7 @@ class HomeTabletScreen extends CustomState {
                           right: 0,
                           top: 0,
                           bottom: 0,
-                          width: 500,
+                          width: 350,
                           child: Container(
                             decoration: BoxDecoration(
                               gradient: LinearGradient(
@@ -342,31 +339,33 @@ class HomeTabletScreen extends CustomState {
                 SizedBox(
                   key: controller.projectsKey,
                   width: getWidth(context) * 0.8,
-                  height: 550,
+                  height: 560,
                   child: controller.projects.isEmpty
                       ? const CustomLoadingScreen()
                       : CardSwiper(
-                    controller: controller.cardSwiperController,
-                    cardsCount: controller.projects.length <= 3 ? controller.projects.length : 3,
-                    numberOfCardsDisplayed: controller.projects.length <= 3 ? controller.projects.length : 3,
-                    cardBuilder: (context, index, percentThresholdX, percentThresholdY) =>
-                        _customProject(
-                          context: context,
-                          logoUri: controller.projects[index].logo ?? "",
-                          title: controller.projects[index].title ?? "",
-                          description: controller.projects[index].description ?? "",
-                          thumbnailUri: controller.projects[index].thumbnail ?? "",
-                          onInstallApk: () async {
-                            try{ await launchUrl(Uri.parse(controller.projects[index].apkLink ?? CustomConstants.GITHUB)); }
-                            catch(_){ CustomSnackBar.error(); }
-                          },
-                          onDetails: () { Get.toNamed('/details/${controller.projects[index].id}'); },
-                          onGithub: () async {
-                            try{ await launchUrl(Uri.parse(controller.projects[index].codeSourceLink ?? CustomConstants.GITHUB)); }
-                            catch(_){ CustomSnackBar.error(); }
+                          controller: controller.cardSwiperController,
+                          cardsCount: controller.projects.length <= 3
+                              ? controller.projects.length
+                              : 3,
+                          numberOfCardsDisplayed:
+                              controller.projects.length <= 3
+                                  ? controller.projects.length
+                                  : 3,
+                          cardBuilder: (context, index, percentThresholdX,
+                                  percentThresholdY) {
+                            final project = controller.projects[index];
+                            return _customProject(
+                              context: context,
+                              logoUri: project.logo ?? "",
+                              title: project.title ?? "",
+                              description: project.description ?? "",
+                              thumbnailUri: project.thumbnail ?? "",
+                              onGooglePlay: () => controller.launchProjectLink(project.googlePlayLink),
+                              onAppStore: () => controller.launchProjectLink(project.appStoreLink),
+                              onVideo: () => controller.launchProjectLink(project.videoLink),
+                            );
                           },
                         ),
-                  ),
                 ),
                 const SizedBox(height: CustomSizes.SPACE_DEFAULT * 3),
                   ],
@@ -390,7 +389,7 @@ class HomeTabletScreen extends CustomState {
                           left: 0,
                           top: 0,
                           bottom: 0,
-                          width: 500,
+                          width: 350,
                           child: Container(
                             decoration: BoxDecoration(
                               gradient: LinearGradient(
@@ -411,7 +410,7 @@ class HomeTabletScreen extends CustomState {
                           right: 0,
                           top: 0,
                           bottom: 0,
-                          width: 500,
+                          width: 350,
                           child: Container(
                             decoration: BoxDecoration(
                               gradient: LinearGradient(
@@ -489,7 +488,7 @@ class HomeTabletScreen extends CustomState {
                           left: 0,
                           top: 0,
                           bottom: 0,
-                          width: 500,
+                          width: 350,
                           child: Container(
                             decoration: BoxDecoration(
                               gradient: LinearGradient(
@@ -510,7 +509,7 @@ class HomeTabletScreen extends CustomState {
                           right: 0,
                           top: 0,
                           bottom: 0,
-                          width: 500,
+                          width: 350,
                           child: Container(
                             decoration: BoxDecoration(
                               gradient: LinearGradient(
@@ -782,7 +781,7 @@ class HomeTabletScreen extends CustomState {
                           left: 0,
                           top: 0,
                           bottom: 0,
-                          width: 500,
+                          width: 350,
                           child: Container(
                             decoration: BoxDecoration(
                               gradient: LinearGradient(
@@ -803,7 +802,7 @@ class HomeTabletScreen extends CustomState {
                           right: 0,
                           top: 0,
                           bottom: 0,
-                          width: 500,
+                          width: 350,
                           child: Container(
                             decoration: BoxDecoration(
                               gradient: LinearGradient(
@@ -950,17 +949,45 @@ class HomeTabletScreen extends CustomState {
         required String title,
         required String description,
         required String thumbnailUri,
-        required GestureTapCallback onInstallApk,
-        required GestureTapCallback onDetails,
-        required GestureTapCallback onGithub
+        required GestureTapCallback onGooglePlay,
+        required GestureTapCallback onAppStore,
+        required GestureTapCallback onVideo
       }) => Container(
       width: getWidth(context) * 0.8,
       padding: const EdgeInsets.symmetric(vertical: CustomSizes.SPACE_BETWEEN_ITEMS),
       decoration: BoxDecoration(
-      borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_ITEMS / 2),
-      color: grayColor(context),
-      border: Border.all(width: 0.6, color: darkDarkLightLightColor(context))
-  ),
+            border: Border.all(
+                width: 0.6,
+                color: context.isDarkMode
+                    ? CustomColors.GRAY_DARK
+                    : CustomColors.GRAY_LIGHT),
+            borderRadius:
+                BorderRadius.circular(CustomSizes.SPACE_BETWEEN_ITEMS / 2),
+            gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  (context.isDarkMode
+                      ? CustomColors.GRAY_LIGHT
+                      : CustomColors.GRAY_DARK),
+                  (context.isDarkMode
+                      ? CustomColors.WHITE
+                      : CustomColors.BLACK),
+                  (context.isDarkMode
+                      ? CustomColors.GRAY_LIGHT
+                      : CustomColors.GRAY_DARK),
+                ]),
+            boxShadow: [
+              BoxShadow(
+                color: context.isDarkMode
+                    ? CustomColors.GRAY_LIGHT
+                    : CustomColors.GRAY_DARK,
+                blurRadius: 1,
+                blurStyle: BlurStyle.inner,
+                offset: const Offset(2, 2),
+              ),
+            ],
+          ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -999,48 +1026,75 @@ class HomeTabletScreen extends CustomState {
             child: Row(
               spacing: CustomSizes.SPACE_DEFAULT,
               children: [
-                Expanded(child: CustomElevatedButton(
-                    onPressed: onInstallApk,
-                    height: CustomSizes.SPACE_DEFAULT * 1.3,
-                    bgColor: darkDarkLightLightColor(context),
-                    elevation: 0,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      spacing: CustomSizes.SPACE_BETWEEN_ITEMS / 2,
-                      children: [
-                        Icon(Icons.arrow_circle_down, color: darkLightColor(context), size: 16),
-                        Text('Install APK', style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: darkLightColor(context), fontSize: 10)),
-                      ],
-                    )
-                )),
-                Expanded(child: CustomElevatedButton(
-                    onPressed: onDetails,
-                    height: CustomSizes.SPACE_DEFAULT * 1.3,
-                    bgColor: darkDarkLightLightColor(context),
-                    elevation: 0,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      spacing: CustomSizes.SPACE_BETWEEN_ITEMS / 2,
-                      children: [
-                        Icon(Icons.more_horiz, color: darkLightColor(context), size: 16),
-                        Text('More Details', style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: darkLightColor(context), fontSize: 10)),
-                      ],
-                    )
-                )),
-                Expanded(child: CustomElevatedButton(
-                    onPressed: onGithub,
-                    height: CustomSizes.SPACE_DEFAULT * 1.3,
-                    bgColor: darkDarkLightLightColor(context),
-                    elevation: 0,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      spacing: CustomSizes.SPACE_BETWEEN_ITEMS / 2,
-                      children: [
-                        Image.asset(CustomIcons.CONTACT_GITHUB, color: darkLightColor(context), width: 16, height: 16),
-                        Text('Code Source', style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: darkLightColor(context), fontSize: 10)),
-                      ],
-                    )
-                )),
+                Expanded(
+                  child: CustomElevatedButton(
+                      onPressed: onGooglePlay,
+                      height: CustomSizes.SPACE_DEFAULT * 1.3,
+                      bgColor: darkDarkLightLightColor(context),
+                      elevation: 0,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        spacing:
+                            CustomSizes.SPACE_BETWEEN_ITEMS / 2,
+                        children: [
+                          Image.asset(CustomIcons.STORES_GOOGLE_PLAY,
+                              width: 16, height: 16),
+                          Text('Google Play',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyLarge
+                                  ?.copyWith(
+                                      color: darkLightColor(context),
+                                      fontSize: 10)),
+                        ],
+                      )),
+                ),
+                Expanded(
+                  child: CustomElevatedButton(
+                      onPressed: onAppStore,
+                      height: CustomSizes.SPACE_DEFAULT * 1.3,
+                      bgColor: darkDarkLightLightColor(context),
+                      elevation: 0,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        spacing:
+                            CustomSizes.SPACE_BETWEEN_ITEMS / 2,
+                        children: [
+                          Image.asset(CustomIcons.STORES_APPLE,
+                              width: 16, height: 16),
+                          Text('App Store',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyLarge
+                                  ?.copyWith(
+                                      color: darkLightColor(context),
+                                      fontSize: 10)),
+                        ],
+                      )),
+                ),
+                Expanded(
+                  child: CustomElevatedButton(
+                      onPressed: onVideo,
+                      height: CustomSizes.SPACE_DEFAULT * 1.3,
+                      bgColor: darkDarkLightLightColor(context),
+                      elevation: 0,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        spacing:
+                            CustomSizes.SPACE_BETWEEN_ITEMS / 2,
+                        children: [
+                          Image.asset(CustomIcons.YOUTUBE,
+                              width: 16, height: 16),
+                          Text('App Demo',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyLarge
+                                  ?.copyWith(
+                                      color: darkLightColor(context),
+                                      fontSize: 10)),
+                        ],
+                      )),
+                ),
               ],
             ),
           ),

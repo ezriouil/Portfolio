@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ExperienceEntity {
-  
   final String? id;
   final String? fromDate;
   final String? toDate;
@@ -50,4 +49,3 @@ class ExperienceEntity {
     };
   }
 }
-
