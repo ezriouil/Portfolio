@@ -288,7 +288,7 @@ class HomeMobileScreen extends CustomState {
                 const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS),
                 SizedBox(
                   width: getWidth(context),
-                  height: 520,
+                  height: 500,
                   child: controller.projects.isEmpty
                       ? const CustomLoadingScreen()
                       : CardSwiper(
@@ -308,9 +308,11 @@ class HomeMobileScreen extends CustomState {
                               title: project.title ?? "",
                               description: project.description ?? "",
                               thumbnailUri: project.thumbnail ?? "",
-                              
+                              type: project.type ?? "mobile",
+                              websiteUri: project.websiteUri,
                               onGooglePlay: () => controller.launchProjectLink(project.googlePlayLink),
                               onAppStore: () => controller.launchProjectLink(project.appStoreLink),
+                              onWebsite: () => controller.launchProjectLink(project.websiteUri),
                               onVideo: () => controller.launchProjectLink(project.videoLink),
                             );
                           },
@@ -909,8 +911,11 @@ class HomeMobileScreen extends CustomState {
         required String title,
         required String description,
         required String thumbnailUri,
+        required String type,
+        String? websiteUri,
         required GestureTapCallback onGooglePlay,
         required GestureTapCallback onAppStore,
+        GestureTapCallback? onWebsite,
         required GestureTapCallback onVideo
       }) => Container(
       width: getWidth(context), padding: const EdgeInsets.symmetric(vertical: CustomSizes.SPACE_BETWEEN_ITEMS), decoration: BoxDecoration(
@@ -984,39 +989,58 @@ class HomeMobileScreen extends CustomState {
             child: Column(
               spacing: CustomSizes.SPACE_BETWEEN_ITEMS,
               children: [
-                Row(
-                  spacing: CustomSizes.SPACE_BETWEEN_ITEMS,
-                  children: [
-                    Expanded(child: CustomElevatedButton(
-                        onPressed: onGooglePlay,
-                        height: CustomSizes.SPACE_DEFAULT * 1.4,
-                        bgColor: darkDarkLightLightColor(context),
-                        elevation: 0,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          spacing: CustomSizes.SPACE_BETWEEN_ITEMS / 2,
-                          children: [
-                            Image.asset(CustomIcons.STORES_GOOGLE_PLAY, width: 20, height: 20),
-                            Flexible(child: Text('Google Play', style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontSize: 10, color: darkLightColor(context)))),
-                          ],
-                        )
-                    )),
-                    Expanded(child: CustomElevatedButton(
-                        onPressed: onAppStore,
-                        height: CustomSizes.SPACE_DEFAULT * 1.4,
-                        bgColor: darkDarkLightLightColor(context),
-                        elevation: 0,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          spacing: CustomSizes.SPACE_BETWEEN_ITEMS / 2,
-                          children: [
-                            Image.asset(CustomIcons.STORES_APPLE, width: 20, height: 20),
-                            Flexible(child: Text('App Store', style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontSize: 10, color: darkLightColor(context)))),
-                          ],
-                        )
-                    )),
-                  ],
-                ),
+                // Show mobile buttons (Google Play & App Store) if type is mobile
+                if (type.toLowerCase() == 'mobile')
+                  Row(
+                    spacing: CustomSizes.SPACE_BETWEEN_ITEMS,
+                    children: [
+                      Expanded(child: CustomElevatedButton(
+                          onPressed: onGooglePlay,
+                          height: CustomSizes.SPACE_DEFAULT * 1.4,
+                          bgColor: darkDarkLightLightColor(context),
+                          elevation: 0,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            spacing: CustomSizes.SPACE_BETWEEN_ITEMS / 2,
+                            children: [
+                              Image.asset(CustomIcons.STORES_GOOGLE_PLAY, width: 20, height: 20),
+                              Flexible(child: Text('Google Play', style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontSize: 10, color: darkLightColor(context)))),
+                            ],
+                          )
+                      )),
+                      Expanded(child: CustomElevatedButton(
+                          onPressed: onAppStore,
+                          height: CustomSizes.SPACE_DEFAULT * 1.4,
+                          bgColor: darkDarkLightLightColor(context),
+                          elevation: 0,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            spacing: CustomSizes.SPACE_BETWEEN_ITEMS / 2,
+                            children: [
+                              Image.asset(CustomIcons.STORES_APPLE, width: 20, height: 20),
+                              Flexible(child: Text('App Store', style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontSize: 10, color: darkLightColor(context)))),
+                            ],
+                          )
+                      )),
+                    ],
+                  )
+                // Show website button if type is web
+                else if (type.toLowerCase() == 'web' && onWebsite != null)
+                  CustomElevatedButton(
+                      onPressed: onWebsite,
+                      height: CustomSizes.SPACE_DEFAULT * 1.4,
+                      bgColor: darkDarkLightLightColor(context),
+                      elevation: 0,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        spacing: CustomSizes.SPACE_BETWEEN_ITEMS / 2,
+                        children: [
+                          Image.asset(CustomIcons.WEBSITE, width: 20, height: 20),
+                          Flexible(child: Text('Visit Website', style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontSize: 10, color: darkLightColor(context)))),
+                        ],
+                      )
+                  ),
+                // Video/Demo button (shown for both types)
                 CustomElevatedButton(
                         onPressed: onVideo,
                         height: CustomSizes.SPACE_DEFAULT * 1.4,
@@ -1027,7 +1051,7 @@ class HomeMobileScreen extends CustomState {
                           spacing: CustomSizes.SPACE_BETWEEN_ITEMS / 2,
                           children: [
                             Image.asset(CustomIcons.YOUTUBE, width: 20, height: 20),
-                            Flexible(child: Text('App Demo', style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontSize: 10, color: darkLightColor(context)))),
+                            Flexible(child: Text(type.toLowerCase() == 'web' ? 'Video Demo' : 'App Demo', style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontSize: 10, color: darkLightColor(context)))),
                           ],
                         )
                     ),

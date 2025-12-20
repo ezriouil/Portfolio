@@ -12,6 +12,8 @@ class ProjectEntity {
   final String? appStoreLink;
   final String? videoLink;
   final String? codeSourceLink;
+  final String? type; // "mobile" or "web"
+  final String? websiteUri; // For web projects
   final DateTime? createdAt;
 
   ProjectEntity({
@@ -26,6 +28,8 @@ class ProjectEntity {
     this.videoLink,
     this.websiteLink,
     this.codeSourceLink,
+    this.type,
+    this.websiteUri,
     this.createdAt,
   });
 
@@ -42,6 +46,8 @@ class ProjectEntity {
       videoLink: json['videoLink'],
       websiteLink: json['websiteLink'],
       codeSourceLink: json['codeSourceLink'],
+      type: json['type'],
+      websiteUri: json['websiteUri'],
       createdAt: json['createdAt'] != null
           ? (json['createdAt'] is Timestamp
               ? (json['createdAt'] as Timestamp).toDate()
@@ -65,7 +71,15 @@ class ProjectEntity {
       'appStoreLink': appStoreLink,
       'videoLink': videoLink,
       'codeSourceLink': codeSourceLink,
+      'type': type,
+      'websiteUri': websiteUri,
       'createdAt': createdAt != null ? Timestamp.fromDate(createdAt!) : null,
     };
   }
+  
+  /// Check if project is mobile type
+  bool get isMobile => type?.toLowerCase() == 'mobile';
+  
+  /// Check if project is web type
+  bool get isWeb => type?.toLowerCase() == 'web';
 }

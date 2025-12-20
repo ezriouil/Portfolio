@@ -43,7 +43,6 @@ class CustomIcons{
   static const String CONTACT_GITHUB = "assets/icons/contact/github.png";
 
   static const String YOUTUBE = "assets/icons/contact/youtube.png";
-  static const String APK = "assets/icons/contact/apk.png";
   static const String WEBSITE = "assets/icons/contact/website.png";
 
 }

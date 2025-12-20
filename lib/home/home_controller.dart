@@ -9,9 +9,9 @@ import 'package:http/http.dart' as http;
 import 'package:portfolio/common/models/project_entity.dart';
 import 'package:portfolio/common/models/experience_entity.dart';
 import 'package:portfolio/utils/constants/custom_icons.dart';
+import 'package:portfolio/utils/services/firebase_analytics_service.dart';
+import 'package:portfolio/utils/services/firebase_remote_config_service.dart';
 import 'package:url_launcher/url_launcher.dart';
-
-import '../utils/constants/custom_constants.dart';
 
 class HomeController extends GetxController {
   // - - - - - - - - - - - - - - - - - - CREATE STATES - - - - - - - - - - - - - - - - - -  //
@@ -100,6 +100,20 @@ class HomeController extends GetxController {
     _autoScrolling();
     _getProjects();
     _getExperiences();
+    _initializeFirebaseServices();
+  }
+
+  // - - - - - - - - - - - - - - - - - - INITIALIZE FIREBASE SERVICES - - - - - - - - - - - - - - - - - -  //
+  Future<void> _initializeFirebaseServices() async {
+    try {
+      // Initialize Remote Config
+      await FirebaseRemoteConfigService().initialize();
+      
+      // Log screen view
+      await FirebaseAnalyticsService().logScreenView('home');
+    } catch (e) {
+      print('Firebase services initialization error: $e');
+    }
   }
 
   // - - - - - - - - - - - - - - - - - - GET PROJECTS - - - - - - - - - - - - - - - - - -  //
@@ -154,17 +168,42 @@ class HomeController extends GetxController {
     }
   }
 
-  void onHome() => _scrollToKey(homeKey);
-  void onSkills() => _scrollToKey(skillsKey);
-  void onProjects() => _scrollToKey(projectsKey);
-  void onExperiences() => _scrollToKey(experiencesKey);
-  void onContact() => _scrollToKey(contactKey);
+  void onHome() {
+    _scrollToKey(homeKey);
+    FirebaseAnalyticsService().logNavigation('home');
+  }
 
-  void onDownloadResume() {
+  void onSkills() {
+    _scrollToKey(skillsKey);
+    FirebaseAnalyticsService().logNavigation('skills');
+  }
+
+  void onProjects() {
+    _scrollToKey(projectsKey);
+    FirebaseAnalyticsService().logNavigation('projects');
+  }
+
+  void onExperiences() {
+    _scrollToKey(experiencesKey);
+    FirebaseAnalyticsService().logNavigation('experiences');
+  }
+
+  void onContact() {
+    _scrollToKey(contactKey);
+    FirebaseAnalyticsService().logNavigation('contact');
+  }
+
+  void onDownloadResume() async {
     try {
-      const pdfUrl = "https://drive.google.com/file/d/1fyUBU8oJ6wWHaXo4Cd2qW79klP0I5HYi/view?usp=sharing";
+      // Get CV URL from Remote Config
+      final pdfUrl = FirebaseRemoteConfigService().getCVUrl();
       html.window.open(pdfUrl, "_blank");
-    } catch (_) {}
+      
+      // Log CV download event
+      await FirebaseAnalyticsService().logCVDownload();
+    } catch (e) {
+      print('Error opening CV: $e');
+    }
   }
 
   // - - - - - - - - - - - - - - - - - - CONTACT BUTTON SEND - - - - - - - - - - - - - - - - - -  //
@@ -173,7 +212,8 @@ class HomeController extends GetxController {
       if (!formState.currentState!.validate()) return;
       isSending.value = true;
 
-      const email = 'Ezriouil.dev@gmail.com';
+      // Get email from Remote Config
+      final email = FirebaseRemoteConfigService().getEmail();
 
       final fullName = fullNameController.text.trim();
       final subject = objectController.text.trim();
@@ -193,7 +233,7 @@ class HomeController extends GetxController {
             "from_email": email,
             "subject": subject,
             "message": message,
-            "to_email": "Ezriouil.dev@gmail.com"
+            "to_email": email
           }
         }),
       );
@@ -201,6 +241,9 @@ class HomeController extends GetxController {
       fullNameController.clear();
       objectController.clear();
       messageController.clear();
+
+      // Log contact form submission
+      await FirebaseAnalyticsService().logContactFormSubmission();
 
       Future.delayed(const Duration(milliseconds: 300), () {
         formState.currentState?.reset();
@@ -271,43 +314,57 @@ class HomeController extends GetxController {
   }
 
   // - - - - - - - - - - - - - - - - - - CHANGE COLOR THEME - - - - - - - - - - - - - - - - - -  //
-  void onChangeColorTheming() {
+  void onChangeColorTheming() async {
     try {
       Get.changeThemeMode(isDarkTheme.value ? ThemeMode.light : ThemeMode.dark);
       isDarkTheme.value = !isDarkTheme.value;
+      
+      // Log theme change
+      await FirebaseAnalyticsService().logThemeChange(isDarkTheme.value);
     } catch (_) {}
   }
 
   // - - - - - - - - - - - - - - - - - - GITHUB - - - - - - - - - - - - - - - - - -  //
   void onGithub() async {
     try {
-      await launchUrl(Uri.parse(CustomConstants.GITHUB));
+      final githubUrl = FirebaseRemoteConfigService().getGitHubUrl();
+      await launchUrl(Uri.parse(githubUrl));
+      await FirebaseAnalyticsService().logSocialMediaClick('github');
     } catch (_) {}
   }
 
   // - - - - - - - - - - - - - - - - - - LINKEDIN - - - - - - - - - - - - - - - - - -  //
   void onLinkedIn() async {
     try {
-      await launchUrl(Uri.parse(CustomConstants.LIKED_IN));
+      final linkedInUrl = FirebaseRemoteConfigService().getLinkedInUrl();
+      await launchUrl(Uri.parse(linkedInUrl));
+      await FirebaseAnalyticsService().logSocialMediaClick('linkedin');
     } catch (_) {}
   }
 
   // - - - - - - - - - - - - - - - - - - GMAIL - - - - - - - - - - - - - - - - - -  //
   void onGmail() async {
     try {
-      final Uri gmailUri =
-          Uri(scheme: 'mailto', path: 'Ezriouil.dev@gmail.com');
+      final email = FirebaseRemoteConfigService().getEmail();
+      final Uri gmailUri = Uri(scheme: 'mailto', path: email);
       if (await canLaunchUrl(gmailUri)) {
         await launchUrl(gmailUri);
+        await FirebaseAnalyticsService().logSocialMediaClick('gmail');
       }
     } catch (_) {}
   }
 
   // - - - - - - - - - - - - - - - - - - HELPER: LAUNCH URL WITH GITHUB FALLBACK - - - - - - - - - - - -  //
-  Future<void> launchProjectLink(String? link) async {
+  Future<void> launchProjectLink(String? link, {String? projectTitle, String? linkType}) async {
     try {
-      final url = (link != null && link.isNotEmpty) ? link : CustomConstants.GITHUB;
+      final fallbackUrl = FirebaseRemoteConfigService().getGitHubUrl();
+      final url = (link != null && link.isNotEmpty) ? link : fallbackUrl;
       await launchUrl(Uri.parse(url));
+      
+      // Log project link click if project info is provided
+      if (projectTitle != null && linkType != null) {
+        await FirebaseAnalyticsService().logProjectLinkClick(projectTitle, linkType);
+      }
     } catch (_) {
       // Silently handle errors
     }

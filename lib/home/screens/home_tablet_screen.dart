@@ -336,37 +336,43 @@ class HomeTabletScreen extends CustomState {
                   ],
                 ),
                 const SizedBox(height: CustomSizes.SPACE_DEFAULT),
-                SizedBox(
-                  key: controller.projectsKey,
-                  width: getWidth(context) * 0.8,
-                  height: 560,
-                  child: controller.projects.isEmpty
-                      ? const CustomLoadingScreen()
-                      : CardSwiper(
-                          controller: controller.cardSwiperController,
-                          cardsCount: controller.projects.length <= 3
-                              ? controller.projects.length
-                              : 3,
-                          numberOfCardsDisplayed:
-                              controller.projects.length <= 3
-                                  ? controller.projects.length
-                                  : 3,
-                          cardBuilder: (context, index, percentThresholdX,
-                                  percentThresholdY) {
-                            final project = controller.projects[index];
-                            return _customProject(
+                Obx(() {
+                  
+                  return SizedBox(
+                    key: controller.projectsKey,
+                    width: getWidth(context) * 0.8,
+                    height: 560,
+                    child: controller.projects.isEmpty
+                        ? const CustomLoadingScreen()
+                        : CardSwiper(
+                            controller: controller.cardSwiperController,
+                            cardsCount: controller.projects.length <= 3
+                                ? controller.projects.length
+                                : 3,
+                            numberOfCardsDisplayed:
+                                controller.projects.length <= 3
+                                    ? controller.projects.length
+                                    : 3,
+                            cardBuilder: (context, index, percentThresholdX,
+                                    percentThresholdY) {
+                              final project = controller.projects[index];
+                              return _customProject(
                               context: context,
                               logoUri: project.logo ?? "",
                               title: project.title ?? "",
                               description: project.description ?? "",
                               thumbnailUri: project.thumbnail ?? "",
+                              type: project.type ?? "mobile",
+                              websiteUri: project.websiteUri,
                               onGooglePlay: () => controller.launchProjectLink(project.googlePlayLink),
                               onAppStore: () => controller.launchProjectLink(project.appStoreLink),
+                              onWebsite: () => controller.launchProjectLink(project.websiteUri),
                               onVideo: () => controller.launchProjectLink(project.videoLink),
                             );
                           },
                         ),
-                ),
+                  );
+                }),
                 const SizedBox(height: CustomSizes.SPACE_DEFAULT * 3),
                   ],
                 ),
@@ -949,11 +955,14 @@ class HomeTabletScreen extends CustomState {
         required String title,
         required String description,
         required String thumbnailUri,
+        required String type,
+        String? websiteUri,
         required GestureTapCallback onGooglePlay,
         required GestureTapCallback onAppStore,
+        GestureTapCallback? onWebsite,
         required GestureTapCallback onVideo
       }) => Container(
-      width: getWidth(context) * 0.8,
+      width: getWidth(context),
       padding: const EdgeInsets.symmetric(vertical: CustomSizes.SPACE_BETWEEN_ITEMS),
       decoration: BoxDecoration(
             border: Border.all(
@@ -1015,7 +1024,7 @@ class HomeTabletScreen extends CustomState {
           const SizedBox(height: CustomSizes.SPACE_DEFAULT),
 
           SizedBox(
-              width: getWidth(context) * 0.8,
+              width: getWidth(context),
               height: 300,
               child: DecoratedBox(decoration: BoxDecoration(image: DecorationImage(image: NetworkImage(thumbnailUri), fit: BoxFit.cover)))),
 
@@ -1023,80 +1032,136 @@ class HomeTabletScreen extends CustomState {
 
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: CustomSizes.SPACE_DEFAULT),
-            child: Row(
-              spacing: CustomSizes.SPACE_DEFAULT,
-              children: [
-                Expanded(
-                  child: CustomElevatedButton(
-                      onPressed: onGooglePlay,
-                      height: CustomSizes.SPACE_DEFAULT * 1.3,
-                      bgColor: darkDarkLightLightColor(context),
-                      elevation: 0,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        spacing:
-                            CustomSizes.SPACE_BETWEEN_ITEMS / 2,
-                        children: [
-                          Image.asset(CustomIcons.STORES_GOOGLE_PLAY,
-                              width: 16, height: 16),
-                          Text('Google Play',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyLarge
-                                  ?.copyWith(
-                                      color: darkLightColor(context),
-                                      fontSize: 10)),
-                        ],
-                      )),
-                ),
-                Expanded(
-                  child: CustomElevatedButton(
-                      onPressed: onAppStore,
-                      height: CustomSizes.SPACE_DEFAULT * 1.3,
-                      bgColor: darkDarkLightLightColor(context),
-                      elevation: 0,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        spacing:
-                            CustomSizes.SPACE_BETWEEN_ITEMS / 2,
-                        children: [
-                          Image.asset(CustomIcons.STORES_APPLE,
-                              width: 16, height: 16),
-                          Text('App Store',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyLarge
-                                  ?.copyWith(
-                                      color: darkLightColor(context),
-                                      fontSize: 10)),
-                        ],
-                      )),
-                ),
-                Expanded(
-                  child: CustomElevatedButton(
-                      onPressed: onVideo,
-                      height: CustomSizes.SPACE_DEFAULT * 1.3,
-                      bgColor: darkDarkLightLightColor(context),
-                      elevation: 0,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        spacing:
-                            CustomSizes.SPACE_BETWEEN_ITEMS / 2,
-                        children: [
-                          Image.asset(CustomIcons.YOUTUBE,
-                              width: 16, height: 16),
-                          Text('App Demo',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyLarge
-                                  ?.copyWith(
-                                      color: darkLightColor(context),
-                                      fontSize: 10)),
-                        ],
-                      )),
-                ),
-              ],
-            ),
+            child: type.toLowerCase() == 'web'
+                ? Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    spacing: CustomSizes.SPACE_DEFAULT,
+                    children: [
+                      // Website button (Expanded)
+                      Expanded(
+                        child: CustomElevatedButton(
+                            onPressed: onWebsite ?? () {},
+                            height: CustomSizes.SPACE_DEFAULT * 1.3,
+                            bgColor: darkDarkLightLightColor(context),
+                            elevation: 0,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              spacing:
+                                  CustomSizes.SPACE_BETWEEN_ITEMS / 2,
+                              children: [
+                                Image.asset(CustomIcons.WEBSITE,
+                                    width: 16, height: 16),
+                                Text('Visit Website',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyLarge
+                                        ?.copyWith(
+                                            color: darkLightColor(context),
+                                            fontSize: 10)),
+                              ],
+                            )),
+                      ),
+                      // Demo button (Expanded)
+                      Expanded(
+                        child: CustomElevatedButton(
+                            onPressed: onVideo,
+                            height: CustomSizes.SPACE_DEFAULT * 1.3,
+                            bgColor: darkDarkLightLightColor(context),
+                            elevation: 0,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              spacing:
+                                  CustomSizes.SPACE_BETWEEN_ITEMS / 2,
+                              children: [
+                                Image.asset(CustomIcons.YOUTUBE,
+                                    width: 16, height: 16),
+                                Text('Demo',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyLarge
+                                        ?.copyWith(
+                                            color: darkLightColor(context),
+                                            fontSize: 10)),
+                              ],
+                            )),
+                      ),
+                    ],
+                  )
+                : Row(
+                    spacing: CustomSizes.SPACE_DEFAULT,
+                    children: [
+                      // Mobile buttons (Google Play & App Store)
+                      Expanded(
+                        child: CustomElevatedButton(
+                            onPressed: onGooglePlay,
+                            height: CustomSizes.SPACE_DEFAULT * 1.3,
+                            bgColor: darkDarkLightLightColor(context),
+                            elevation: 0,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              spacing:
+                                  CustomSizes.SPACE_BETWEEN_ITEMS / 2,
+                              children: [
+                                Image.asset(CustomIcons.STORES_GOOGLE_PLAY,
+                                    width: 16, height: 16),
+                                Text('Google Play',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyLarge
+                                        ?.copyWith(
+                                            color: darkLightColor(context),
+                                            fontSize: 10)),
+                              ],
+                            )),
+                      ),
+                      Expanded(
+                        child: CustomElevatedButton(
+                            onPressed: onAppStore,
+                            height: CustomSizes.SPACE_DEFAULT * 1.3,
+                            bgColor: darkDarkLightLightColor(context),
+                            elevation: 0,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              spacing:
+                                  CustomSizes.SPACE_BETWEEN_ITEMS / 2,
+                              children: [
+                                Image.asset(CustomIcons.STORES_APPLE,
+                                    width: 16, height: 16),
+                                Text('App Store',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyLarge
+                                        ?.copyWith(
+                                            color: darkLightColor(context),
+                                            fontSize: 10)),
+                              ],
+                            )),
+                      ),
+                      Expanded(
+                        child: CustomElevatedButton(
+                            onPressed: onVideo,
+                            height: CustomSizes.SPACE_DEFAULT * 1.3,
+                            bgColor: darkDarkLightLightColor(context),
+                            elevation: 0,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              spacing:
+                                  CustomSizes.SPACE_BETWEEN_ITEMS / 2,
+                              children: [
+                                Image.asset(CustomIcons.YOUTUBE,
+                                    width: 16, height: 16),
+                                Text('App Demo',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyLarge
+                                        ?.copyWith(
+                                            color: darkLightColor(context),
+                                            fontSize: 10)),
+                              ],
+                            )),
+                      ),
+                    ],
+                  ),
           ),
 
         ],

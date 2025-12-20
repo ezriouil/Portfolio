@@ -479,39 +479,67 @@ class HomeWebScreen extends CustomState {
                           ],
                         ),
                         const SizedBox(height: CustomSizes.SPACE_DEFAULT),
-                        SizedBox(
-                          width: 800,
-                          height: 560,
-                          child: controller.projects.isEmpty
-                              ? const CustomLoadingScreen()
-                              : CardSwiper(
-                                  cardsCount: controller.projects.length <= 3
-                                      ? controller.projects.length
-                                      : 3,
-                                  numberOfCardsDisplayed:
-                                      controller.projects.length <= 3
-                                          ? controller.projects.length
-                                          : 3,
-                                  cardBuilder: (context,
-                                          index,
-                                          percentThresholdX,
-                                          percentThresholdY) {
-                                    final project =
-                                        controller.projects[index];
-                                    return _customProject(
+                        Obx(() {
+                          // Determine width based on first project type (or default to mobile)
+                          final firstProjectType = controller.projects.isNotEmpty
+                              ? (controller.projects.first.type ?? "mobile").toLowerCase()
+                              : "mobile";
+                          final containerWidth = firstProjectType == 'web'
+                              ? getWidth(context) * 0.6
+                              : getWidth(context) * 0.8;
+                          
+                          return SizedBox(
+                            width: containerWidth,
+                            height: 560,
+                            child: controller.projects.isEmpty
+                                ? const CustomLoadingScreen()
+                                : CardSwiper(
+                                    cardsCount: controller.projects.length <= 3
+                                        ? controller.projects.length
+                                        : 3,
+                                    numberOfCardsDisplayed:
+                                        controller.projects.length <= 3
+                                            ? controller.projects.length
+                                            : 3,
+                                    cardBuilder: (context,
+                                            index,
+                                            percentThresholdX,
+                                            percentThresholdY) {
+                                      final project =
+                                          controller.projects[index];
+                                      return _customProject(
                                       context: context,
                                       logoUri: project.logo ?? "",
                                       title: project.title ?? "",
                                       description: project.description ?? "",
                                       thumbnailUri: project.thumbnail ?? "",
-                                      
-                                      onGooglePlay: () => controller.launchProjectLink(project.googlePlayLink),
-                                      onAppStore: () => controller.launchProjectLink(project.appStoreLink),
-                                      onVideo: () => controller.launchProjectLink(project.videoLink),
+                                      type: project.type ?? "mobile",
+                                      websiteUri: project.websiteUri,
+                                      onGooglePlay: () => controller.launchProjectLink(
+                                        project.googlePlayLink,
+                                        projectTitle: project.title ?? "",
+                                        linkType: 'google_play',
+                                      ),
+                                      onAppStore: () => controller.launchProjectLink(
+                                        project.appStoreLink,
+                                        projectTitle: project.title ?? "",
+                                        linkType: 'app_store',
+                                      ),
+                                      onWebsite: () => controller.launchProjectLink(
+                                        project.websiteUri,
+                                        projectTitle: project.title ?? "",
+                                        linkType: 'website',
+                                      ),
+                                      onVideo: () => controller.launchProjectLink(
+                                        project.videoLink,
+                                        projectTitle: project.title ?? "",
+                                        linkType: 'video',
+                                      ),
                                     );
                                   },
                                 ),
-                        ),
+                          );
+                        }),
                         const SizedBox(
                             height: CustomSizes.SPACE_BETWEEN_SECTIONS * 3),
                       ],
@@ -1518,11 +1546,16 @@ class HomeWebScreen extends CustomState {
           required String title,
           required String description,
           required String thumbnailUri,
+          required String type,
+          String? websiteUri,
           required GestureTapCallback onGooglePlay,
           required GestureTapCallback onAppStore,
+          GestureTapCallback? onWebsite,
           required GestureTapCallback onVideo}) =>
       Container(
-          width: getWidth(context),
+          width: type.toLowerCase() == 'web' 
+              ? getWidth(context) * 0.6 
+              : getWidth(context) * 0.8,
           padding: const EdgeInsets.symmetric(
               vertical: CustomSizes.SPACE_BETWEEN_ITEMS / 3),
           decoration: BoxDecoration(
@@ -1597,7 +1630,9 @@ class HomeWebScreen extends CustomState {
               ),
               const SizedBox(height: CustomSizes.SPACE_DEFAULT),
               SizedBox(
-                  width: 800,
+                  width: type.toLowerCase() == 'web' 
+                      ? getWidth(context) * 0.6 
+                      : 800,
                   height: 300,
                   child: DecoratedBox(
                       decoration: BoxDecoration(
@@ -1608,80 +1643,136 @@ class HomeWebScreen extends CustomState {
               Padding(
                 padding: const EdgeInsets.symmetric(
                     horizontal: CustomSizes.SPACE_DEFAULT),
-                child: Row(
-                  spacing: CustomSizes.SPACE_DEFAULT,
-                  children: [
-                    Expanded(
-                      child: CustomElevatedButton(
-                          onPressed: onGooglePlay,
-                          height: CustomSizes.SPACE_DEFAULT * 1.3,
-                          bgColor: darkDarkLightLightColor(context),
-                          elevation: 0,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            spacing:
-                                CustomSizes.SPACE_BETWEEN_ITEMS / 2,
-                            children: [
-                              Image.asset(CustomIcons.STORES_GOOGLE_PLAY,
-                                  width: 16, height: 16),
-                              Text('Google Play',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyLarge
-                                      ?.copyWith(
-                                          color: darkLightColor(context),
-                                          fontSize: 10)),
-                            ],
-                          )),
-                    ),
-                    Expanded(
-                      child: CustomElevatedButton(
-                          onPressed: onAppStore,
-                          height: CustomSizes.SPACE_DEFAULT * 1.3,
-                          bgColor: darkDarkLightLightColor(context),
-                          elevation: 0,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            spacing:
-                                CustomSizes.SPACE_BETWEEN_ITEMS / 2,
-                            children: [
-                              Image.asset(CustomIcons.STORES_APPLE,
-                                  width: 16, height: 16),
-                              Text('App Store',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyLarge
-                                      ?.copyWith(
-                                          color: darkLightColor(context),
-                                          fontSize: 10)),
-                            ],
-                          )),
-                    ),
-                    Expanded(
-                      child: CustomElevatedButton(
-                          onPressed: onVideo,
-                          height: CustomSizes.SPACE_DEFAULT * 1.3,
-                          bgColor: darkDarkLightLightColor(context),
-                          elevation: 0,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            spacing:
-                                CustomSizes.SPACE_BETWEEN_ITEMS / 2,
-                            children: [
-                              Image.asset(CustomIcons.YOUTUBE,
-                                  width: 16, height: 16),
-                              Text('App Demo',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyLarge
-                                      ?.copyWith(
-                                          color: darkLightColor(context),
-                                          fontSize: 10)),
-                            ],
-                          )),
-                    ),
-                  ],
-                ),
+                child: type.toLowerCase() == 'web'
+                    ? Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        spacing: CustomSizes.SPACE_DEFAULT,
+                        children: [
+                          // Website button (Expanded)
+                          Expanded(
+                            child: CustomElevatedButton(
+                                onPressed: onWebsite ?? () {},
+                                height: CustomSizes.SPACE_DEFAULT * 1.3,
+                                bgColor: darkDarkLightLightColor(context),
+                                elevation: 0,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  spacing:
+                                      CustomSizes.SPACE_BETWEEN_ITEMS / 2,
+                                  children: [
+                                    Image.asset(CustomIcons.WEBSITE,
+                                        width: 16, height: 16),
+                                    Text('Visit Website',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyLarge
+                                            ?.copyWith(
+                                                color: darkLightColor(context),
+                                                fontSize: 10)),
+                                  ],
+                                )),
+                          ),
+                          // Demo button (Expanded)
+                          Expanded(
+                            child: CustomElevatedButton(
+                                onPressed: onVideo,
+                                height: CustomSizes.SPACE_DEFAULT * 1.3,
+                                bgColor: darkDarkLightLightColor(context),
+                                elevation: 0,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  spacing:
+                                      CustomSizes.SPACE_BETWEEN_ITEMS / 2,
+                                  children: [
+                                    Image.asset(CustomIcons.YOUTUBE,
+                                        width: 16, height: 16),
+                                    Text('Demo',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyLarge
+                                            ?.copyWith(
+                                                color: darkLightColor(context),
+                                                fontSize: 10)),
+                                  ],
+                                )),
+                          ),
+                        ],
+                      )
+                    : Row(
+                        spacing: CustomSizes.SPACE_DEFAULT,
+                        children: [
+                          // Mobile buttons (Google Play & App Store)
+                          Expanded(
+                            child: CustomElevatedButton(
+                                onPressed: onGooglePlay,
+                                height: CustomSizes.SPACE_DEFAULT * 1.3,
+                                bgColor: darkDarkLightLightColor(context),
+                                elevation: 0,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  spacing:
+                                      CustomSizes.SPACE_BETWEEN_ITEMS / 2,
+                                  children: [
+                                    Image.asset(CustomIcons.STORES_GOOGLE_PLAY,
+                                        width: 16, height: 16),
+                                    Text('Google Play',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyLarge
+                                            ?.copyWith(
+                                                color: darkLightColor(context),
+                                                fontSize: 10)),
+                                  ],
+                                )),
+                          ),
+                          Expanded(
+                            child: CustomElevatedButton(
+                                onPressed: onAppStore,
+                                height: CustomSizes.SPACE_DEFAULT * 1.3,
+                                bgColor: darkDarkLightLightColor(context),
+                                elevation: 0,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  spacing:
+                                      CustomSizes.SPACE_BETWEEN_ITEMS / 2,
+                                  children: [
+                                    Image.asset(CustomIcons.STORES_APPLE,
+                                        width: 16, height: 16),
+                                    Text('App Store',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyLarge
+                                            ?.copyWith(
+                                                color: darkLightColor(context),
+                                                fontSize: 10)),
+                                  ],
+                                )),
+                          ),
+                          Expanded(
+                            child: CustomElevatedButton(
+                                onPressed: onVideo,
+                                height: CustomSizes.SPACE_DEFAULT * 1.3,
+                                bgColor: darkDarkLightLightColor(context),
+                                elevation: 0,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  spacing:
+                                      CustomSizes.SPACE_BETWEEN_ITEMS / 2,
+                                  children: [
+                                    Image.asset(CustomIcons.YOUTUBE,
+                                        width: 16, height: 16),
+                                    Text('App Demo',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyLarge
+                                            ?.copyWith(
+                                                color: darkLightColor(context),
+                                                fontSize: 10)),
+                                  ],
+                                )),
+                          ),
+                        ],
+                      ),
               ),
             ],
           ));

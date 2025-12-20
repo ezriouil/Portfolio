@@ -18,6 +18,8 @@ dependencies:
   firebase_core: ^2.24.2
   cloud_firestore: ^4.14.0
   cloud_firestore_web: any
+  firebase_analytics: ^10.8.0
+  firebase_remote_config: ^4.3.5
 
   # UTILS
   http: any
