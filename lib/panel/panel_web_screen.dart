@@ -118,8 +118,8 @@ class PanelWebScreen extends CustomState {
                         final formType = controller.selectedFormType.value;
                         return _buildSection(
                           context: context,
-                          title: 'Admin Panel',
-                          subtitle: 'Manage your portfolio content',
+                          title: 'Portfolio Admin',
+                          subtitle: 'Manage your projects and experiences',
                           formTypeDropdown: _buildFormTypeDropdown(context, controller),
                           child: formType == 'project'
                               ? _buildProjectForm(context, controller)

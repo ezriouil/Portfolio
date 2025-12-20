@@ -480,17 +480,11 @@ class HomeWebScreen extends CustomState {
                         ),
                         const SizedBox(height: CustomSizes.SPACE_DEFAULT),
                         Obx(() {
-                          // Determine width based on first project type (or default to mobile)
-                          final firstProjectType = controller.projects.isNotEmpty
-                              ? (controller.projects.first.type ?? "mobile").toLowerCase()
-                              : "mobile";
-                          final containerWidth = firstProjectType == 'web'
-                              ? getWidth(context) * 0.6
-                              : getWidth(context) * 0.8;
+                          
                           
                           return SizedBox(
-                            width: containerWidth,
-                            height: 560,
+                            width: 800,
+                            height: 570,
                             child: controller.projects.isEmpty
                                 ? const CustomLoadingScreen()
                                 : CardSwiper(
@@ -1553,9 +1547,7 @@ class HomeWebScreen extends CustomState {
           GestureTapCallback? onWebsite,
           required GestureTapCallback onVideo}) =>
       Container(
-          width: type.toLowerCase() == 'web' 
-              ? getWidth(context) * 0.6 
-              : getWidth(context) * 0.8,
+          width: getWidth(context),
           padding: const EdgeInsets.symmetric(
               vertical: CustomSizes.SPACE_BETWEEN_ITEMS / 3),
           decoration: BoxDecoration(
@@ -1630,9 +1622,7 @@ class HomeWebScreen extends CustomState {
               ),
               const SizedBox(height: CustomSizes.SPACE_DEFAULT),
               SizedBox(
-                  width: type.toLowerCase() == 'web' 
-                      ? getWidth(context) * 0.6 
-                      : 800,
+                  width: getWidth(context),
                   height: 300,
                   child: DecoratedBox(
                       decoration: BoxDecoration(

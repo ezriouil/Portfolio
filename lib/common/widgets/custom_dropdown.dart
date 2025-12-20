@@ -60,7 +60,6 @@ class CustomDropdown<T> extends CustomState {
         ),
       ),
       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-        color: darkDarkLightLightColor(context),
         fontSize: 11.0,
         fontFamily: "Manrope-Medium",
       ),
