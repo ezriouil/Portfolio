@@ -346,9 +346,7 @@ class HomeTabletScreen extends CustomState {
                         ? const CustomLoadingScreen()
                         : CardSwiper(
                             controller: controller.cardSwiperController,
-                            cardsCount: controller.projects.length <= 3
-                                ? controller.projects.length
-                                : 3,
+                            cardsCount: controller.projects.length,
                             numberOfCardsDisplayed:
                                 controller.projects.length <= 3
                                     ? controller.projects.length
@@ -1021,14 +1019,14 @@ class HomeTabletScreen extends CustomState {
             ),
           ),
 
-          const SizedBox(height: CustomSizes.SPACE_DEFAULT),
+          const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS),
 
           SizedBox(
               width: getWidth(context),
-              height: 300,
+              height: 320,
               child: DecoratedBox(decoration: BoxDecoration(image: DecorationImage(image: NetworkImage(thumbnailUri), fit: BoxFit.cover)))),
 
-          const SizedBox(height: CustomSizes.SPACE_DEFAULT),
+          const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS),
 
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: CustomSizes.SPACE_DEFAULT),

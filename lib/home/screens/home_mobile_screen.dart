@@ -292,9 +292,7 @@ class HomeMobileScreen extends CustomState {
                   child: controller.projects.isEmpty
                       ? const CustomLoadingScreen()
                       : CardSwiper(
-                          cardsCount: controller.projects.length <= 3
-                              ? controller.projects.length
-                              : 3,
+                          cardsCount: controller.projects.length,
                           numberOfCardsDisplayed:
                               controller.projects.length <= 3
                                   ? controller.projects.length

@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ExperienceEntity {
-  final String? id;
   final String? fromDate;
   final String? toDate;
   final String? title;
@@ -10,7 +9,6 @@ class ExperienceEntity {
   final DateTime? createdAt;
 
   ExperienceEntity({
-    this.id,
     this.fromDate,
     this.toDate,
     this.title,
@@ -21,7 +19,6 @@ class ExperienceEntity {
 
   factory ExperienceEntity.fromJson(Map<String, dynamic> json) {
     return ExperienceEntity(
-      id: json['id'],
       fromDate: json['fromDate'],
       toDate: json['toDate'],
       title: json['title'],
@@ -39,7 +36,6 @@ class ExperienceEntity {
 
   Map<String, dynamic> toJson() {
     return {
-      'id': id,
       'fromDate': fromDate,
       'toDate': toDate,
       'title': title,

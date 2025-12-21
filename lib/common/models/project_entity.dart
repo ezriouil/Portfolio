@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ProjectEntity {
-  final String? id;
   final String? title;
   final String? description;
   final String? logo;
@@ -17,7 +16,6 @@ class ProjectEntity {
   final DateTime? createdAt;
 
   ProjectEntity({
-    this.id,
     this.title,
     this.description,
     this.logo,
@@ -35,7 +33,6 @@ class ProjectEntity {
 
   factory ProjectEntity.fromJson(Map<String, dynamic> json) {
     return ProjectEntity(
-      id: json['id'],
       title: json['title'],
       description: json['description'],
       logo: json['logo'],
@@ -60,7 +57,6 @@ class ProjectEntity {
 
   Map<String, dynamic> toJson() {
     return {
-      'id': id,
       'title': title,
       'description': description,
       'logo': logo,

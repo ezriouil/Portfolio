@@ -488,9 +488,7 @@ class HomeWebScreen extends CustomState {
                             child: controller.projects.isEmpty
                                 ? const CustomLoadingScreen()
                                 : CardSwiper(
-                                    cardsCount: controller.projects.length <= 3
-                                        ? controller.projects.length
-                                        : 3,
+                                    cardsCount: controller.projects.length,
                                     numberOfCardsDisplayed:
                                         controller.projects.length <= 3
                                             ? controller.projects.length
@@ -1600,7 +1598,7 @@ class HomeWebScreen extends CustomState {
                             borderRadius: BorderRadius.circular(
                                 CustomSizes.SPACE_BETWEEN_ITEMS / 2),
                             child:
-                                Image.network(logoUri, height: 36, width: 36)),
+                                Image.network(logoUri, height: 36, width: 36, fit: BoxFit.cover,)),
                         Text(title,
                             style: Theme.of(context)
                                 .textTheme
@@ -1620,16 +1618,16 @@ class HomeWebScreen extends CustomState {
                   ],
                 ),
               ),
-              const SizedBox(height: CustomSizes.SPACE_DEFAULT),
+              const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS),
               SizedBox(
                   width: getWidth(context),
-                  height: 300,
+                  height: 320,
                   child: DecoratedBox(
                       decoration: BoxDecoration(
                           image: DecorationImage(
                               image: NetworkImage(thumbnailUri),
                               fit: BoxFit.cover)))),
-              const SizedBox(height: CustomSizes.SPACE_DEFAULT),
+              const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS),
               Padding(
                 padding: const EdgeInsets.symmetric(
                     horizontal: CustomSizes.SPACE_DEFAULT),
