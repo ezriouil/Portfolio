@@ -8,15 +8,17 @@ A responsive, animated portfolio built with Flutter Web and Firebase. It present
 
 ## Preview
 
-### Desktop
+### Web
 
-![Desktop view of the portfolio](assets/screenshots/portfolio-desktop.png)
+![Portfolio home page](assets/screenshots/web-home.png)
 
-### Mobile
+![Portfolio projects section](assets/screenshots/web-projects.png)
 
-<p align="center">
-  <img src="assets/screenshots/portfolio-mobile.png" width="360" alt="Mobile view of the portfolio">
-</p>
+![Portfolio experience section](assets/screenshots/web-experience.png)
+
+![Portfolio skills section](assets/screenshots/web-skills.png)
+
+![Portfolio contact section](assets/screenshots/web-contact.png)
 
 ## Features
 
