@@ -26,10 +26,10 @@ class ExperienceEntity {
       subTitle: json['subTitle'],
       createdAt: json['createdAt'] != null
           ? (json['createdAt'] is Timestamp
-              ? (json['createdAt'] as Timestamp).toDate()
-              : json['createdAt'] is DateTime
-                  ? json['createdAt'] as DateTime
-                  : DateTime.tryParse(json['createdAt'].toString()))
+                ? (json['createdAt'] as Timestamp).toDate()
+                : json['createdAt'] is DateTime
+                ? json['createdAt'] as DateTime
+                : DateTime.tryParse(json['createdAt'].toString()))
           : null,
     );
   }

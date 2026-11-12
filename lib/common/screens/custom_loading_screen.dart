@@ -13,18 +13,29 @@ class CustomLoadingScreen extends CustomState {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           CircularProgressIndicator(
-              color: darkDarkLightLightColor(context),
-              strokeCap: StrokeCap.round,
-              backgroundColor: darkDarkLightLightColor(context).withValues(alpha: 0.1)
+            color: darkDarkLightLightColor(context),
+            strokeCap: StrokeCap.round,
+            backgroundColor: darkDarkLightLightColor(
+              context,
+            ).withValues(alpha: 0.1),
           ),
           const SizedBox(height: CustomSizes.SPACE_DEFAULT),
-          Text("Loading", style: Theme.of(context).textTheme.titleLarge?.copyWith(color: darkDarkLightLightColor(context))),
+          Text(
+            "Loading",
+            style: Theme.of(context).textTheme.titleLarge?.copyWith(
+              color: darkDarkLightLightColor(context),
+            ),
+          ),
           const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS / 2),
-          Text("Process will take a few moments.",
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: darkDarkLightLightColor(context)),
-              maxLines: 2,
-              textAlign: TextAlign.center,
-              overflow: TextOverflow.ellipsis),
+          Text(
+            "Process will take a few moments.",
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+              color: darkDarkLightLightColor(context),
+            ),
+            maxLines: 2,
+            textAlign: TextAlign.center,
+            overflow: TextOverflow.ellipsis,
+          ),
         ],
       ),
     );

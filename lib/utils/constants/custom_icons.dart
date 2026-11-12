@@ -1,6 +1,6 @@
 // ignore_for_file: constant_identifier_names
 
-class CustomIcons{
+class CustomIcons {
   CustomIcons._();
 
   static const String DB_FIREBASE = "assets/icons/db/firebase.png";
@@ -11,8 +11,10 @@ class CustomIcons{
   static const String DESIGN_FIGMA = "assets/icons/design/figma.png";
   static const String DESIGN_CANVA = "assets/icons/design/canva.png";
 
-  static const String EDITORS_INTELLIJ_IDEA = "assets/icons/editors/intellij_idea.png";
-  static const String EDITORS_ANDROID_STUDIO = "assets/icons/editors/android_studio.png";
+  static const String EDITORS_INTELLIJ_IDEA =
+      "assets/icons/editors/intellij_idea.png";
+  static const String EDITORS_ANDROID_STUDIO =
+      "assets/icons/editors/android_studio.png";
   static const String EDITORS_SUBLIME = "assets/icons/editors/sublime.png";
   static const String EDITORS_VS_CODE = "assets/icons/editors/vs_code.png";
 
@@ -25,7 +27,8 @@ class CustomIcons{
 
   static const String STORES_AMAZON = "assets/icons/stores/amazon_appstore.png";
   static const String STORES_APPLE = "assets/icons/stores/app_store.png";
-  static const String STORES_GOOGLE_PLAY = "assets/icons/stores/google_play.png";
+  static const String STORES_GOOGLE_PLAY =
+      "assets/icons/stores/google_play.png";
   static const String STORES_HUAWEI = "assets/icons/stores/huawei.png";
 
   static const String WEB_CSS = "assets/icons/web/css.png";
@@ -44,5 +47,4 @@ class CustomIcons{
 
   static const String YOUTUBE = "assets/icons/contact/youtube.png";
   static const String WEBSITE = "assets/icons/contact/website.png";
-
 }

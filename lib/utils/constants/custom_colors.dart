@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 
-class CustomColors{
+class CustomColors {
   CustomColors._();
 
   /*___________________ BASIC COLORS _____________________*/
@@ -37,5 +37,4 @@ class CustomColors{
 
   static const ORANGE_LIGHT = Color(0xFFFFAB40); // Orange vif et chaleureux
   static const ORANGE_DARK = Color(0xFFEF6C00); // Orange foncé audacieux
-
 }

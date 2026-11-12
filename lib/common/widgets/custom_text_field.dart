@@ -15,24 +15,23 @@ class CustomTextField extends CustomState {
   final TextInputAction textInputAction;
   final bool enabled, obscureText, readOnly;
 
-  const CustomTextField(
-      {
-        super.key,
-        required this.controller,
-        required this.hint,
-        this.icon,
-        this.keyboardType = TextInputType.text,
-        this.textInputAction = TextInputAction.next,
-        this.enabled = true,
-        this.maxLength,
-        this.onChanged,
-        this.obscureText = false,
-        this.readOnly = false,
-        this.validator,
-        this.trailing,
-        this.minLines = 1,
-        this.maxLines = 1,
-      });
+  const CustomTextField({
+    super.key,
+    required this.controller,
+    required this.hint,
+    this.icon,
+    this.keyboardType = TextInputType.text,
+    this.textInputAction = TextInputAction.next,
+    this.enabled = true,
+    this.maxLength,
+    this.onChanged,
+    this.obscureText = false,
+    this.readOnly = false,
+    this.validator,
+    this.trailing,
+    this.minLines = 1,
+    this.maxLines = 1,
+  });
 
   @override
   Widget execute(BuildContext context) {
@@ -48,10 +47,18 @@ class CustomTextField extends CustomState {
         fillColor: darkDarkLightLightColor(context).withValues(alpha: 0.8),
         filled: true,
         hintText: hint,
-        contentPadding: const EdgeInsets.all(CustomSizes.SPACE_BETWEEN_ITEMS * 1.25),
-        hintStyle: Theme.of(context).textTheme.bodySmall?.copyWith(color: grayColor(context)),
-        prefixIcon: icon == null ? null : Icon(icon, color: grayColor(context), size: 16.0),
-        counterStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(fontSize: 8),
+        contentPadding: const EdgeInsets.all(
+          CustomSizes.SPACE_BETWEEN_ITEMS * 1.25,
+        ),
+        hintStyle: Theme.of(
+          context,
+        ).textTheme.bodySmall?.copyWith(color: grayColor(context)),
+        prefixIcon: icon == null
+            ? null
+            : Icon(icon, color: grayColor(context), size: 16.0),
+        counterStyle: Theme.of(
+          context,
+        ).textTheme.bodyMedium?.copyWith(fontSize: 8),
         suffixIcon: trailing,
       ),
       minLines: minLines,

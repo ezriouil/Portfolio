@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:html' as html;
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -62,7 +61,7 @@ class HomeController extends GetxController {
     CustomIcons.WEB_NODE_JS,
     CustomIcons.WEB_PYTHON,
     CustomIcons.WEB_REACT_JS,
-    CustomIcons.WEB_TAILWIND_CSS
+    CustomIcons.WEB_TAILWIND_CSS,
   ];
 
   late final List<String> skills;
@@ -108,11 +107,11 @@ class HomeController extends GetxController {
     try {
       // Initialize Remote Config
       await FirebaseRemoteConfigService().initialize();
-      
+
       // Log screen view
       await FirebaseAnalyticsService().logScreenView('home');
     } catch (e) {
-      print('Firebase services initialization error: $e');
+      debugPrint('Firebase services initialization error: $e');
     }
   }
 
@@ -124,9 +123,9 @@ class HomeController extends GetxController {
               .collection('PROJECTS')
               .orderBy('createdAt', descending: true)
               .get();
-      
+
       if (snapshot.docs.isEmpty) return;
-      
+
       projects.value = snapshot.docs.map((doc) {
         final data = {...doc.data()};
         data['id'] ??= doc.id;
@@ -145,9 +144,9 @@ class HomeController extends GetxController {
               .collection('EXPERIENCES')
               .orderBy('createdAt', descending: true)
               .get();
-      
+
       if (snapshot.docs.isEmpty) return;
-      
+
       experiences.value = snapshot.docs
           .map((doc) => ExperienceEntity.fromJson(doc.data()))
           .toList();
@@ -197,12 +196,12 @@ class HomeController extends GetxController {
     try {
       // Get CV URL from Remote Config
       final pdfUrl = FirebaseRemoteConfigService().getCVUrl();
-      html.window.open(pdfUrl, "_blank");
-      
+      await launchUrl(Uri.parse(pdfUrl), webOnlyWindowName: '_blank');
+
       // Log CV download event
       await FirebaseAnalyticsService().logCVDownload();
     } catch (e) {
-      print('Error opening CV: $e');
+      debugPrint('Error opening CV: $e');
     }
   }
 
@@ -233,8 +232,8 @@ class HomeController extends GetxController {
             "from_email": email,
             "subject": subject,
             "message": message,
-            "to_email": email
-          }
+            "to_email": email,
+          },
         }),
       );
 
@@ -259,33 +258,35 @@ class HomeController extends GetxController {
   void _autoScrolling() async {
     await Future.delayed(const Duration(seconds: 3));
 
-    void _setupAutoScrolling(ScrollController controller) {
+    void setupAutoScrolling(ScrollController controller) {
       void startScrolling() {
-        if (controller.hasClients &&
-            controller.position.maxScrollExtent > 0) {
+        if (controller.hasClients && controller.position.maxScrollExtent > 0) {
           controller
               .animateTo(
-            controller.position.maxScrollExtent,
-            curve: Curves.linear,
-            duration: const Duration(seconds: 40),
-          )
+                controller.position.maxScrollExtent,
+                curve: Curves.linear,
+                duration: const Duration(seconds: 40),
+              )
               .then((_) {
-            if (controller.hasClients) {
-              controller.jumpTo(0);
-              Future.delayed(
-                  const Duration(milliseconds: 100), () => startScrolling());
-            }
-          });
+                if (controller.hasClients) {
+                  controller.jumpTo(0);
+                  Future.delayed(
+                    const Duration(milliseconds: 100),
+                    () => startScrolling(),
+                  );
+                }
+              });
         } else {
           Future.delayed(
-              const Duration(milliseconds: 500), () => startScrolling());
+            const Duration(milliseconds: 500),
+            () => startScrolling(),
+          );
         }
       }
 
       controller.addListener(() {
         if (controller.hasClients &&
-            controller.position.pixels >=
-                controller.position.maxScrollExtent &&
+            controller.position.pixels >= controller.position.maxScrollExtent &&
             controller.position.maxScrollExtent > 0) {
           controller.jumpTo(0);
         }
@@ -293,10 +294,10 @@ class HomeController extends GetxController {
       startScrolling();
     }
 
-    _setupAutoScrolling(skillsZeroScrollController);
-    _setupAutoScrolling(skillsFirstScrollController);
-    _setupAutoScrolling(skillsLastScrollController);
-    _setupAutoScrolling(skillsSecondScrollController);
+    setupAutoScrolling(skillsZeroScrollController);
+    setupAutoScrolling(skillsFirstScrollController);
+    setupAutoScrolling(skillsLastScrollController);
+    setupAutoScrolling(skillsSecondScrollController);
 
     scrollController.addListener(() {
       if (scrollController.offset > 200 && !isFabVisible.value) {
@@ -309,8 +310,11 @@ class HomeController extends GetxController {
 
   // - - - - - - - - - - - - - - - - - - SCROLL UP - - - - - - - - - - - - - - - - - -  //
   void scrollingUp() {
-    scrollController.animateTo(0,
-        duration: const Duration(milliseconds: 500), curve: Curves.easeInOut);
+    scrollController.animateTo(
+      0,
+      duration: const Duration(milliseconds: 500),
+      curve: Curves.easeInOut,
+    );
   }
 
   // - - - - - - - - - - - - - - - - - - CHANGE COLOR THEME - - - - - - - - - - - - - - - - - -  //
@@ -318,7 +322,7 @@ class HomeController extends GetxController {
     try {
       Get.changeThemeMode(isDarkTheme.value ? ThemeMode.light : ThemeMode.dark);
       isDarkTheme.value = !isDarkTheme.value;
-      
+
       // Log theme change
       await FirebaseAnalyticsService().logThemeChange(isDarkTheme.value);
     } catch (_) {}
@@ -355,15 +359,22 @@ class HomeController extends GetxController {
   }
 
   // - - - - - - - - - - - - - - - - - - HELPER: LAUNCH URL WITH GITHUB FALLBACK - - - - - - - - - - - -  //
-  Future<void> launchProjectLink(String? link, {String? projectTitle, String? linkType}) async {
+  Future<void> launchProjectLink(
+    String? link, {
+    String? projectTitle,
+    String? linkType,
+  }) async {
     try {
       final fallbackUrl = FirebaseRemoteConfigService().getGitHubUrl();
       final url = (link != null && link.isNotEmpty) ? link : fallbackUrl;
       await launchUrl(Uri.parse(url));
-      
+
       // Log project link click if project info is provided
       if (projectTitle != null && linkType != null) {
-        await FirebaseAnalyticsService().logProjectLinkClick(projectTitle, linkType);
+        await FirebaseAnalyticsService().logProjectLinkClick(
+          projectTitle,
+          linkType,
+        );
       }
     } catch (_) {
       // Silently handle errors

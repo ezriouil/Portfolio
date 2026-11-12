@@ -61,5 +61,4 @@ class DefaultFirebaseOptions {
     storageBucket: 'mohamedezriouil.firebasestorage.app',
     measurementId: 'G-TXDSFLN6RG',
   );
-
 }

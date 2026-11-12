@@ -47,10 +47,10 @@ class ProjectEntity {
       websiteUri: json['websiteUri'],
       createdAt: json['createdAt'] != null
           ? (json['createdAt'] is Timestamp
-              ? (json['createdAt'] as Timestamp).toDate()
-              : json['createdAt'] is DateTime
-                  ? json['createdAt'] as DateTime
-                  : DateTime.tryParse(json['createdAt'].toString()))
+                ? (json['createdAt'] as Timestamp).toDate()
+                : json['createdAt'] is DateTime
+                ? json['createdAt'] as DateTime
+                : DateTime.tryParse(json['createdAt'].toString()))
           : null,
     );
   }
@@ -72,10 +72,10 @@ class ProjectEntity {
       'createdAt': createdAt != null ? Timestamp.fromDate(createdAt!) : null,
     };
   }
-  
+
   /// Check if project is mobile type
   bool get isMobile => type?.toLowerCase() == 'mobile';
-  
+
   /// Check if project is web type
   bool get isWeb => type?.toLowerCase() == 'web';
 }
